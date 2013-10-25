@@ -18,7 +18,7 @@ $
 ## argos-json
 ```sh
 $  curl "https://raw.github.com/npolar/argos-ruby/master/spec/argos/_ds/990660_A.DAT" > /tmp/990660_A.DAT
-$  argos-json /tmp/990660_A.DAT "lambda {|a| a[:program] == 660 }"
+$  ./bin/argos-json /tmp/990660_A.DAT "lambda {|a| a[:program] == 660 }"
 ```
 This will output (the "lambda" is of course optional):
 

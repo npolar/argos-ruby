@@ -51,7 +51,7 @@ module Argos
         :type=>"diag",
         :filename=>VALID_DIAG,
         :id => "d329cfdf6ea15666159cc3bb8b84a996870c7720",
-        :parser => "9acf98aafbca5385ab69d39ed79448127687af46",
+        :parser => "https://github.com/npolar/argos-ruby",
         :source =>"f53ae3ab454f3e210347439aa440c084f775f9a4"}
         end
       end

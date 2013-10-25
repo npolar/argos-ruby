@@ -57,15 +57,12 @@ module Argos
           @ds.parse(VALID_DS)
           first = @ds.select{ |ds|
             ds[:positioned] == "1999-12-30T18:41:56Z"
-          }.first
-
-          first.delete :parser
-          first.should ==  {:program=>9660, :platform=>10783, :lines=>2, :sensors=>3, :satellite=>"H", :lc=>"A",
+          }.should ==  [{:program=>9660, :platform=>10783, :lines=>2, :sensors=>3, :satellite=>"H", :lc=>"A",
 :positioned=>"1999-12-30T18:41:56Z", :latitude=>79.828,
 :longitude=>22.319, :altitude=>0.0, :errors=>[], :headers=>12,
 :measured=>"1999-12-30T18:43:52Z", :identical=>3, :sensor_data=>["78", "00", "00"],
-:technology=>"argos", :type=>"ds", :filename=>VALID_DS,
-:source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994", :valid=>true, :id=>"4369c31c191bd55a998e6293ff4639da3984a95d"}
+:technology=>"argos", :type=>"ds", :filename=>VALID_DS, :parser => "https://github.com/npolar/argos-ruby",
+:source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994", :valid=>true, :id=>"4369c31c191bd55a998e6293ff4639da3984a95d"}]
           end
         end
       end
@@ -79,9 +76,16 @@ module Argos
 
       it "a filter may also be a string containing a lambda" do
         @ds.filter = 'lambda {|ds| ds[:program] == 660 }'
-        @ds.parse(VALID_DS).should == [{:program=>660, :platform=>14747, :lines=>2, :sensors=>32, :satellite=>"K", :lc=>nil, :positioned=>nil, :latitude=>nil, :longitude=>nil, :altitude=>nil, :errors=>["missing-position", "sensors-count-mismatch"], :headers=>5,
-:measured=>"1999-12-16T00:46:49Z", :identical=>1, :sensor_data=>["92", "128", "130", "132"], :technology=>"argos", :type=>"ds",
-:filename=>VALID_DS, :parser=>"a23f82183ff777c339279dac3fb627f5c2d4745f", :source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994", :valid=>false, :id=>"f2c82a5ca1330b312925949a15ac300d07452a12"}]
+        @ds.parse(VALID_DS).should ==  [{:program=>660, :platform=>14747,
+:lines=>2, :sensors=>32, :satellite=>"K", :lc=>nil, :positioned=>nil,
+:latitude=>nil, :longitude=>nil, :altitude=>nil, :headers=>5,
+:measured=>"1999-12-16T00:46:49Z", :identical=>1,
+:sensor_data=>["92", "128", "130", "132"], :technology=>"argos",
+:type=>"ds", :filename=>VALID_DS,
+:source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994",
+:errors=>["missing-position", "sensors-count-mismatch"],
+:valid=>false, :parser=>"https://github.com/npolar/argos-ruby",
+:id=>"f2c82a5ca1330b312925949a15ac300d07452a12"}]
       end
 
     end

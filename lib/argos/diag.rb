@@ -232,9 +232,7 @@ module Argos
       idbase.delete :filename
       id = Digest::SHA1.hexdigest(idbase.to_json)
 
-      # Git SHA-1 Hash, see http://chrisfrederick.net/2013/05/27/calculating-git-sha-1-hashes-in-ruby/
-      # id = Digest::SHA1.hexdigest("blob #{t.to_json.size}\0#{t.to_json}")
-      diag[:parser] = Digest::SHA1.hexdigest("blob #{File.read(__FILE__).size}\0#{File.read(__FILE__)}")
+      diag[:parser] = "https://github.com/npolar/argos-ruby"
       diag[:id] = id
       diag
     end
