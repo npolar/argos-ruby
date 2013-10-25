@@ -1,0 +1,78 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+require_relative "../lib/argos"
+
+action = "parse"
+format = "json"
+require "yaml"
+
+glob = ARGV[0]||Dir.pwd
+filter = ARGV[1]||""
+format = ARGV[2]||"json"
+
+
+if ARGV.include? "--source"
+  action = "source"
+end
+
+  begin
+
+log = Logger.new(STDERR)
+log.level = Logger::DEBUG
+
+if not Argos.argos? glob
+  glob = glob.gsub(/\/$/, "")
+  if glob != /\*/
+    glob += "/**/*"
+  end
+end
+
+log.debug "#{__FILE__} --#{action}"
+bundle = Digest::SHA1.hexdigest(glob+filter)
+result = []
+
+Dir[glob].select {|f|
+  Argos.argos? f
+}.map {|filename|
+  
+  argos = Argos.factory(Argos.type(filename))
+  argos.filename = filename
+  argos.filter = filter
+  argos.log = log
+
+  case action
+    when "source"
+      result << Argos.source(argos).merge(glob: glob, bundle: bundle)
+    when "parse"
+      result += argos.parse(filename)
+  end
+}
+
+ds_count = result.select {|argos| argos[:type] == "ds"}.size
+diag_count = result.select {|argos| argos[:type] == "diag"}.size
+
+if "parse" == action
+  log.info "Documents: #{result.size}, ds: #{ds_count}, diag: #{diag_count}, bundle: #{bundle}, glob: #{glob}"
+elsif "source" == action
+  result = result.select {|s| s[:size] > 0 }
+  sum_count = result.map {|s| s[:size]}.inject { |sum, c| sum + c }
+  result = result.map {|s|
+    s[:total] = sum_count
+    s
+  }
+  log.info "Documents (Σcount): #{sum_count}, sources: #{result.size} (ds: #{ds_count}, diag: #{diag_count}), bundle: #{bundle}, glob: #{glob}"
+end
+
+if "json" == format
+  puts result.to_json
+else
+  puts result.to_yaml
+end
+
+
+exit(0)
+
+rescue => e
+  Logger.new(STDERR).fatal e
+  exit(1)
+end

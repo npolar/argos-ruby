@@ -1,0 +1,25 @@
+02170  Date : 03.02.09 17:47:56  LC : 3  IQ : 66
+      Lat1 : 33.385N  Lon1 : 111.811W  Lat2 : 35.397N  Lon2 : 121.727W
+      Nb mes : 009  Nb mes>-120dB : 000  Best level : -126 dB
+      Pass duration : 811s  NOPC :  3
+      Calcul freq : 401 637664.9 Hz   Altitude :  352 m
+              00           7B           5D           E0
+              C2           51           81           51
+              14           6A           30           00
+              3F           FC           03           00
+              03           FF           C0           30
+              00           3F           FC           0C
+              3F           FF           FF           C0
+02170  Date : 03.02.09 18:04:26  LC : 3  IQ : 66
+      Lat1 : 33.385N  Lon1 : 111.810W  Lat2 : 37.544N  Lon2 : 131.878W
+      Nb mes : 007  Nb mes>-120dB : 000  Best level : -123 dB
+      Pass duration : 630s  NOPC :  3
+      Calcul freq : 401 637664.6 Hz   Altitude :  352 m
+              00           0D           DD           E0
+              C2           51           81           51
+              14           86           AC           01
+              FF           00           00           00
+              00           0E           7F           E0
+              00           2B           00           7F
+              C0           00           00           00
+              03           80           E9           7F
