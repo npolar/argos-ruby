@@ -23,6 +23,7 @@ module Argos
   # @return [String]
   #"ds"|"diag"
   def self.type filename
+
     if File.file? filename
       # Avoid invalid byte sequence in UTF-8 (ArgumentError)
       firstline = File.open(filename, :encoding => "iso-8859-1") {|f| f.readline}
@@ -31,7 +32,7 @@ module Argos
     end
 
     case firstline
-      when Argos::Ds::START_REGEX
+      when Argos::Ds::START_REGEX, Argos::Ds::START_REGEX_LEGACY
         "ds"
       when Argos::Diag::START_REGEX
         "diag"
@@ -86,12 +87,27 @@ module Argos
 
     argos.parse(argos.filename)
 
+    latitude_mean = longitude_mean = nil
+    if argos.latitudes.any?
+      latitude_mean = (argos.latitudes.inject{ |sum, latitude| sum + latitude } / argos.latitudes.size).round(3)
+    end
+    if argos.longitudes.any?
+      longitude_mean = (argos.longitudes.inject{ |sum, longitude| sum + longitude } / argos.latitudes.size).round(3)
+    end
+    
+
     { id: argos.source,
       type: argos.type,
       programs: argos.programs,
       platforms: argos.platforms,
       start: argos.start,
       stop: argos.stop,
+      north: argos.latitudes.max,
+      east: argos.longitudes.max,
+      south: argos.latitudes.min,
+      west: argos.longitudes.min,
+      latitude_mean: latitude_mean,
+      longitude_mean: longitude_mean,
       filename: argos.filename,
       filesize: argos.filesize,
       messages: argos.messages.size,
@@ -99,5 +115,23 @@ module Argos
       size: argos.size,
     }
   end
+
+
+  def latitudes
+    select {|a| a.key? :latitude and a[:latitude].is_a? Float }.map {|a| a[:latitude]}.sort
+  end
+
+  def longitudes
+    select {|a| a.key? :longitude and a[:longitude].is_a? Float }.map {|a| a[:longitude]}.sort
+  end
+
+  def platforms
+    map {|a| a[:platform]}.uniq.sort
+  end
+
+  def programs
+    map {|a| a[:program]}.uniq.sort
+  end
+
 
 end
