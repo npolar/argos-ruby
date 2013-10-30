@@ -13,10 +13,11 @@ module Argos
   # @author Espen Egeland
   # @author Conrad Helgeland
   class Diag < Array
+    include Argos
   
     LOCATION_CLASS = ["3", "2", "1", "0", "A", "B", "Z"]
 
-    attr_accessor :log, :filename
+    attr_accessor :log, :filename, :programs
 
     attr_reader :filename, :filter, :filtername, :sha1, :valid, :filesize
   
@@ -140,7 +141,6 @@ module Argos
         end
       else
         log.info "Parsed #{self.size} Argos DIAG segments sha1:#{sha1} #{filename}"
-        
       end
         
       self
@@ -161,15 +161,14 @@ module Argos
   end
   
     #http://www.argos-system.org/files/pmedia/public/r363_9_argos_users_manual-v1.5.pdf p. 48
-#Nb mes : 025 Number of messages received
-#Nb mes>-120 dB: 015 Number of messages received by the satellite at a signal strength 
-#greater than -120 decibels
-#Best level : -113 dB Best signal strength, units are dB
-#Pass duration : 900s Time elapsed between the first and last message received by the 
-#satellite
-#NOPC = 4 Number Of Plausibility Checks successful (from 0-4)
-#Calcul Freq : 401 650000.3 Calculated frequency
-#Altitude : 213 m Altitude used for location calculation
+    #Nb mes : 025 Number of messages received
+    #Nb mes>-120 dB: 015 Number of messages received by the satellite at a signal strength greater than -120 decibels
+    #Best level : -113 dB Best signal strength, units are dB
+    #Pass duration : 900s Time elapsed between the first and last message received by the 
+    #satellite
+    #NOPC = 4 Number Of Plausibility Checks successful (from 0-4)
+    #Calcul Freq : 401 650000.3 Calculated frequency
+    #Altitude : 213 m Altitude used for location calculation
     def create_diag_hash(contact="")
       platform = contact[/^(\d{5,})/,1]
       location_data = contact[/Date : (\d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2})/,1]
@@ -203,13 +202,11 @@ module Argos
       data_start = contact.index(" m ")
       sensor_data = contact[data_start+2,contact.length].split(" ") unless data_start == nil
      
-
-
-
       diag = { platform: platform.to_i,
         measured: contact_time,
         lc: lc,
         iq: iq,
+        li: li,
         latitude: lat1,
         longitude: lon1,
         latitude2: lat2,
@@ -218,6 +215,7 @@ module Argos
         messages_120dB: nb120.to_i,
         best_level: best_level.to_i,
         pass_duration: pass_duration.to_i,
+        dist_track: dist_track,
         nopc: nopc.to_i,
         frequency: frequency,
         altitude: altitude,
@@ -264,23 +262,16 @@ module Argos
       self
     end
 
-    def platforms
-      platforms = map {|a| a[:platform]}.uniq.sort
-    end
-
     def programs
-      # FIXME if used with DIAG files containing program
-      []
+      @programs ||= []
     end
 
     def start
       first[:measured]
-      #positioned.map {|ds| ds [:positioned] }.first
     end
 
     def stop
       last[:measured]
-      #positioned.map {|ds| ds [:positioned] }.last
     end
 
 
@@ -288,29 +279,6 @@ module Argos
       sha1
     end
 
-#X=0
-#No calculation of residual frequency error (fewer than four messages received)
-#X = 1, 2, 3 Unsatisfactory convergence of calculation
-#X=4 Residual frequency error > 1.5 Hz
-#X=5 0.15 Hz < residual frequency error < 1.5 Hz
-#X=6 Residual frequency error < 0.15 Hz
-#Y=0 No check on transmit frequency drift, as the two results are more than 12 hours
-#   apart.
-#Y=1 Frequency discrepancy > 400 Hz
-#   Probably due to transmit frequency discrepancy, change of oscillator, etc.
-#Y=2 Previous location is less than 1/2 hour old.
-#   Frequency discrepancy > 30 Hz, i.e. F/F (over 10 min) >2.5 E-8
-#Y=3 Frequency drift > 4 Hz/minute, i.e. F/F (10 min) > 1.10-7
-#Y=4 Frequency drift < 4 Hz/minute, i.e. F/F (10 min) < 1.10-7
-#Y=5 Frequency drift < 2 Hz/minute, i.e. F/F (10 min) < 5.10-8
-#Y=6 Frequency drift < 1 Hz/minute, i.e. F/F (10 min) < 2.5 . 10-8
-#Y=7 Frequency drift < 0.4 Hz/minute, i.e. F/F (10 min) < 1.10-8
-#Y=8 Frequency drift < 0.2 Hz/minute, i.e. F/F (10 min) < 5.10-9
-
-  
-  
-  
-  
   end
 end
 
