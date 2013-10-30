@@ -14,14 +14,20 @@ module Argos
   # @author Espen Egeland
   # @author Conrad Helgeland
   class Ds < Array
-  
+    include Argos  
+
     attr_writer :log, :filename
 
     attr_reader :filename, :filter, :filtername, :valid, :filesize, :sha1, :messages
 
     START_REGEX = /^\d{5} \d{5,6} +\d+ +\d+/
 
+    START_REGEX_LEGACY = /\s+\d\.\d{3}\s\d{9}\s+\w{4}$/
+
     LOCATION_CLASS = [nil, "0","1","2","3","A","B","G","Z"]
+
+    def self.ds? filename
+    end
 
     def filter?
       not @filter.nil?
@@ -77,6 +83,13 @@ module Argos
         log.debug "Using filter: #{@filtername.nil? ? filter : @filtername }"
       end
 
+      firstline = file.readline
+      file.rewind
+
+      if firstline =~ START_REGEX_LEGACY
+        return parse_until_1991(file)
+      end
+
       file.each_with_index do |line, c|
         line = line.strip
 
@@ -89,7 +102,7 @@ module Argos
           @valid = true
 
           if contact.any?
-            item = parse_ds_item(contact)
+            item = parse_message(contact)
 
             if self.class.valid_item? item  
               
@@ -114,11 +127,11 @@ module Argos
   
       if false == @valid
         #log.debug file.read
-        message = "Not a valid ARGOS DS file: #{filename}"
+        message = "Cannot parse file: #{filename}"
         raise ArgumentError, message 
       end
 
-      last = parse_ds_item(contact)
+      last = parse_message(contact)
 
       # The last message
       if last
@@ -127,7 +140,7 @@ module Argos
         end
       end
       
-      log.info "Parsed #{@messages.size} Argos DS messages into #{self.class.name} Array"  
+      log.debug "Parsed #{@messages.size} Argos DS messages into #{self.class.name} Array"  
       @segments = @messages.size
       unfold.each do |d|
         self << d
@@ -136,55 +149,13 @@ module Argos
     end
   
     # Pare one DS segment
-    def parse_ds_item(contact)
+    def parse_message(contact)
       header = contact[0]
       body = contact[1,contact.count]
       items = process_item_body(body)
       combine_header_with_transmission(items, header)
     end
   
-  
-    def process_item_body(body_arr)
-      @buf =""
-      @transmission_arr = []
-      @transmission_arr = recursive_transmission_parse(body_arr)
-    end
-  
-  
-    # @param [Array] body_arr
-    # @return  [Aray]
-    def recursive_transmission_parse(body_arr)
-      if  body_arr.nil? or body_arr.empty?
-        return
-      end
-      @buf =@buf + " " + body_arr[0]
-  
-      if body_arr[1] =~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/ or body_arr[1]==nil
-        @transmission_arr << transmission_package(@buf)
-        @buf=""
-      end
-      recursive_transmission_parse(body_arr[1,body_arr.length])
-      @transmission_arr
-    end
-  
-  
-    
-    def transmission_package(data)
-      transmission_time = data[/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/,1]
-      transmission_time = convert_datetime(transmission_time)
-
-      identical = data.split(" ")[2].to_i    
-      data = data.strip[23,data.length]
-
-      if not data.nil?
-        sensor_data = data.split(" ")
-      end
-      { measured: transmission_time,
-        identical: identical,
-        sensor_data: sensor_data
-      }
-    end
-
     def type
       "ds"
     end
@@ -273,29 +244,10 @@ module Argos
         errors: errors,
         measurements: measurements,
         headers: header.size
-    
       }
       document
     end
   
-    
-    
-    #  "1999-04-02 01:28:54"
-    def convert_datetime(datetime)
-    
-    #AUO89.DAT/home/ch/github.com/argos-ruby/lib/ds.rb:143:in `parse': can't convert nil into String (TypeError)
-    #/home/ch/github.com/api.npolar.no/seed/tracking/argos/19890800-19891000
-    #AUO89.DAT/home/ch/github.com/argos-ruby/lib/ds.rb:149:in `parse': invalid date (ArgumentError)  
-      begin  
-        datetime = ::DateTime.parse(datetime).iso8601.to_s
-        datetime['+00:00'] = "Z"
-        datetime
-      rescue
-        log.error "Invalid date #{datetime}"
-        DateTime.new(0).xmlschema.gsub(/\+00:00/, "Z")
-      end
-    end
-
     # Merge position and all other top-level DS fields with each measurement line
     # (containing sensor data)
     # The 3 lines below will unfold to *2* documents, each with
@@ -306,10 +258,9 @@ module Argos
     def unfold
 
       # First, grab all segments *without* measurements (if any)
-      no_sensor_data = messages.reject {|ds| ds.key?(:measurements) or ds[:measurements].nil? }
-      log.debug "#{messages.size - no_sensor_data.size} / #{messages.size} messages contained measurements"
+      unfolded = messages.reject {|ds| ds.key?(:measurements) or ds[:measurements].nil? }
+      log.debug "#{messages.size - unfolded.size} / #{messages.size} messages contained measurements"
 
-      unfolded = []
       messages.select {|ds|
         ds.key?(:measurements) and not ds[:measurements].nil?
       }.each do |ds|
@@ -319,11 +270,11 @@ module Argos
         end
       end
  
-      unfolded.sort_by! {|ds|
-        if not ds[:positioned].nil?
-          ds[:positioned]
-        elsif not ds[:measured].nil?
-          ds[:measured]
+      unfolded = unfolded.sort_by {|ds|
+        if not ds[:measured].nil?
+          DateTime.parse(ds[:measured]) 
+        elsif not ds[:positioned].nil?
+          DateTime.parse(ds[:positioned])
         else
           ds[:program]
         end
@@ -348,7 +299,7 @@ module Argos
       end
       
 
-      if m[:sensor_data].size != ds[:sensors]
+      if not m[:sensor_data].nil? and m[:sensor_data].size != ds[:sensors]
         m[:errors] << "sensors-count-mismatch"
       end
 
@@ -366,17 +317,42 @@ module Argos
       m
     end
 
-    def platforms
-      map {|a| a[:platform]}.uniq.sort
+    def process_item_body(body_arr)
+      @buf =""
+      @transmission_arr = []
+      @transmission_arr = recursive_transmission_parse(body_arr)
     end
-
-    def programs
-      map {|a| a[:program]}.uniq.sort
+  
+  
+    # @param [Array] body_arr
+    # @return  [Aray]
+    def recursive_transmission_parse(body_arr)
+      if  body_arr.nil? or body_arr.empty?
+        return
+      end
+      @buf =@buf + " " + body_arr[0]
+  
+      if body_arr[1] =~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/ or body_arr[1]==nil
+        @transmission_arr << transmission_package(@buf)
+        @buf=""
+      end
+      recursive_transmission_parse(body_arr[1,body_arr.length])
+      @transmission_arr
     end
+  
+    def transmission_package(data)
+      transmission_time = data[/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/,1]
+      transmission_time = convert_datetime(transmission_time)
 
-    def positioned
-      self.select {|ds|
-        ds.key? :positioned and not ds[:positioned].nil?
+      identical = data.split(" ")[2].to_i    
+      data = data.strip[23,data.length]
+
+      if not data.nil?
+        sensor_data = data.split(" ")
+      end
+      { measured: transmission_time,
+        identical: identical,
+        sensor_data: sensor_data
       }
     end
 
@@ -393,6 +369,47 @@ module Argos
     end
     
     protected
+
+    # "1999-04-02 01:28:54"
+    def convert_datetime(datetime)
+    
+    #AUO89.DAT/home/ch/github.com/argos-ruby/lib/ds.rb:143:in `parse': can't convert nil into String (TypeError)
+    #/home/ch/github.com/api.npolar.no/seed/tracking/argos/19890800-19891000
+    #AUO89.DAT/home/ch/github.com/argos-ruby/lib/ds.rb:149:in `parse': invalid date (ArgumentError)  
+      begin  
+        datetime = ::DateTime.parse(datetime).iso8601.to_s
+        datetime['+00:00'] = "Z"
+        datetime
+      rescue
+        log.error "Invalid date #{datetime}"
+        DateTime.new(0).xmlschema.gsub(/\+00:00/, "Z")
+      end
+    end
+
+    def positioned
+      select {|ds|
+        ds.key? :positioned and not ds[:positioned].nil?
+      }
+    end
+
+    # Argos format until 1991
+    # 
+    #09660   6 09691  2 14286 89 042 17 18 05 1   3 G     0.000 401650000        0VDI
+    #09660      2     59.891   10.629                           401649651        0VDJ
+    #09660 14286 17 14 26  1  -.72543E+1           00                            0VDK
+    #09660 14286 17 16 52  1  -.72410E+1           00                            0VDL
+    #09660 14286 17 19 18  2  -.72376E+1           00                            0VDM
+    #09660 14286 17 21 44  3  -.72376E+1           00                            0VDN
+    
+    # Header: 09660[program]   6[lines] ????? 2 ????? 89[year] 042[day?] 17 18 05[time?] 1   3[?] G[?]    0.000 \d{9}[f] \d\w{3}[ident]
+    def parse_until_1991(file)
+      raise "Legacy DS file parser: not implemented"
+      #file.each_with_index do |line, c|
+      #  line = line.strip
+      #  log.debug line
+      #end
+    end
+
 
     def valid_float?(str)
       !!Float(str) rescue false
