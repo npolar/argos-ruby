@@ -4,21 +4,23 @@ require_relative "../lib/argos"
 
 action = "parse"
 format = "json"
-require "yaml"
 
 glob = ARGV[0]||Dir.pwd
 filter = ARGV[1]||""
-format = ARGV[2]||"json"
-
+level = Logger::WARN
 
 if ARGV.include? "--source"
   action = "source"
+elsif ARGV.include? "--messages"
+  action = "messages"
+elsif ARGV.include? "--level=debug"
+  level = Logger::DEBUG
 end
 
-  begin
+begin
 
 log = Logger.new(STDERR)
-log.level = Logger::DEBUG
+log.level = level
 
 if not Argos.argos? glob
   glob = glob.gsub(/\/$/, "")
@@ -45,13 +47,16 @@ Dir[glob].select {|f|
       result << Argos.source(argos).merge(glob: glob, bundle: bundle)
     when "parse"
       result += argos.parse(filename)
+    when "messages"
+      argos.parse(filename)
+      result += argos.messages
   end
 }
 
 ds_count = result.select {|argos| argos[:type] == "ds"}.size
 diag_count = result.select {|argos| argos[:type] == "diag"}.size
 
-if "parse" == action
+if ["parse", "messages"].include? action
   log.info "Documents: #{result.size}, ds: #{ds_count}, diag: #{diag_count}, bundle: #{bundle}, glob: #{glob}"
 elsif "source" == action
   result = result.select {|s| s[:size] > 0 }
@@ -65,8 +70,6 @@ end
 
 if "json" == format
   puts result.to_json
-else
-  puts result.to_yaml
 end
 
 
