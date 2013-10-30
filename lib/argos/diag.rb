@@ -153,7 +153,7 @@ module Argos
       self << create_diag_hash(contact)
       true
     else
-      error = "#{filename}:#{line_num} source:#{@sha1} Invalid format:" + contact
+      error = "#{__FILE__}#check_format #{filename}:#{line_num} source:#{@sha1} Invalid format:\n"  + contact
       log.error error
       false
     end
