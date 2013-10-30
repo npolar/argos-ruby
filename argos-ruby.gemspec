@@ -2,7 +2,7 @@
 # https://github.com/radar/guides/blob/master/gem-development.md
 Gem::Specification.new do |s|
   s.name        = "argos-ruby"
-  s.version     = "1.0.0"
+  s.version     = "1.0.1"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Espen Egeland", "Conrad Helgeland"]
   s.email       = ["data*npolar.no"]
