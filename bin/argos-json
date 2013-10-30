@@ -7,6 +7,7 @@ format = "json"
 
 glob = ARGV[0]||Dir.pwd
 filter = ARGV[1]||""
+dest = ARGV[2]||nil
 level = Logger::WARN
 
 if ARGV.include? "--source"
@@ -15,6 +16,8 @@ elsif ARGV.include? "--messages"
   action = "messages"
 elsif ARGV.include? "--level=debug"
   level = Logger::DEBUG
+elsif ARGV.include? "--level=info"
+  level = Logger::INFO
 end
 
 begin
@@ -46,7 +49,12 @@ Dir[glob].select {|f|
     when "source"
       result << Argos.source(argos).merge(glob: glob, bundle: bundle)
     when "parse"
-      result += argos.parse(filename)
+      arr = argos.parse(filename)
+      unless dest.nil?
+        jsonfile = "#{dest.gsub(/\$/, "")}/#{argos.source}.json"
+        File.open(jsonfile, "w") { |file| file.write(arr.to_json) }
+      end
+      result += arr
     when "messages"
       argos.parse(filename)
       result += argos.messages
@@ -68,10 +76,9 @@ elsif "source" == action
   log.info "Documents (Σcount): #{sum_count}, sources: #{result.size} (ds: #{ds_count}, diag: #{diag_count}), bundle: #{bundle}, glob: #{glob}"
 end
 
-if "json" == format
+if "json" == format and dest.nil?
   puts result.to_json
 end
-
 
 exit(0)
 
