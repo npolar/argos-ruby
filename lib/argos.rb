@@ -16,7 +16,7 @@ require_relative "argos/diag"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-
+  VERSION = "1.0.2"
   # Detect Argos type ("ds" or "diag" or nil)
   #
   # @param filename [String] Argos (DS or DIAG) file
@@ -77,6 +77,11 @@ module Argos
     else
       raise ArgumentError, "Unknown Argos type: #{type}"
     end
+  end
+
+
+  def self.library_version
+    "argos-ruby-#{VERSION}" 
   end
 
   # Source fingerprint of Argos file (sha1 hash, segment and document counts, etc.)
