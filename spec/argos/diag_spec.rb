@@ -47,11 +47,13 @@ module Argos
         :pass_duration=>62, :nopc=>1,
         :frequency=>401649594.3, :altitude=>0,
         :sensor_data=>["19032", "53", "352"],
+        :li => nil,
+        :dist_track => nil,
         :technology=>"argos",
         :type=>"diag",
         :filename=>VALID_DIAG,
-        :id => "d329cfdf6ea15666159cc3bb8b84a996870c7720",
-        :parser => "https://github.com/npolar/argos-ruby",
+        :id => "a4e59580432b7b621f66c0cdc3087127554acd1d",
+        :parser => "argos-ruby-#{Argos::VERSION}",
         :source =>"f53ae3ab454f3e210347439aa440c084f775f9a4"}
         end
       end

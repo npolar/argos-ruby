@@ -230,7 +230,7 @@ module Argos
       idbase.delete :filename
       id = Digest::SHA1.hexdigest(idbase.to_json)
 
-      diag[:parser] = "https://github.com/npolar/argos-ruby"
+      diag[:parser] = Argos.library_version
       diag[:id] = id
       diag
     end
