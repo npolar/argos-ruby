@@ -13,6 +13,7 @@ module Argos
   #
   # @author Espen Egeland
   # @author Conrad Helgeland
+  # @todo errors => warn or remove unless asked for? (debug)
   class Ds < Array
     include Argos  
 
@@ -87,7 +88,7 @@ module Argos
       file.rewind
 
       if firstline =~ START_REGEX_LEGACY
-        return parse_until_1991(file)
+        return parse_legacy(file)
       end
 
       file.each_with_index do |line, c|
@@ -188,7 +189,8 @@ module Argos
       unless header.is_a? Array
         header = header.split(" ")
       end
-      latitude = longitude = positioned = valid = nil
+      latitude = longitude = positioned = nil
+      warn = []
       errors = []
 
       lc = header[5]
@@ -214,16 +216,15 @@ module Argos
       end
         
       if positioned.nil? and measurements.nil?
-        errors << "missing-time"
+        warn << "missing-time"
       end
         
       if latitude.nil? or longitude.nil?
-        errors << "missing-position"
+        warn << "missing-position"
       else
       
         unless latitude.between?(-90, 90) and longitude.between?(-180, 180)
-          errors << ["invalid-position"]
-          #latitude = longitude = nil
+          errors << "invalid-position"
         end
       end
 
@@ -231,20 +232,29 @@ module Argos
         errors << "invalid-lc"
       end
 
+      # Satellites 
+      #  ["A", "B", "K", "L", "M", "N", "P", "R"] 
+
       document = { program:  header[0].to_i,
         platform: header[1].to_i,
         lines: header[2].to_i,
         sensors: header[3].to_i,
         satellite: header[4],
-        lc: header[5],
+        lc: lc,
         positioned: positioned,
         latitude: latitude,
         longitude: longitude,
         altitude: altitude,        
-        errors: errors,
         measurements: measurements,
         headers: header.size
       }
+      if warn.any?
+        document[:warn]=warn
+      end
+      if errors.any?
+        document[:errors]=errors
+      end
+      
       document
     end
   
@@ -292,27 +302,26 @@ module Argos
         type: type, filename: filename, source: sha1
       })
 
-      if ds[:errors].any?
+
+      if not ds[:errors].nil? and ds[:errors].any?
         m[:errors] = ds[:errors].clone
-      else
-        m[:errors] = []
       end
-      
 
       if not m[:sensor_data].nil? and m[:sensor_data].size != ds[:sensors]
+        if m[:errors].nil?
+          m[:errors] = []
+        end
         m[:errors] << "sensors-count-mismatch"
       end
-
-      m[:valid] = m[:errors].any? ? false : true
 
       idbase = m.clone
       idbase.delete :errors
       idbase.delete :filename
-      idbase.delete :valid
+      idbase.delete :warn
       
       id = Digest::SHA1.hexdigest(idbase.to_json)
 
-      m[:parser] = "https://github.com/npolar/argos-ruby"
+      m[:parser] = Argos.library_version
       m[:id] = id
       m
     end
@@ -402,7 +411,7 @@ module Argos
     #09660 14286 17 21 44  3  -.72376E+1           00                            0VDN
     
     # Header: 09660[program]   6[lines] ????? 2 ????? 89[year] 042[day?] 17 18 05[time?] 1   3[?] G[?]    0.000 \d{9}[f] \d\w{3}[ident]
-    def parse_until_1991(file)
+    def parse_legacy(file)
       raise "Legacy DS file parser: not implemented"
       #file.each_with_index do |line, c|
       #  line = line.strip
