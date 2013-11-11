@@ -1,29 +1,64 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
+
+# argos-ruby /path/argos/ --dest=/path/dest --level=info 2>> /path/argos-json.log 
 require_relative "../lib/argos"
+require "optparse"
+require "yaml"
 
-action = "parse"
-format = "json"
+param = { format: "json",
+  action: "parse",
+  level: Logger::WARN,
+  dest: nil,
+  filter: nil,
+}
 
-glob = ARGV[0]||Dir.pwd
-filter = ARGV[1]||""
-dest = ARGV[2]||nil
-level = Logger::WARN
+optparser = OptionParser.new(ARGV) do |opts|
+    
+  opts.on_tail("--version", "-v", "Library version") do
+    puts Argos.library_version
+    exit
+  end
 
-if ARGV.include? "--source"
-  action = "source"
-elsif ARGV.include? "--messages"
-  action = "messages"
-elsif ARGV.include? "--level=debug"
-  level = Logger::DEBUG
-elsif ARGV.include? "--level=info"
-  level = Logger::INFO
+  opts.on("--action=ACTION", "-a", "Action") do |action|
+    param[:action] = action
+  end
+
+  opts.on("--format=FORMAT", "-f", "Format") do |format|
+    param[:format] = format
+  end
+
+  opts.on("--filter=FILTER", "Filter") do |filter|
+    param[:filter] = filter
+  end
+
+  opts.on("--level=LEVEL", "-l=LEVEL", "Log level") do |level|
+
+    param[:level] = case level
+      when /debug|0/i
+        Logger::DEBUG
+      when /info|1/i
+        Logger::INFO
+      when /warn|2/i
+        Logger::WARN
+      when /error|3/i
+        Logger::ERROR
+      when /fatal|4/i
+        Logger::FATAL
+      else
+        param[:level]
+    end
+  end
+
 end
+optparser.parse!
+glob = ARGV[0]||Dir.pwd
 
 begin
 
 log = Logger.new(STDERR)
-log.level = level
+log.level = param[:level]
+
 
 if not Argos.argos? glob
   glob = glob.gsub(/\/$/, "")
@@ -32,8 +67,8 @@ if not Argos.argos? glob
   end
 end
 
-log.debug "#{__FILE__} --#{action}"
-bundle = Digest::SHA1.hexdigest(glob+filter)
+log.debug "#{File.realpath(__FILE__)} #{param}"
+bundle = Digest::SHA1.hexdigest(glob+param[:filter].to_s)
 result = []
 
 Dir[glob].select {|f|
@@ -42,16 +77,16 @@ Dir[glob].select {|f|
   
   argos = Argos.factory(Argos.type(filename))
   argos.filename = filename
-  argos.filter = filter
+  argos.filter = param[:filter]
   argos.log = log
 
-  case action
+  case param[:action]
     when "source"
       result << Argos.source(argos).merge(glob: glob, bundle: bundle)
     when "parse"
       arr = argos.parse(filename)
-      unless dest.nil?
-        jsonfile = "#{dest.gsub(/\$/, "")}/#{argos.source}.json"
+      unless param[:dest].nil?
+        jsonfile = "#{param[:dest].gsub(/\$/, "")}/#{argos.source}.json"
         File.open(jsonfile, "w") { |file| file.write(arr.to_json) }
       end
       result += arr
@@ -64,9 +99,9 @@ Dir[glob].select {|f|
 ds_count = result.select {|argos| argos[:type] == "ds"}.size
 diag_count = result.select {|argos| argos[:type] == "diag"}.size
 
-if ["parse", "messages"].include? action
+if ["parse", "messages"].include? param[:action]
   log.info "Documents: #{result.size}, ds: #{ds_count}, diag: #{diag_count}, bundle: #{bundle}, glob: #{glob}"
-elsif "source" == action
+elsif "source" == param[:action]
   result = result.select {|s| s[:size] > 0 }
   sum_count = result.map {|s| s[:size]}.inject { |sum, c| sum + c }
   result = result.map {|s|
@@ -76,8 +111,15 @@ elsif "source" == action
   log.info "Documents (Σcount): #{sum_count}, sources: #{result.size} (ds: #{ds_count}, diag: #{diag_count}), bundle: #{bundle}, glob: #{glob}"
 end
 
-if "json" == format and dest.nil?
-  puts result.to_json
+if param[:dest].nil?
+  case param[:format]
+    when "json"
+      puts result.to_json
+    when /y(a)?ml/ 
+      puts result.to_yaml
+    when /(ruby|rb)/
+      puts result
+  end
 end
 
 exit(0)
