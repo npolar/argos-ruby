@@ -14,13 +14,18 @@ param = { format: "json",
 }
 
 optparser = OptionParser.new(ARGV) do |opts|
-    
+  #opts.banner "BLA BLA BLA"
+
   opts.on_tail("--version", "-v", "Library version") do
     puts Argos.library_version
     exit
   end
 
-  opts.on("--action=ACTION", "-a", "Action") do |action|
+  opts.on("--action=ACTION", "-a", "Action: parse|source") do |action|
+    param[:action] = action
+  end
+
+  opts.on("--dest=destination", "-a", "Destination directory") do |action|
     param[:action] = action
   end
 
@@ -28,11 +33,11 @@ optparser = OptionParser.new(ARGV) do |opts|
     param[:format] = format
   end
 
-  opts.on("--filter=FILTER", "Filter") do |filter|
+  opts.on("--filter=FILTER", "Filter lambda") do |filter|
     param[:filter] = filter
   end
 
-  opts.on("--level=LEVEL", "-l=LEVEL", "Log level") do |level|
+  opts.on("--level=LEVEL", "-l=LEVEL", "Log level: debug|info|warn|error|fatal") do |level|
 
     param[:level] = case level
       when /debug|0/i
