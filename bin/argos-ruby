@@ -25,8 +25,8 @@ optparser = OptionParser.new(ARGV) do |opts|
     param[:action] = action
   end
 
-  opts.on("--dest=destination", "-a", "Destination directory") do |action|
-    param[:action] = action
+  opts.on("--dest=destination", "-a", "Destination directory") do |dest|
+    param[:dest] = dest
   end
 
   opts.on("--format=FORMAT", "-f", "Format") do |format|
