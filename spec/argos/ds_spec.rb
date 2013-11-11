@@ -83,28 +83,14 @@ module Argos
 :sensor_data=>["92", "128", "130", "132"], :technology=>"argos",
 :type=>"ds", :filename=>VALID_DS,
 :source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994",
-:warn=>["missing-position"],
-:errors=>["sensors-count-mismatch"],
+:warn=>["missing-position", "sensors-count-mismatch"],
 :parser=>"argos-ruby-#{Argos::VERSION}",
 :id=>"f2c82a5ca1330b312925949a15ac300d07452a12"}]
       end
 
     end
 
-    context "errors" do
-
-      before(:each) do
-        @file = File.expand_path(File.dirname(__FILE__)+"/_ds/sensor_mismatch_ds.txt")
-      end
-
-      it "sensors-count-mismatch" do
-        @ds.parse @file
-        @ds[0][:errors].should == nil
-        @ds[2][:errors].include?("sensors-count-mismatch").should == true
-      end
-
-
-    end
+    #context "errors" do
 
     context "warn" do
 
@@ -112,10 +98,16 @@ module Argos
         @file = File.expand_path(File.dirname(__FILE__)+"/_ds/sensor_mismatch_ds.txt")
       end
 
+      it "sensors-count-mismatch" do
+        @ds.parse @file
+        @ds[1][:warn].should_not include("sensors-count-mismatch")
+        @ds[2][:warn].should include("sensors-count-mismatch")  
+      end
+
       it "missing-position"  do
           @ds.parse @file
-          @ds[0][:warn].should == ["missing-position"]
-          @ds[2][:warn].should include("missing-position")
+          @ds[0][:warn].should include("missing-position")
+          @ds[3][:warn].should == nil
       end
 
     end

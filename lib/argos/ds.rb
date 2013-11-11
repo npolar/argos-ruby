@@ -296,22 +296,25 @@ module Argos
     end
 
     def merge(ds, measurement)
-      m = ds.select {|k,v| k != :measurements and k != :errors }     
+      m = ds.select {|k,v| k != :measurements and k != :errors and k != :warn }     
       m = m.merge(measurement)          
       m = m.merge({ technology: "argos",
         type: type, filename: filename, source: sha1
       })
 
-
       if not ds[:errors].nil? and ds[:errors].any?
         m[:errors] = ds[:errors].clone
       end
 
+      if not ds[:warn].nil? and ds[:warn].any?
+        m[:warn] = ds[:warn].clone
+      end
+
       if not m[:sensor_data].nil? and m[:sensor_data].size != ds[:sensors]
-        if m[:errors].nil?
-          m[:errors] = []
+        if m[:warn].nil?
+          m[:warn] = []
         end
-        m[:errors] << "sensors-count-mismatch"
+        m[:warn] << "sensors-count-mismatch"
       end
 
       idbase = m.clone
