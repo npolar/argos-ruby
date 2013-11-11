@@ -1,8 +1,10 @@
 # encoding: utf-8
 # https://github.com/radar/guides/blob/master/gem-development.md
+require File.expand_path(File.dirname(__FILE__)+"/lib/argos")
+
 Gem::Specification.new do |s|
   s.name        = "argos-ruby"
-  s.version     = "1.0.1"
+  s.version     = Argos::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Espen Egeland", "Conrad Helgeland"]
   s.email       = ["data*npolar.no"]
