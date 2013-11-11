@@ -19,7 +19,7 @@ $ git clone https://github.com/npolar/argos-ruby.git
 Soon
 $ gem install argos-ruby
 
-## argos-json
+## Command-line usage
 ```sh
 $  curl "https://raw.github.com/npolar/argos-ruby/master/spec/argos/_ds/990660_A.DAT" > /tmp/990660_A.DAT
 $  ./bin/argos-ruby /tmp/990660_A.DAT --filter "lambda {|a| a[:program] == 660 }"
