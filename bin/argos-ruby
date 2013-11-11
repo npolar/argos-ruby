@@ -14,14 +14,14 @@ param = { format: "json",
 }
 
 optparser = OptionParser.new(ARGV) do |opts|
-  #opts.banner "BLA BLA BLA"
+  #opts.banner ""
 
   opts.on_tail("--version", "-v", "Library version") do
     puts Argos.library_version
     exit
   end
 
-  opts.on("--action=ACTION", "-a", "Action: parse|source") do |action|
+  opts.on("--action={parse|source}", "-a", "Action") do |action|
     param[:action] = action
   end
 

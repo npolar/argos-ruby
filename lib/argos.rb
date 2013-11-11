@@ -12,11 +12,11 @@ require_relative "argos/diag"
 # Contains parsers for Argos DS/DAT and DIAG files.
 # 
 # Code written by staff at the Norwegian Polar Data Centre
-# http://data.npolar.no - a unit of [Norwegian Polar Institute](http://npolar.no)
+# http://data.npolar.no - a service run by the [Norwegian Polar Institute](http://npolar.no)
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.0.2"
+  VERSION = "1.0.0.dev"
   # Detect Argos type ("ds" or "diag" or nil)
   #
   # @param filename [String] Argos (DS or DIAG) file
