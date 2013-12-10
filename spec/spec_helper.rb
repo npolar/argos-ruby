@@ -11,4 +11,11 @@ RSpec.configure do |config|
   config.formatter =  :documentation #:progress,  :html, :textmate
 end
 
+def dsfile(filename)
+  File.expand_path(File.dirname(__FILE__)+"/argos/_ds/#{filename}")
+end
+
+def diagfile(filename)
+  File.expand_path(File.dirname(__FILE__)+"/argos/_diag/#{filename}")
+end
 

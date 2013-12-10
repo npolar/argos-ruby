@@ -19,7 +19,7 @@ module Argos
 
     attr_writer :log, :filename
 
-    attr_reader :filename, :filter, :filtername, :valid, :filesize, :sha1, :messages
+    attr_reader :filename, :filter, :filtername, :valid, :filesize, :sha1, :messages, :multiplicates
 
     START_REGEX = /^\d{5} \d{5,6} +\d+ +\d+/
 
@@ -146,6 +146,14 @@ module Argos
       unfold.each do |d|
         self << d
       end
+
+      @multiplicates = group_by { |e| e }.select { |k, v| v.size > 1 }.map(&:first)
+      if multiplicates.any?
+        log.warn "Multiplicates (source sha1 #{sha1} #{filename}): #{multiplicates.to_json}"
+        self.uniq!
+        log.info "Unique DS messages: #{self.size} sha1: #{sha1} #{filename}"
+      end
+      
       self
     end
   

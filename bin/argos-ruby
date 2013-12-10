@@ -87,9 +87,13 @@ Dir[glob].select {|f|
 
   case param[:action]
     when "source"
+     
       result << Argos.source(argos).merge(glob: glob, bundle: bundle)
+      
     when "parse"
+      
       arr = argos.parse(filename)
+      
       unless param[:dest].nil?
         jsonfile = "#{param[:dest].gsub(/\$/, "")}/#{argos.source}.json"
         File.open(jsonfile, "w") { |file| file.write(arr.to_json) }
@@ -103,6 +107,8 @@ Dir[glob].select {|f|
 
 ds_count = result.select {|argos| argos[:type] == "ds"}.size
 diag_count = result.select {|argos| argos[:type] == "diag"}.size
+# err count
+# warn count
 
 if ["parse", "messages"].include? param[:action]
   log.info "Documents: #{result.size}, ds: #{ds_count}, diag: #{diag_count}, bundle: #{bundle}, glob: #{glob}"

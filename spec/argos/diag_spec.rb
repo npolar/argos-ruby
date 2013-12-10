@@ -3,8 +3,8 @@ require 'spec_helper.rb'
 module Argos
 
   describe Diag do
-  
-    VALID_DIAG = File.expand_path(File.dirname(__FILE__)+"/_diag/990660_A.DIA")
+      
+    VALID_DIAG = diagfile("990660_A.DIA")
   
     describe "#type" do
       it do
@@ -23,6 +23,10 @@ module Argos
       it "should return Argos::Diag Array" do
         @diag.filter =  lambda{|a| true}
         @diag.parse(VALID_DIAG).should be_kind_of Diag
+      end
+      
+      it "should return unique elements" do
+        @diag.parse(diagfile("dup.diag")).size.should == 1
       end
   
       describe "#size" do

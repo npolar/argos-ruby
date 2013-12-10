@@ -16,7 +16,7 @@ require_relative "argos/diag"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.0.0"
+  VERSION = "1.0.1"
   # Detect Argos type ("ds" or "diag" or nil)
   #
   # @param filename [String] Argos (DS or DIAG) file
@@ -101,7 +101,10 @@ module Argos
     end
     
 
-    { id: argos.source,
+    source = {
+      id: argos.source,
+      technology: "argos",
+      collection: "tracking",
       type: argos.type,
       programs: argos.programs,
       platforms: argos.platforms,
@@ -117,8 +120,13 @@ module Argos
       filesize: argos.filesize,
       messages: argos.messages.size,
       filter: argos.filtername.nil? ? argos.filter : argos.filtername,
-      size: argos.size,
+      size: argos.size
     }
+    if argos.multiplicates.any?
+      source[:multiplicates] = argos.multiplicates.map {|a| a[:id]}
+    end
+    source
+    
   end
 
 
@@ -137,6 +145,5 @@ module Argos
   def programs
     map {|a| a[:program]}.uniq.sort
   end
-
-
+  
 end

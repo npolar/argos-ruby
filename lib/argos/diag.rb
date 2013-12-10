@@ -17,7 +17,7 @@ module Argos
   
     LOCATION_CLASS = ["3", "2", "1", "0", "A", "B", "Z"]
 
-    attr_accessor :log, :filename, :programs
+    attr_accessor :log, :filename, :programs, :multiplicates
 
     attr_reader :filename, :filter, :filtername, :sha1, :valid, :filesize
   
@@ -142,7 +142,14 @@ module Argos
       else
         log.info "Parsed #{self.size} Argos DIAG segments sha1:#{sha1} #{filename}"
       end
-        
+  
+      @multiplicates = group_by { |e| e }.select { |k, v| v.size > 1 }.map(&:first)
+      if multiplicates.any?
+        log.warn "Multiplicates (source sha1 #{sha1} #{filename}): #{multiplicates.to_json}"
+        self.uniq!
+        log.info "Unique DIAG messages: #{self.size} sha1: #{sha1} #{filename}"
+      end
+    
       self
     end
   

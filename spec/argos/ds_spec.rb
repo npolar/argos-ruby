@@ -1,10 +1,11 @@
 require 'spec_helper.rb'
 
 module Argos
+  
 
   describe Ds do
-  
-    VALID_DS = File.expand_path(File.dirname(__FILE__)+"/_ds/990660_A.DAT")
+    
+    VALID_DS = dsfile("990660_A.DAT")
 
     before (:each) do
       @ds = Ds.new
@@ -36,6 +37,34 @@ module Argos
       it "should return Argos::Ds Array" do
         @ds.filter = lambda {|ds|true}
         @ds.parse(VALID_DS).should be_kind_of Ds
+      end
+      
+      it "should return unique elements" do
+        @ds.parse(dsfile("dup.ds")).size.should == 3 # file contains 6
+      end
+      
+                  
+      it "should store multiplicates" do
+        @ds.parse(dsfile("dup.ds")).multiplicates.map {|m| m.keys }.should==3.times.map{[:program,
+         :platform,
+         :lines,
+         :sensors,
+         :satellite,
+         :lc,
+         :positioned,
+         :latitude,
+         :longitude,
+         :altitude,
+         :headers,
+         :measured,
+         :identical,
+         :sensor_data,
+         :technology,
+         :type,
+         :filename,
+         :source,
+         :parser,
+         :id]}
       end
 
       it "should sort ascending on positioned, measured" do
@@ -95,7 +124,7 @@ module Argos
     context "warn" do
 
       before(:each) do
-        @file = File.expand_path(File.dirname(__FILE__)+"/_ds/sensor_mismatch_ds.txt")
+        @file = dsfile("sensor_mismatch_ds.txt")
       end
 
       it "sensors-count-mismatch" do
