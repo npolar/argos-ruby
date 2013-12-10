@@ -28,6 +28,10 @@ module Argos
       it "should return unique elements" do
         @diag.parse(diagfile("dup.diag")).size.should == 1
       end
+      
+      it "should store errors" do
+        @diag.parse(diagfile("error.diag")).errors[0].should =~ /Invalid format/
+      end
   
       describe "#size" do
         it "should == number messages" do

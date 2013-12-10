@@ -17,9 +17,9 @@ module Argos
   
     LOCATION_CLASS = ["3", "2", "1", "0", "A", "B", "Z"]
 
-    attr_accessor :log, :filename, :programs, :multiplicates
+    attr_accessor :log, :filename, :programs
 
-    attr_reader :filename, :filter, :filtername, :sha1, :valid, :filesize
+    attr_reader :filename, :filter, :filtername, :sha1, :valid, :filesize, :multiplicates, :errors
   
     START_REGEX = /^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}/
     $start_diag ='^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}'
@@ -53,14 +53,8 @@ module Argos
     $FORMAT_3 =' *\d{5,6} +Date : (0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.\d{2} ([0-1][0-9]|2[0-3]):([0-5][0-9]:[0-5][0-9]) +LC : (3|2|1|0|A|B|Z) +IQ : *\d{2} *Lat1 : +((\d+\.\d{3}[NS])|\?+) +Lon1 : +((\d+\.\d{3}[EW])|\?+) +Lat2 : +((\d+\.\d{3}[NS])|\?)+ +Lon2 : +((\d+\.\d{3}[EW])|\?+) +Nb mes : (\d{3})? +Nb mes>-120dB : (\d{3})? +Best level : (-\d{3})? *dB +Pass duration : *(\d+|\?+) *s? +NOPC : +([0-4]|\?) +Calcul freq : +\d{3} (\d+\.\d+)? *Hz +Altitude : +(\d+)? m +.+E[+-]\d+( +(\d{2,5}|\w{2}))*$'
   
   
-    def initialize (filename = nil)
-      @index = 0
-      @error_num = 0
-      @errors_num =0
-      @argos_contacts = Array.new
-      @filename = filename
-      read_file (filename) unless filename == nil
-  
+    def initialize
+      @errors = []  
     end
 
     def filter?
@@ -76,10 +70,6 @@ module Argos
       end
     end
 
-    def get_hash
-      @argos_contacts
-    end
-  
     def parse(filename=nil)
       if filename.nil?
         filename = @filename
@@ -160,7 +150,8 @@ module Argos
       self << create_diag_hash(contact)
       true
     else
-      error = "#{__FILE__}#check_format #{filename}:#{line_num} source:#{@sha1} Invalid format:\n"  + contact
+      error = "#{filename}:#{line_num} sha1:#{@sha1} Invalid format:\n"  + contact
+      @errors << error
       log.error error
       false
     end
