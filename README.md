@@ -23,8 +23,39 @@ $  ./bin/argos-ruby /tmp/990660_A.DAT --filter "lambda {|a| a[:program] == 660 }
 This will output (the lambda filter is of course optional):
 
 ```json
-[{"program":660,"platform":14747,"lines":2,"sensors":32,"satellite":"K","lc":null,"positioned":null,"latitude":null,"longitude":null,"altitude":null,"headers":5,"measured":"1999-12-16T00:46:49Z","identical":1,"sensor_data":["92","128","130","132"],"technology":"argos","type":"ds","filename":"/tmp/990660_A.DAT","source":"3a39e0bd0b944dca4f4fbf17bc0680704cde2994","warn":["missing-position","sensors-count-mismatch"],"parser":"argos-ruby-1.0.0","id":"f2c82a5ca1330b312925949a15ac300d07452a12"}]
-
+[
+  {
+    "program": 660,
+    "platform": 14747,
+    "lines": 2,
+    "sensors": 32,
+    "satellite": "K",
+    "lc": null,
+    "positioned": null,
+    "latitude": null,
+    "longitude": null,
+    "altitude": null,
+    "headers": 5,
+    "measured": "1999-12-16T00:46:49Z",
+    "identical": 1,
+    "sensor_data": [
+      "92",
+      "128",
+      "130",
+      "132"
+    ],
+    "technology": "argos",
+    "type": "ds",
+    "location": "file:///tmp/990660_A.DAT",
+    "source": "3a39e0bd0b944dca4f4fbf17bc0680704cde2994",
+    "warn": [
+      "missing-position",
+      "sensors-count-mismatch"
+    ],
+    "parser": "argos-ruby-1.0.2",
+    "id": "f12fe18341430f1db0fcf04fae314421c13369a6"
+  }
+]
 ```
 Links
 * [http://api.npolar.no/tracking/?q=&filter-technology=argos](http://api.npolar.no/tracking/?q=&filter-technology=argos)
