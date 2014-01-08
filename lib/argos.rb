@@ -16,7 +16,7 @@ require_relative "argos/diag"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.0.1"
+  VERSION = "1.0.2"
   # Detect Argos type ("ds" or "diag" or nil)
   #
   # @param filename [String] Argos (DS or DIAG) file
@@ -116,14 +116,19 @@ module Argos
       west: argos.longitudes.min,
       latitude_mean: latitude_mean,
       longitude_mean: longitude_mean,
-      filename: argos.filename,
-      filesize: argos.filesize,
+      location: "file://"+argos.filename,
+      bytes: argos.filesize,
+      updated: argos.updated.xmlschema,
       messages: argos.messages.size,
       filter: argos.filtername.nil? ? argos.filter : argos.filtername,
-      size: argos.size
+      size: argos.size,
+      parser: library_version
     }
     if argos.multiplicates.any?
       source[:multiplicates] = argos.multiplicates.map {|a| a[:id]}
+    end
+    if argos.errors.any?
+      source[:errors] = argos.errors
     end
     source
     
