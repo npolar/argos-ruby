@@ -19,7 +19,7 @@ module Argos
 
     attr_accessor :log, :filename, :programs
 
-    attr_reader :filename, :filter, :filtername, :sha1, :valid, :filesize, :multiplicates, :errors
+    attr_reader :filename, :filter, :filtername, :sha1, :valid, :filesize, :updated, :multiplicates, :errors
   
     START_REGEX = /^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}/
     $start_diag ='^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}'
@@ -70,6 +70,7 @@ module Argos
       end
     end
 
+    # @return []
     def parse(filename=nil)
       if filename.nil?
         filename = @filename
@@ -92,6 +93,7 @@ module Argos
       contact = []
       file = File.open(filename)
       @filesize = file.size
+      @updated = file.mtime
 
       log.debug "Parsing Argos DIAG file #{filename} sha1:#{sha1} (#{filesize} bytes)"
       if filter?
@@ -135,10 +137,11 @@ module Argos
   
       @multiplicates = group_by { |e| e }.select { |k, v| v.size > 1 }.map(&:first)
       if multiplicates.any?
-        log.warn "Multiplicates (source sha1 #{sha1} #{filename}): #{multiplicates.to_json}"
+        #log.warn "#{multiplicates.size} multiplicates in source sha1 #{sha1} #{filename}): #{multiplicates.map {|a|a[:id]} }"
         self.uniq!
         log.info "Unique DIAG messages: #{self.size} sha1: #{sha1} #{filename}"
       end
+      self.sort_by! {|diag| diag[:measured]}
     
       self
     end
@@ -220,7 +223,7 @@ module Argos
         sensor_data: sensor_data,
         technology: "argos",
         type: type,
-        filename: filename,
+        location: "file://"+filename,
         source: "#{sha1}"
       }
 

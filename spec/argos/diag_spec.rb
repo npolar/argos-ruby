@@ -59,8 +59,8 @@ module Argos
         :dist_track => nil,
         :technology=>"argos",
         :type=>"diag",
-        :filename=>VALID_DIAG,
-        :id => "a4e59580432b7b621f66c0cdc3087127554acd1d",
+        :location=>"file://"+VALID_DIAG,
+        :id => "ea2243d95df7d70a02a4fb66bc8876f10fdabf12",
         :parser => "argos-ruby-#{Argos::VERSION}",
         :source =>"f53ae3ab454f3e210347439aa440c084f775f9a4"}
         end
