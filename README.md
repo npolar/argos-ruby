@@ -2,21 +2,17 @@
 
 A Ruby library for parsing Argos tracking data
 
-```argos-ruby``` has been developed to parse [Argos](http://www.argos-system.org)
-satellite tracking data collected at the [Norwegian Polar Institute]
-(http://npolar.no/en) over a 25-year period (!) from 1989 to 2013.
+[argos-ruby](https://github.com/npolar/argos-ruby) is used to parse [Argos](http://www.argos-system.org)
+satellite tracking data files collected at the [Norwegian Polar Institute]
+(http://npolar.no/en) since 1989.
 
 Be warned, the Argos file formats have changed over time. No promises are
 made that the library will work outside of Norway :).
 
-Currently, the library parses Argos DS/DIAG files dating from 1991
+Currently, the library parses Argos DS/DIAG files dating from August 1990
 and onwards.
 
 ## Install
-Now
-$ git clone https://github.com/npolar/argos-ruby.git
-
-Soon
 $ gem install argos-ruby
 
 ## Command-line usage
