@@ -19,7 +19,7 @@ module Argos
 
     attr_writer :log, :filename
 
-    attr_reader :filename, :filter, :filtername, :valid, :filesize, :sha1, :messages, :multiplicates
+    attr_reader :filename, :filter, :filtername, :valid, :filesize, :updated, :sha1, :messages, :multiplicates, :errors
 
     START_REGEX = /^\d{5} \d{5,6} +\d+ +\d+/
 
@@ -27,7 +27,8 @@ module Argos
 
     LOCATION_CLASS = [nil, "0","1","2","3","A","B","G","Z"]
 
-    def self.ds? filename
+    def initialize
+      @errors = []
     end
 
     def filter?
@@ -78,7 +79,8 @@ module Argos
       contact = []
       file = File.open(filename)
       @filesize = file.size
-
+      @updated = file.mtime
+      
       log.debug "Parsing ARGOS DS file #{filename} source:#{sha1} (#{filesize} bytes)"
       if filter?
         log.debug "Using filter: #{@filtername.nil? ? filter : @filtername }"
@@ -149,11 +151,11 @@ module Argos
 
       @multiplicates = group_by { |e| e }.select { |k, v| v.size > 1 }.map(&:first)
       if multiplicates.any?
-        log.warn "Multiplicates (source sha1 #{sha1} #{filename}): #{multiplicates.to_json}"
+        log.warn "#{multiplicates.size} multiplicates in source sha1 #{sha1} #{filename}): #{multiplicates.map {|a|a[:id]} }"
         self.uniq!
         log.info "Unique DS messages: #{self.size} sha1: #{sha1} #{filename}"
       end
-      
+      self.sort_by! {|ds| ds[:measured]}
       self
     end
   
@@ -303,11 +305,15 @@ module Argos
       unfolded
     end
 
+    # Merges a DS header hash into each measurement
+    # @return [Array] Measurements with header and static metadata merged in
     def merge(ds, measurement)
       m = ds.select {|k,v| k != :measurements and k != :errors and k != :warn }     
       m = m.merge(measurement)          
-      m = m.merge({ technology: "argos",
-        type: type, filename: filename, source: sha1
+      m = m.merge ({ technology: "argos",
+        type: type,
+        location: "file://"+filename,
+        source: sha1
       })
 
       if not ds[:errors].nil? and ds[:errors].any?
@@ -324,6 +330,27 @@ module Argos
         end
         m[:warn] << "sensors-count-mismatch"
       end
+
+      # Create id as SHA1 hash of measurement minus stuff that may vary (like filename)
+      # 
+      # Possible improvement for is to base id on a static list of keys
+      # :program,
+      # :platform,
+      # :lines,
+      # :sensors,
+      # :satellite,
+      # :lc,
+      # :positioned,
+      # :latitude,
+      # :longitude,
+      # :altitude,
+      # :headers,
+      # :measured,
+      # :identical,
+      # :sensor_data,
+      # :technology,
+      # :type,
+      # :source
 
       idbase = m.clone
       idbase.delete :errors
