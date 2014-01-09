@@ -16,50 +16,46 @@ and onwards.
 $ gem install argos-ruby
 
 ## Command-line usage
+
 ```sh
 $  curl "https://raw.github.com/npolar/argos-ruby/master/spec/argos/_ds/990660_A.DAT" > /tmp/990660_A.DAT
-$  ./bin/argos-ruby /tmp/990660_A.DAT --filter "lambda {|a| a[:program] == 660 }"
+$  ./bin/argos-ruby /tmp/990660_A.DAT
 ```
-This will output (the lambda filter is of course optional):
+JSON output (shortened)
 
 ```json
-[
+[ { .. }, 
   {
-    "program": 660,
-    "platform": 14747,
-    "lines": 2,
-    "sensors": 32,
+    "program": 9660,
+    "platform": 2173,
+    "lines": 3,
+    "sensors": 3,
     "satellite": "K",
-    "lc": null,
-    "positioned": null,
-    "latitude": null,
-    "longitude": null,
-    "altitude": null,
-    "headers": 5,
-    "measured": "1999-12-16T00:46:49Z",
+    "lc": "B",
+    "positioned": "1999-12-31T19:18:58Z",
+    "latitude": 77.562,
+    "longitude": 40.341,
+    "altitude": 0.0,
+    "headers": 12,
+    "measured": "1999-12-31T19:19:28Z",
     "identical": 1,
     "sensor_data": [
-      "92",
-      "128",
-      "130",
-      "132"
+      "18729",
+      "17",
+      "149"
     ],
     "technology": "argos",
     "type": "ds",
     "location": "file:///tmp/990660_A.DAT",
     "source": "3a39e0bd0b944dca4f4fbf17bc0680704cde2994",
-    "warn": [
-      "missing-position",
-      "sensors-count-mismatch"
-    ],
-    "parser": "argos-ruby-1.0.2",
-    "id": "f12fe18341430f1db0fcf04fae314421c13369a6"
+    "parser": "argos-ruby-1.0.3",
+    "id": "5185906d06859457786753459894bd33fdd8cd0a"
   }
 ]
+
 ```
 Links
 * [http://api.npolar.no/tracking/?q=&filter-technology=argos](http://api.npolar.no/tracking/?q=&filter-technology=argos)
 * [Argos users manual v1.5](http://www.argos-system.org/files/pmedia/public/r363_9_argos_users_manual-v1.5.pdf) (PDF)
-http://alaska.usgs.gov/science/biology/spatial/pdfs/argosfilter_v850_manual.pdf
-http://gis-lab.info/programs/argos/argos-manual-eng.html#delimit
-http://alaska.usgs.gov/science/biology/spatial/
+* http://alaska.usgs.gov/science/biology/spatial/
+* http://gis-lab.info/programs/argos/argos-manual-eng.html
