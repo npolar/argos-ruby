@@ -1,8 +1,10 @@
 # argos-ruby
 
-A Ruby library for parsing Argos tracking data
+A Ruby library and command-line tool for parsing Argos tracking data
+
 
 # DS/DIAG to JSON
+In the default JSON format header data is repeated in each message
 ```sh
 curl "https://raw.github.com/npolar/argos-ruby/master/spec/argos/_ds/fragment.ds" > /tmp/fragment.ds
 argos-ruby /tmp/fragment.ds 
@@ -62,6 +64,7 @@ argos-ruby /tmp/fragment.ds
     "id": "26af9092d01fbd49ff8cb9041e63df352886dba6"
   }
 ]
+```
 
 ## About
 
