@@ -3,8 +3,10 @@
 A Ruby library and command-line tool for parsing Argos tracking data
 
 
-# DS/DIAG to JSON
-In the default JSON format header data is repeated in each message
+## Usage
+### DS/DIAG to JSON
+
+```argos-ruby``` converts Argos files to JSON. DS header data is repeated in each message
 ```sh
 curl "https://raw.github.com/npolar/argos-ruby/master/spec/argos/_ds/fragment.ds" > /tmp/fragment.ds
 argos-ruby /tmp/fragment.ds 
