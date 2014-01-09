@@ -93,7 +93,7 @@ module Argos
       contact = []
       file = File.open(filename)
       @filesize = file.size
-      @updated = file.mtime
+      @updated = file.mtime.utc
 
       log.debug "Parsing Argos DIAG file #{filename} sha1:#{sha1} (#{filesize} bytes)"
       if filter?
