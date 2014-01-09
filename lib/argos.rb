@@ -1,5 +1,6 @@
 require "bigdecimal"
 require "date"
+require "time" # for iso8601
 require "digest/sha1"
 require "json"
 require "logger"
@@ -16,7 +17,7 @@ require_relative "argos/diag"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.0.2"
+  VERSION = "1.0.3"
   # Detect Argos type ("ds" or "diag" or nil)
   #
   # @param filename [String] Argos (DS or DIAG) file
@@ -87,7 +88,7 @@ module Argos
   # Source fingerprint of Argos file (sha1 hash, segment and document counts, etc.)
   #
   # @param  [Argos::Ds Argos::Diag] argos
-  # @return [Hash]
+  # @return [Hash] Source hash
   def self.source(argos)
 
     argos.parse(argos.filename)
@@ -100,7 +101,7 @@ module Argos
       longitude_mean = (argos.longitudes.inject{ |sum, longitude| sum + longitude } / argos.latitudes.size).round(3)
     end
     
-
+    
     source = {
       id: argos.source,
       technology: "argos",
@@ -118,7 +119,7 @@ module Argos
       longitude_mean: longitude_mean,
       location: "file://"+argos.filename,
       bytes: argos.filesize,
-      updated: argos.updated.xmlschema,
+      updated: argos.updated.utc.iso8601,
       messages: argos.messages.size,
       filter: argos.filtername.nil? ? argos.filter : argos.filtername,
       size: argos.size,

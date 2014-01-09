@@ -60,3 +60,6 @@ This will output (the lambda filter is of course optional):
 Links
 * [http://api.npolar.no/tracking/?q=&filter-technology=argos](http://api.npolar.no/tracking/?q=&filter-technology=argos)
 * [Argos users manual v1.5](http://www.argos-system.org/files/pmedia/public/r363_9_argos_users_manual-v1.5.pdf) (PDF)
+http://alaska.usgs.gov/science/biology/spatial/pdfs/argosfilter_v850_manual.pdf
+http://gis-lab.info/programs/argos/argos-manual-eng.html#delimit
+http://alaska.usgs.gov/science/biology/spatial/

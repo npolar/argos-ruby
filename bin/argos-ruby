@@ -75,11 +75,17 @@ end
 log.debug "#{File.realpath(__FILE__)} #{param}"
 bundle = Digest::SHA1.hexdigest(glob+param[:filter].to_s)
 result = []
+argosfiles = 0
 
-Dir[glob].select {|f|
-  Argos.argos? f
-}.map {|filename|
+Dir[glob].reject {|f| File.directory? f}.select {|f|
+  argosfiles = argosfiles + 1
+  if not Argos.argos? f  
+    log.warn "Not Argos: #{f}"
+  end
   
+  Argos.argos? f  
+}.map {|filename|
+  log.debug "*"*80
   argos = Argos.factory(Argos.type(filename))
   argos.filename = filename
   argos.filter = param[:filter]
@@ -87,9 +93,7 @@ Dir[glob].select {|f|
 
   case param[:action]
     when "source"
-     
       result << Argos.source(argos).merge(glob: glob, bundle: bundle)
-      
     when "parse"
       
       arr = argos.parse(filename)
@@ -112,6 +116,8 @@ diag_count = result.select {|argos| argos[:type] == "diag"}.size
 
 if ["parse", "messages"].include? param[:action]
   log.info "Documents: #{result.size}, ds: #{ds_count}, diag: #{diag_count}, bundle: #{bundle}, glob: #{glob}"
+  
+  
 elsif "source" == param[:action]
   result = result.select {|s| s[:size] > 0 }
   sum_count = result.map {|s| s[:size]}.inject { |sum, c| sum + c }
@@ -119,13 +125,16 @@ elsif "source" == param[:action]
     s[:total] = sum_count
     s
   }
+  if argosfiles != result.size
+    log.warn "Argos file count: #{argosfiles} differs from parsed files: #{result.size}"
+  end
   log.info "Documents (Σcount): #{sum_count}, sources: #{result.size} (ds: #{ds_count}, diag: #{diag_count}), bundle: #{bundle}, glob: #{glob}"
 end
 
 if param[:dest].nil?
   case param[:format]
     when "json"
-      puts result.to_json
+      puts JSON.pretty_generate(result)
     when /y(a)?ml/ 
       puts result.to_yaml
     when /(ruby|rb)/
@@ -138,4 +147,4 @@ exit(0)
 rescue => e
   Logger.new(STDERR).fatal e
   exit(1)
-end
+end 
