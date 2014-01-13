@@ -17,7 +17,7 @@ require_relative "argos/diag"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.0.3"
+  VERSION = "1.0.4"
   # Detect Argos type ("ds" or "diag" or nil)
   #
   # @param filename [String] Argos (DS or DIAG) file

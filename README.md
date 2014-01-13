@@ -1,7 +1,6 @@
 # argos-ruby
 
-A Ruby library and command-line tool for parsing Argos tracking data
-
+A Ruby library and command-line tool for parsing Argos tracking data files.
 
 ## Usage
 ### DS/DIAG to JSON
@@ -36,8 +35,9 @@ argos-ruby /tmp/fragment.ds
     "type": "ds",
     "location": "file:///tmp/fragment.ds",
     "source": "a9c02cf81978a9fafecac582309c7c8161e5a76c",
-    "parser": "argos-ruby-1.0.3",
-    "id": "2d833010d13714dfb771f73470417405b887e8f4"
+    "parser": "argos-ruby-1.0.4",
+    "id": "2d833010d13714dfb771f73470417405b887e8f4",
+    "bundle": "bc30f5e5733087f730202bea53fa730092a192e3"
   },
   {
     "program": 9660,
@@ -62,16 +62,18 @@ argos-ruby /tmp/fragment.ds
     "type": "ds",
     "location": "file:///tmp/fragment.ds",
     "source": "a9c02cf81978a9fafecac582309c7c8161e5a76c",
-    "parser": "argos-ruby-1.0.3",
-    "id": "26af9092d01fbd49ff8cb9041e63df352886dba6"
+    "parser": "argos-ruby-1.0.4",
+    "id": "26af9092d01fbd49ff8cb9041e63df352886dba6",
+    "bundle": "bc30f5e5733087f730202bea53fa730092a192e3"
   }
 ]
+
 ```
 
 ## About
 
-[argos-ruby](https://github.com/npolar/argos-ruby) is used to parse [Argos](http://www.argos-system.org)
-satellite tracking data files collected at the [Norwegian Polar Institute]
+[argos-ruby](https://github.com/npolar/argos-ruby) has been developed to parse [Argos](http://www.argos-system.org)
+satellite tracking data files collected by the [Norwegian Polar Institute]
 (http://npolar.no/en) since 1989.
 
 Be warned, the Argos file formats have changed over time. No promises are

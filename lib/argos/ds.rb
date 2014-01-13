@@ -17,9 +17,9 @@ module Argos
   class Ds < Array
     include Argos  
 
-    attr_writer :log, :filename
+    attr_writer :log, :filename, :bundle
 
-    attr_reader :filename, :filter, :filtername, :valid, :filesize, :updated, :sha1, :messages, :multiplicates, :errors
+    attr_reader :bundle, :filename, :filter, :filtername, :valid, :filesize, :updated, :sha1, :messages, :multiplicates, :errors
 
     START_REGEX = /^\d{5} \d{5,6} +\d+ +\d+/
 
@@ -361,6 +361,7 @@ module Argos
 
       m[:parser] = Argos.library_version
       m[:id] = id
+      m[:bundle] = bundle
       m
     end
 

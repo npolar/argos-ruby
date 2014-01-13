@@ -62,6 +62,7 @@ module Argos
         :location=>"file://"+VALID_DIAG,
         :id => "ea2243d95df7d70a02a4fb66bc8876f10fdabf12",
         :parser => "argos-ruby-#{Argos::VERSION}",
+        :bundle => nil,
         :source =>"f53ae3ab454f3e210347439aa440c084f775f9a4"}
         end
       end

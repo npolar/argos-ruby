@@ -19,6 +19,12 @@ module Argos
     def param(argv=ARGV)
       optparser = OptionParser.new(ARGV) do |opts|
     
+        opts.banner = "argos-ruby [OPTIONS] {filename|glob}
+        For more information and source: https://github.com/npolar/argos-ruby
+
+Options:\n
+        "
+    
         opts.on_tail("--version", "-v", "Library version") do
           puts Argos.library_version
           exit

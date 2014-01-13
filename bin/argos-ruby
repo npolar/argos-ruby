@@ -89,6 +89,7 @@ Dir[glob].reject {|f| File.directory? f}.select {|f|
   argos = Argos.factory(Argos.type(filename))
   argos.filename = filename
   argos.filter = param[:filter]
+  argos.bundle = bundle
   argos.log = log
 
   case param[:action]

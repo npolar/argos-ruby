@@ -11,7 +11,9 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
-
+Gemfile.lock
+buffer.txt
+todo.txt
 # YARD artifacts
 .yardoc
 _yardoc

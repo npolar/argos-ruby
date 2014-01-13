@@ -17,9 +17,9 @@ module Argos
   
     LOCATION_CLASS = ["3", "2", "1", "0", "A", "B", "Z"]
 
-    attr_accessor :log, :filename, :programs
+    attr_accessor :log, :filename, :programs, :bundle
 
-    attr_reader :filename, :filter, :filtername, :sha1, :valid, :filesize, :updated, :multiplicates, :errors
+    attr_reader :bundle, :filename, :filter, :filtername, :sha1, :valid, :filesize, :updated, :multiplicates, :errors
   
     START_REGEX = /^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}/
     $start_diag ='^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}'
@@ -224,7 +224,7 @@ module Argos
         technology: "argos",
         type: type,
         location: "file://"+filename,
-        source: "#{sha1}"
+        source: "#{sha1}",
       }
 
       idbase = diag.clone
@@ -233,6 +233,7 @@ module Argos
 
       diag[:parser] = Argos.library_version
       diag[:id] = id
+      diag[:bundle] = bundle
       diag
     end
   
