@@ -5,6 +5,7 @@
 require_relative "../lib/argos"
 require "optparse"
 require "yaml"
+require "fileutils"
 
 param = { format: "json",
   action: "parse",
@@ -93,8 +94,9 @@ Dir[glob].reject {|f| File.directory? f}.select {|f|
   argos.log = log
 
   case param[:action]
-    when "source"
+    when "source","metadata"
       result << Argos.source(argos).merge(glob: glob, bundle: bundle)
+      
     when "parse"
       
       arr = argos.parse(filename)
@@ -119,13 +121,21 @@ if ["parse", "messages"].include? param[:action]
   log.info "Documents: #{result.size}, ds: #{ds_count}, diag: #{diag_count}, bundle: #{bundle}, glob: #{glob}"
   
   
-elsif "source" == param[:action]
+elsif /source|metadata/ =~ param[:action]
+  # Count the total number of files in the bundle
   result = result.select {|s| s[:size] > 0 }
   sum_count = result.map {|s| s[:size]}.inject { |sum, c| sum + c }
   result = result.map {|s|
     s[:total] = sum_count
     s
   }
+  unless param[:dest].nil?
+    jsonfile = "#{param[:dest].gsub(/\$/, "")}/bundle-#{bundle}-metadata.json"
+    FileUtils.mkpath(File.dirname(jsonfile))
+    log.debug "Argos bundle metadata: #{jsonfile}"
+    File.open(jsonfile, "w") { |file| file.write(result.to_json) }
+    
+  end
   if argosfiles != result.size
     log.warn "Argos file count: #{argosfiles} differs from parsed files: #{result.size}"
   end

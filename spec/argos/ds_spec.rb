@@ -92,7 +92,7 @@ module Argos
 :longitude=>22.319, :altitude=>0.0, :headers=>12,
 :measured=>"1999-12-30T18:43:52Z", :identical=>3, :sensor_data=>["78", "00", "00"],
 :technology=>"argos", :type=>"ds", :location=>"file://"+VALID_DS, :parser => "argos-ruby-#{Argos::VERSION}",
-:source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994", :id=>"c78642c2bbfd4188df8940cd966b40cef33f2881",
+:source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994", :id=>"4369c31c191bd55a998e6293ff4639da3984a95d",
 :bundle=>nil}]
           end
         end
@@ -117,7 +117,7 @@ module Argos
 :warn=>["missing-position", "sensors-count-mismatch"],
 :parser=>"argos-ruby-#{Argos::VERSION}",
 :bundle=>nil,
-:id=>"e81e2f255b62fa88e20351de8d5b2de9bf6b3028"}]
+:id=>"f2c82a5ca1330b312925949a15ac300d07452a12"}]
       end
 
     end

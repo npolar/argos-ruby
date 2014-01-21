@@ -354,7 +354,7 @@ module Argos
 
       idbase = m.clone
       idbase.delete :errors
-      idbase.delete :filename
+      idbase.delete :location
       idbase.delete :warn
       
       id = Digest::SHA1.hexdigest(idbase.to_json)

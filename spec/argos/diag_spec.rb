@@ -16,7 +16,7 @@ module Argos
       before (:each) do
     
         @diag = Diag.new
-        @diag.log = Logger.new("/dev/null")     
+        @diag.log = Logger.new("/dev/stdout")     
         @diag.parse(VALID_DIAG)
       end
       
@@ -60,13 +60,22 @@ module Argos
         :technology=>"argos",
         :type=>"diag",
         :location=>"file://"+VALID_DIAG,
-        :id => "ea2243d95df7d70a02a4fb66bc8876f10fdabf12",
+        :id => "a4e59580432b7b621f66c0cdc3087127554acd1d",
         :parser => "argos-ruby-#{Argos::VERSION}",
         :bundle => nil,
         :source =>"f53ae3ab454f3e210347439aa440c084f775f9a4"}
         end
       end
+      
+      it "should parse program from Prog header if present" do
+        @diag.parse(diagfile("Prog_header.ds")).map {|diag|
+          diag[:program]||nil }. should == ["14660", "9999", "14660", "9999", "14660"]
+      end
+      
+      
     end
+    
+
     #describe '#check_format' do
     #  it 'should return true if this is a recognized Diag format' do
     #    str ="02170  Date : 03.02.09 17:47:56  LC : 3  IQ : 66 Lat1 : 33.385N  Lon1 : 111.811W  Lat2 : 35.397N  Lon2 : 121.727W Nb mes : 009  Nb mes>-120dB : 000  Best level : -126 dB Pass duration : 811s  NOPC :  3 Calcul freq : 401 637664.9 Hz   Altitude :  352 m 00           7B           5D           E0 C2           51           81           51 14           6A           30           00 3F           FC           03           00 03           FF           C0           30 00           3F           FC           0C 3F           FF           FF           C0"

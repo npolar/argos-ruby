@@ -21,7 +21,7 @@ module Argos
 
     attr_reader :bundle, :filename, :filter, :filtername, :sha1, :valid, :filesize, :updated, :multiplicates, :errors
   
-    START_REGEX = /^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}/
+    START_REGEX = /^(\s*Prog\s\d{4,}|\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2})/
     $start_diag ='^\s*\d{5,6}\s+Date : \d{2}.\d{2}.\d{2} \d{2}:\d{2}:\d{2}'
   
     # Diag format 1
@@ -54,7 +54,8 @@ module Argos
   
   
     def initialize
-      @errors = []  
+      @errors = []
+      @programs = []
     end
 
     def filter?
@@ -80,7 +81,7 @@ module Argos
       @total = linecount = 0
       @valid = false
 
-      #filename = File.realpath(filename)
+      filename = File.realpath(filename)
       @filename = filename
       if filename.nil? or not File.exists? filename
         raise ArgumentError, "Missing ARGOS DS file: \"#{filename}\""
@@ -109,7 +110,14 @@ module Argos
       File.open(filename, :encoding => "iso-8859-1").each do |line|
         line = line.to_s.strip
         linecount+=1
-        if line =~ /#{$start_diag}/
+        
+        if line =~ /Prog\s(\d{4,})$/
+          @program = line.split(" ").last
+          log.info "Program: #{@program}"
+          @programs << @program
+        end
+        
+        if line =~ START_REGEX
           match+=1
           if contact !=""
             check_format(contact.strip, startline)
@@ -120,14 +128,16 @@ module Argos
           contact = contact + " " +line
         end
       end
+      
       check_format(contact.strip, startline)
-
+      
+      @programs = @programs.uniq
       if filter?
         total = self.size
         filtered = self.select{|diag| filter.call(diag)}    
         log.info "Selected #{filtered.size}/#{total} Argos DIAG segments sha1:#{sha1} #{filename}"
         self.clear
-        
+        # programs may be wrong now!
         filtered.each do |filtered|
           self << filtered
         end
@@ -151,6 +161,8 @@ module Argos
 
     if contact =~ /#{$FORMAT_1}/ or contact =~ /#{$FORMAT_2}/ or contact =~ /#{$FORMAT_2}/
       self << create_diag_hash(contact)
+      true
+    elsif contact =~ /Prog\s\d{5,}$/
       true
     else
       error = "#{filename}:#{line_num} sha1:#{@sha1} Invalid format:\n"  + contact
@@ -228,12 +240,17 @@ module Argos
       }
 
       idbase = diag.clone
-      idbase.delete :filename
+      idbase.delete :location
       id = Digest::SHA1.hexdigest(idbase.to_json)
 
       diag[:parser] = Argos.library_version
       diag[:id] = id
       diag[:bundle] = bundle
+      if @program
+        diag[:program] = @program
+      end
+      
+      
       diag
     end
   
