@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+# Ruby-based command line client for Argos' Soap webservice
+#
+# For more information:
+# $ ./bin/argos-soap --help
+# https://github.com/npolar/argos-ruby/blob/master/README.md
+
+require_relative "../lib/argos"
+require_relative "../lib/argos/soap_command"
+
+pwd = File.dirname(File.realpath(__FILE__))+"/.."
+
+Dir.chdir pwd do
+  begin
+    require "savon"
+  rescue LoadError
+  # Prepend Savon lib to path, bundler seems not work
+    unless defined? Savon
+      savonbundle = `bundle show savon`.chomp
+      $LOAD_PATH.unshift(savonbundle+"/lib")
+      require_relative "#{savonbundle}/lib/savon"
+    end
+  end
+end
+
+Argos::SoapCommand.run
