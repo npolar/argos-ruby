@@ -8,7 +8,7 @@ A Ruby library and command-line tool accessing data from the [Argos](http://www.
 ```json
 ["getCsv","getStreamXml","getKml","getXml","getXsd","getPlatformList","getObsCsv","getObsXml"]
 ```
-''All programs''
+**All programs**
 Data from all programs and all platforms are fetched by default
 
 $ argos-soap --operation=getXml > [getXml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.xml)
@@ -19,14 +19,14 @@ $ argos-soap --operation=getKml > [getKml.xml](https://github.com/npolar/argos-r
 
 $ argos-soap --operation=getCsv --format=text > [getCsv.csv](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getCsv.csv)
 
-''Select program(s)''
+**Select program(s)**
 argos-soap --operation getXml --programNumber 9660
 
-''Select platformId(s)''
+**Select platformId(s)**
 $ argos-soap --operation getXml --platformId 81308
 
 
-''Authentication''
+**Authentication**
 Either set your credentials on the command line
   $ argos-soap --operation=getPlatformList --username=myusername --password=mypassword
 Or set environmental variables ARGOS_SOAP_USERNAME and ARGOS_SOAP_PASSWORD
@@ -37,15 +37,12 @@ Or set environmental variables ARGOS_SOAP_USERNAME and ARGOS_SOAP_PASSWORD
 
 ## About
 
-[argos-ruby](https://github.com/npolar/argos-ruby) has been developed to parse [Argos](http://www.argos-system.org)
-satellite tracking data files collected by the [Norwegian Polar Institute]
-(http://npolar.no/en) since 1989.
-
-Be warned, the Argos file formats have changed over time. No promises are
+[argos-ruby](https://github.com/npolar/argos-ruby) was developed to parse [Argos](http://www.argos-system.org)
+satellite tracking data text files collected by the [Norwegian Polar Institute]
+(http://npolar.no/en) since 1989. Be warned, the Argos text file formats have changed over time. No promises are
 made that the library will work outside of Norway :).
 
-Currently, the library parses Argos DS/DIAG files dating from August 1990
-and onwards.
+Currently, the library parses Argos DS/DIAG files dating from August 1990 and onwards.
 
 ## Install
 $ gem install argos-ruby
