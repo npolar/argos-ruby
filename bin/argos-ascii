@@ -3,9 +3,10 @@
 
 # argos-ruby /path/argos/ --dest=/path/dest --level=info 2>> /path/argos-json.log 
 require_relative "../lib/argos"
+
 require "optparse"
-require "yaml"
 require "fileutils"
+require "csv"
 
 param = { format: "json",
   action: "parse",
@@ -66,7 +67,7 @@ log = Logger.new(STDERR)
 log.level = param[:level]
 
 
-if not Argos.argos? glob
+if not Argos::Ascii.argos? glob
   glob = glob.gsub(/\/$/, "")
   if glob != /\*/
     glob += "/**/*"
@@ -80,14 +81,14 @@ argosfiles = 0
 
 Dir[glob].reject {|f| File.directory? f}.select {|f|
   argosfiles = argosfiles + 1
-  if not Argos.argos? f  
+  if not Argos::Ascii.argos? f  
     log.warn "Not Argos: #{f}"
   end
   
-  Argos.argos? f  
+  Argos::Ascii.argos? f  
 }.map {|filename|
   log.debug "*"*80
-  argos = Argos.factory(Argos.type(filename))
+  argos = Argos::Ascii.factory(Argos::Ascii.type(filename))
   argos.filename = filename
   argos.filter = param[:filter]
   argos.bundle = bundle
@@ -95,7 +96,7 @@ Dir[glob].reject {|f| File.directory? f}.select {|f|
 
   case param[:action]
     when "source","metadata"
-      result << Argos.source(argos).merge(glob: glob, bundle: bundle)
+      result << Argos::Ascii.source(argos).merge(glob: glob, bundle: bundle)
       
     when "parse"
       
@@ -150,6 +151,14 @@ if param[:dest].nil?
       puts result.to_yaml
     when /(ruby|rb)/
       puts result
+    when "csv"
+      
+      data = result.map {|r| r.values }
+      csv = CSV.generate() do |csv|
+        csv << result[0].keys
+        data.each { |row| csv << row }
+      end
+      puts csv
   end
 end
 

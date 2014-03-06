@@ -1,14 +1,33 @@
+root = File.dirname(File.realpath(__FILE__))+"/../.."
+
+Dir.chdir root do
+  begin
+    require "savon"
+  rescue LoadError
+    # Prepend Savon lib to path, bundler seems not work
+    unless defined? Savon
+      savonbundle = `bundle show savon`.chomp
+      $LOAD_PATH.unshift(savonbundle+"/lib")
+      require_relative "#{savonbundle}/lib/savon"
+    end
+  end
+end
+
 module Argos
   class Soap
 
     # A "simple" Soap client for Argos-system satellite tracking webservice
     # http://wanderingbarque.com/nonintersecting/2006/11/15/the-s-stands-for-simple/   
     
+    # client [Savon] 
     # request [String] Soap:Envelope (XML request body)
     # response [Savon::Response]
     # operation [Savon::Operation]
     # xml [String] (Extracted, inner) XML
-    attr_accessor :request, :response, :operation, :xml
+    attr_accessor :client, :request, :response, :operation, :xml, :filter,
+      :platformId, :programNumber, :nbDaysFromNow, :period
+      
+    attr_writer :username, :password
     
     URI = "http://ws-argos.cls.fr/argosDws/services/DixService"
     # Alternative: "http://ws-argos.clsamerica.com/argosDws/services/DixService"
@@ -30,7 +49,7 @@ module Argos
         case k.to_sym
         when :username
           @username=v
-        when :username
+        when :password
           @password=v
         when :wsdl
           @wsdl=v
@@ -40,6 +59,10 @@ module Argos
           @platformId = v
         when :nbDaysFromNow
           @nbDaysFromNow = v.to_i
+        when :period
+          @period = v
+        when :filter
+          @filter = v
         else
           #raise ArgumentError, "Unkown config key: #{k}"
         end
@@ -109,6 +132,10 @@ module Argos
         client
       end
     end
+    
+    def filter?
+      not @filter.nil? and filter.respond_to?(:call)
+    end
 
     # @return [String]
     def getCsv
@@ -126,6 +153,9 @@ module Argos
       _call_xml_operation(:getKml, { kmlRequest: baseRequest.merge(xmlRequest)}, _extract_escaped_xml("kmlResponse"))
     end
     
+    # @return [Hash]
+    # {"data":{"program":[{"programNumber":"9660","platform":[{ .. },{ .. }]}],"@version":"1.0"}}
+    # Each platform Hash (.. above): {"platformId":"129990","lastLocationClass":"3","lastCollectDate":"2013-10-03T08:32:24.000Z","lastLocationDate":"2013-05-22T04:55:15.000Z","lastLatitude":"47.67801","lastLongitude":"-122.13419"}
     def getPlatformList
       _call_xml_operation(:getPlatformList, { platformListRequest:
         # Cannot use #baseRequest here because that methods calls #programs which also calls #getPlatformList...
@@ -174,8 +204,20 @@ module Argos
     end
     
     # @return [Array]
-    def platforms
-      raise "@todo"
+    def platforms(programNumber=nil)
+      platforms = []
+      programs = getPlatformList["data"]["program"]
+      if programNumber.to_s =~ /\d+/
+        programs.select! {|p| p["programNumber"].to_i == programNumber.to_i }
+      end
+      programs.each do |program|
+        platforms  += program["platform"].map {|p| p["platformId"].to_i}
+      end
+      platforms
+    end
+    
+    def period(startDate, endDate)  
+      { startDate: startDate, endDate: endDate }
     end
     
     # @return [Array]
@@ -232,7 +274,6 @@ module Argos
     # @raise on faults
     # @return [Hash]
     def _call_xml_operation(op_sym, body, extract=nil)
-      
       @operation = _operation(op_sym)
       @operation.body = body
       @response = operation.call
@@ -274,8 +315,12 @@ module Argos
       lambda {|response| CGI.unescapeHTML(response.raw.split("<#{responseElement} xmlns=\"http://service.dataxmldistribution.argos.cls.fr/types\"><return>")[1].split("</return>")[0])}
     end
     
-    # This is proof-of-concept quality code
+    # This is proof-of-concept quality code.
+    # @todo Need to extract boundary and start markers from Content-Type header:
+    # Content-Type: multipart/related; type="application/xop+xml"; boundary="uuid:14b8db9f-a393-4786-be3f-f0f7b12e14a2"; start="<root.message@cxf.apache.org>"; start-info="application/soap+xml"
+
     # @return [String]
+    
     def _extract_motm
       lambda {|response|
         # Scan for MOTM signature --uuid:*

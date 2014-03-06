@@ -16,7 +16,7 @@ module Argos
       before (:each) do
     
         @diag = Diag.new
-        @diag.log = Logger.new("/dev/stdout")     
+        @diag.log = Logger.new("/dev/null")     
         @diag.parse(VALID_DIAG)
       end
       
@@ -59,7 +59,7 @@ module Argos
         :dist_track => nil,
         :technology=>"argos",
         :type=>"diag",
-        :location=>"file://"+VALID_DIAG,
+        :file=>"file://"+VALID_DIAG,
         :id => "a4e59580432b7b621f66c0cdc3087127554acd1d",
         :parser => "argos-ruby-#{Argos::VERSION}",
         :bundle => nil,

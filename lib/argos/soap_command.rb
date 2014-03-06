@@ -3,17 +3,12 @@ require "net/http"
 require "csv"
 
 module Argos
-  # 
+
   class SoapCommand
      
     CMD = "argos-soap"
     
-    PARAM = { format: :json,
-      wsdl: Argos::Soap::WSDL,
-      handle_exception: lambda {
-        |e, soap| #noop
-        }
-      }
+    PARAM = { format: :json, wsdl: Argos::Soap::WSDL }
     
     def self.run(argv=ARGV)
       begin
@@ -64,6 +59,14 @@ module Argos
           @param[:nbDaysFromNow] = nbDaysFromNow
         end
         
+        opts.on("--startDate=dateTime", "Set period start") do |startDate|
+          @param[:period] = { startDate: startDate}
+        end
+        
+        opts.on("--endDate=dateTime", "Set period end") do |endDate|
+          @param[:period].merge({ endDate: endDate })
+        end
+        
         opts.on("--operations", "List operations") do
           @param[:operation] = :operations
         end
@@ -109,7 +112,7 @@ module Argos
       end
       
       @log = Logger.new(STDERR)
-      @log.level = param[:level]
+      @log.level = param[:level].to_i
     end
     
     def debug?
@@ -141,7 +144,7 @@ module Argos
         when :operations
           @result = soap.operations
         when :platforms
-          @result = soap.platforms
+          @result = soap.platforms(param[:programNumber])
         when :programs
           @result = soap.programs
         when :services
@@ -154,10 +157,6 @@ module Argos
     end
     
     protected
-    
-    def handle_exception(e)
-      param[:handle_exception].call(e, soap)
-    end
     
     def output
       if debug?

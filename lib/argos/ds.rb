@@ -5,17 +5,13 @@ module Argos
   # Usage
   #
   #   ds = Argos::Ds.new
-  #   ds.log = Logger.new(STDERR)
   #   puts ds.parse(filename).to_json
-  #
-  #
-  # For information about Argos, see: http://www.argos-system.org
   #
   # @author Espen Egeland
   # @author Conrad Helgeland
-  # @todo errors => warn or remove unless asked for? (debug)
+  # 
   class Ds < Array
-    include Argos  
+    include Argos::Ascii  
 
     attr_writer :log, :filename, :bundle
 
@@ -29,6 +25,7 @@ module Argos
 
     def initialize
       @errors = []
+      @log = Logger.new(STDERR)
     end
 
     def filter?
@@ -312,7 +309,7 @@ module Argos
       m = m.merge(measurement)          
       m = m.merge ({ technology: "argos",
         type: type,
-        location: "file://"+filename,
+        file: "file://"+filename,
         source: sha1
       })
 
@@ -354,7 +351,7 @@ module Argos
 
       idbase = m.clone
       idbase.delete :errors
-      idbase.delete :location
+      idbase.delete :file
       idbase.delete :warn
       
       id = Digest::SHA1.hexdigest(idbase.to_json)

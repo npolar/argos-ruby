@@ -10,19 +10,4 @@
 require_relative "../lib/argos"
 require_relative "../lib/argos/soap_command"
 
-pwd = File.dirname(File.realpath(__FILE__))+"/.."
-
-Dir.chdir pwd do
-  begin
-    require "savon"
-  rescue LoadError
-  # Prepend Savon lib to path, bundler seems not work
-    unless defined? Savon
-      savonbundle = `bundle show savon`.chomp
-      $LOAD_PATH.unshift(savonbundle+"/lib")
-      require_relative "#{savonbundle}/lib/savon"
-    end
-  end
-end
-
 Argos::SoapCommand.run

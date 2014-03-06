@@ -5,15 +5,12 @@ module Argos
   # Usage
   #
   #   diag = Argos::Diag.new
-  #   diag.log = Logger.new(STDERR)
   #   puts diag.parse(filename).to_json
-  #
-  # For information about Argos, see: http://www.argos-system.org
   #
   # @author Espen Egeland
   # @author Conrad Helgeland
   class Diag < Array
-    include Argos
+    include Argos::Ascii
   
     LOCATION_CLASS = ["3", "2", "1", "0", "A", "B", "Z"]
 
@@ -56,6 +53,7 @@ module Argos
     def initialize
       @errors = []
       @programs = []
+      @log = Logger.new(STDERR)
     end
 
     def filter?
@@ -235,12 +233,12 @@ module Argos
         sensor_data: sensor_data,
         technology: "argos",
         type: type,
-        location: "file://"+filename,
+        file: "file://"+filename,
         source: "#{sha1}",
       }
 
       idbase = diag.clone
-      idbase.delete :location
+      idbase.delete :file
       id = Digest::SHA1.hexdigest(idbase.to_json)
 
       diag[:parser] = Argos.library_version
@@ -326,8 +324,6 @@ end
 #      Pass duration : ???s  NOPC :  ?
 #      Calcul freq : 401 677531.1 Hz   Altitude :    0 m
 #             168           64           30
-
-
 
 
 #200910Oct.DIA
