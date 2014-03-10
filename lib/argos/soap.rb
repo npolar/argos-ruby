@@ -6,6 +6,8 @@ Dir.chdir root do
   rescue LoadError
     # Prepend Savon lib to path, bundler seems not work
     unless defined? Savon
+      # Cannot use #find_name returns []
+      # raise Bundler.rubygems.find_name('savon').to_json #.first.full_gem_path
       savonbundle = `bundle show savon`.chomp
       $LOAD_PATH.unshift(savonbundle+"/lib")
       require_relative "#{savonbundle}/lib/savon"
