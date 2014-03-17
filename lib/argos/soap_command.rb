@@ -3,7 +3,14 @@ require "net/http"
 require "csv"
 
 module Argos
-
+  
+  # argos-soap command
+  #
+  # On success, data is pumped to STDOUT, on faults/errors to STDERR
+  # Examples:
+  # $ argos-soap --operation getXml
+  # $ argos-soap -o getXml --startDate="2014-03-10T00:00:00Z" --endDate="2014-03-10T23:59:59.999Z" --log-level=1
+  # $ argos-soap -o getXml --startDate="`date --date=yesterday -I`T00:00:00Z" --endDate="`date --date=yesterday -I`T23:59:59.999Z" --username=**** --password=***** > /my/argos/xml/archive/`date -I --date=yesterday`.xml
   class SoapCommand
      
     CMD = "argos-soap"
@@ -16,8 +23,8 @@ module Argos
         cmd.run
         exit(true)
       rescue => e
-        puts e
-        puts e.backtrace.join("\n")
+        STDERR.write e
+        STDERR.write e.backtrace.join("\n")
         exit(false)
       end
     end
@@ -36,6 +43,8 @@ module Argos
         opts.on("--debug", "Debug (alias for --log-level=0") do
           @param[:level] = Logger::DEBUG
         end
+        
+        # --date shorthand for 1 day startDate endDate
 
         opts.on("--format=format", "-f=format", "{ json | xml | text | raw }") do |format|
           @param[:format] = format.to_sym
@@ -64,7 +73,7 @@ module Argos
         end
         
         opts.on("--endDate=dateTime", "Set period end") do |endDate|
-          @param[:period].merge({ endDate: endDate })
+          @param[:period] = (@param[:period]||{}).merge({ endDate: endDate })
         end
         
         opts.on("--operations", "List operations") do
@@ -107,7 +116,7 @@ module Argos
       option_parser.parse!
       
       if operation.nil?
-        puts option_parser.help
+        STDOUT.write option_parser.help
         exit(false)
       end
       
@@ -120,6 +129,7 @@ module Argos
     end
     
     def run
+      begin
         @soap = Argos::Soap.new(param)
         
         @result = nil
@@ -152,33 +162,42 @@ module Argos
         else
           raise ArgumentError, "Unspported operation: #{param[:operation]}"  
         end
-        output
+        STDOUT.write output
+        
+      rescue NodataException
+        log.debug output
+      rescue => e
+        STDERR.write output
+      end
 
     end
     
     protected
     
     def output
+      
       if debug?
         log.debug "#{CMD} param: #{param.to_json}"
         log.debug "$ curl -XPOST #{Argos::Soap::URI} -d'#{soap.request}' -H \"Content-Type: application/soap+xml\""
       end
+      
       if result.is_a? Savon::Response
         @result = result.raw
       end
       
-      case format.to_sym
+      output = case format.to_sym
       
       when :ruby
-        puts result
+        result
       when :json
-        puts result.to_json
+        result.to_json
       when :text
-        puts soap.text
+        soap.text
       when :raw
-        puts soap.raw
+        soap.raw
       when :xml
-        puts soap.xml
+        # Return XML with parameter and time in trailing comment
+        soap.xml+"<!-- #{param.reject {|k,v| k =~ /^password$/}.to_json} now: #{Time.now.utc.xmlschema} -->"
       else
         raise ArgumentError, "Unknown format: #{format}"
       end
