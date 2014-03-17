@@ -332,12 +332,13 @@ module Argos
       ng = Nokogiri.XML(xml)
       ng.xpath("/data/errors/error").each do | error |
         if error.key?("code")
-          case error["code"]
-          when "4"
+          case error["code"].to_i
+          when 4
             raise NodataException
           end
           #<error code="2">max response reached</error>
-          #<errors><error code="9">start date upper than end date</error></errors>
+          #<error code="3">authentification error</error>
+          #<error code="9">start date upper than end date</error>
 
       else
           raise error
