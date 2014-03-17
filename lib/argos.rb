@@ -25,7 +25,7 @@ require_relative "argos/soap"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.1.2"
+  VERSION = "1.1.3"
   
   def self.library_version
     "argos-ruby-#{VERSION}" 
