@@ -197,7 +197,7 @@ module Argos
         soap.raw
       when :xml
         # Return XML with parameter and time in trailing comment
-        soap.xml+"<!-- #{param.reject {|k,v| k =~ /^password$/}.to_json} now: #{Time.now.utc.xmlschema} -->"
+        soap.xml+xml_trailer
       else
         raise ArgumentError, "Unknown format: #{format}"
       end
@@ -214,6 +214,10 @@ module Argos
     
     def operations
       [:getCsv, :getStreamXml, :getKml, :getXml, :getXsd, :getPlatformList, :getObsCsv, :getObsXml] 
+    end
+    
+    def xml_trailer
+      "<!-- #{Argos.library_version} #{param.reject {|k,v| k =~ /^password$/}.to_json} now: #{Time.now.utc.xmlschema} -->"
     end
     
   end

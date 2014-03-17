@@ -12,7 +12,7 @@ require_relative "argos/ascii"
 require_relative "argos/ds"
 require_relative "argos/diag"
 require_relative "argos/soap"
-require_relative "argos/download"
+#require_relative "argos/download"
 
 # Argos library containg
 # * Parsers for Argos legacy ASCII files (DS/DAT and DIAG files)
@@ -25,7 +25,7 @@ require_relative "argos/download"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.1.0"
+  VERSION = "1.1.2"
   
   def self.library_version
     "argos-ruby-#{VERSION}" 
