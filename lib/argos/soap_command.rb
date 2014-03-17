@@ -1,21 +1,21 @@
-require "optparse"  
+require "optparse"    
 require "net/http"
 require "csv"
 
 module Argos
-  
   # argos-soap command
   #
   # On success, data is pumped to STDOUT, on faults/errors to STDERR
+  #
   # Examples:
   # $ argos-soap --operation getXml
-  # $ argos-soap -o getXml --startDate="2014-03-10T00:00:00Z" --endDate="2014-03-10T23:59:59.999Z" --log-level=1
-  # $ argos-soap -o getXml --startDate="`date --date=yesterday -I`T00:00:00Z" --endDate="`date --date=yesterday -I`T23:59:59.999Z" --username=**** --password=***** > /my/argos/xml/archive/`date -I --date=yesterday`.xml
+  # $ argos-soap -o getXml --startDate="2014-03-10T00:00:00Z" --endDate="2014-03-10T23:59:59.999Z" --log-level=0
+  # $ argos-soap -o getXml --date="`date --date=yesterday -I` --username=**** --password=***** > /my/argos/xml/archive/`date -I --date=yesterday`.xml
   class SoapCommand
      
     CMD = "argos-soap"
     
-    PARAM = { format: :json, wsdl: Argos::Soap::WSDL }
+    PARAM = { format: :json, wsdl: Argos::Soap::WSDL, level: 1 }
     
     def self.run(argv=ARGV)
       begin
@@ -40,11 +40,16 @@ module Argos
       
         opts.banner = "#{CMD} operation [options]\n"
 
-        opts.on("--debug", "Debug (alias for --log-level=0") do
+        opts.on("--debug", "Debug (alias for --log-level=0)") do
           @param[:level] = Logger::DEBUG
         end
         
-        # --date shorthand for 1 day startDate endDate
+        # --date shorthand for 1 day period
+        opts.on("--date=isodate", "Set period to one day") do |isodate|
+          startDate = Time.parse(isodate+"T00:00:00Z").iso8601
+          endDate = Time.parse(isodate+"T23:59:59.999Z").iso8601
+          @param[:period] = { startDate: startDate,  endDate: endDate }
+        end
 
         opts.on("--format=format", "-f=format", "{ json | xml | text | raw }") do |format|
           @param[:format] = format.to_sym
@@ -162,12 +167,14 @@ module Argos
         else
           raise ArgumentError, "Unspported operation: #{param[:operation]}"  
         end
-        STDOUT.write output
+        puts output
         
       rescue NodataException
         log.debug output
+        exit(true)
       rescue => e
         STDERR.write output
+        exit(false)
       end
 
     end
