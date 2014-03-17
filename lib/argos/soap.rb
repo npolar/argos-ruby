@@ -26,9 +26,16 @@ module Argos
     # response [Savon::Response]
     # operation [Savon::Operation]
     # xml [String] (Extracted, inner) XML
+    # filter FIXME
+    # platformId [String] Comma-separated list of platforms
+    # programNumber [String] Comma-separated list of programs
+    # nbDaysFromNow
+    # period
     attr_accessor :client, :request, :response, :operation, :xml, :filter,
       :platformId, :programNumber, :nbDaysFromNow, :period
-      
+    
+    # username [String]
+    # password [String]
     attr_writer :username, :password
     
     URI = "http://ws-argos.cls.fr/argosDws/services/DixService"
@@ -37,6 +44,7 @@ module Argos
     WSDL = "#{URI}?wsdl"       
     
     ARGOS_NS = "http://service.dataxmldistribution.argos.cls.fr/types"
+    
     SOAP_NS = "http://www.w3.org/2003/05/soap-envelope"
     
     NAMESPACES = {
@@ -147,6 +155,12 @@ module Argos
       }
       @response = o.call
       @request = o.build
+      
+      # Handle faults (before extracting data)
+      _envelope.xpath("soap:Body/soap:Fault", namespaces).each do | fault |
+        raise fault.to_s
+      end
+      
       @text = _extract_escaped_xml("csvResponse").call(response)
     end
     
@@ -159,10 +173,20 @@ module Argos
     # {"data":{"program":[{"programNumber":"9660","platform":[{ .. },{ .. }]}],"@version":"1.0"}}
     # Each platform Hash (.. above): {"platformId":"129990","lastLocationClass":"3","lastCollectDate":"2013-10-03T08:32:24.000Z","lastLocationDate":"2013-05-22T04:55:15.000Z","lastLatitude":"47.67801","lastLongitude":"-122.13419"}
     def getPlatformList
-      _call_xml_operation(:getPlatformList, { platformListRequest:
+      platformList = _call_xml_operation(:getPlatformList, { platformListRequest:
         # Cannot use #baseRequest here because that methods calls #programs which also calls #getPlatformList...
         { username: _username, password: _password },
       }, _extract_escaped_xml("platformListResponse"))
+      
+      # Raise error if no programs
+      if platformList["data"]["program"].nil?
+        raise platformList.to_json
+      end
+      # Force Array
+      if not platformList["data"]["program"].is_a? Array
+        platformList["data"]["program"] = [platformList["data"]["program"]]
+      end
+      platformList
     end
     
     # @return [Hash]
@@ -205,26 +229,36 @@ module Argos
       @text = _extract_escaped_xml("observationResponse").call(response)
     end
     
-    # @return [Array]
+    # Platforms: array of platformId integers
+    # @return [Array] of [Integer]
     def platforms(programNumber=nil)
       platforms = []
-      programs = getPlatformList["data"]["program"]
+
+      platformListPrograms = getPlatformList["data"]["program"]
+
       if programNumber.to_s =~ /\d+/
-        programs.select! {|p| p["programNumber"].to_i == programNumber.to_i }
+        platformListPrograms.select! {|p| p["programNumber"].to_i == programNumber.to_i }
       end
-      programs.each do |program|
+      platformListPrograms.each do |program|
         platforms  += program["platform"].map {|p| p["platformId"].to_i}
       end
       platforms
     end
     
+    # Period request
     def period(startDate, endDate)  
       { startDate: startDate, endDate: endDate }
     end
     
+    # Programs: Array of programNumber integers
     # @return [Array]
     def programs
-      getPlatformList["data"]["program"].map {|p| p["programNumber"].to_i }
+      platformList = getPlatformList
+      if platformList.key?("data") and platformList["data"].key?("program")
+        platformList["data"]["program"].map {|p| p["programNumber"].to_i }
+      else
+        raise platformList
+      end
     end
 
     # @return [String]
@@ -284,7 +318,7 @@ module Argos
 
       # Handle faults (before extracting data)
       _envelope.xpath("soap:Body/soap:Fault", namespaces).each do | fault |
-        raise fault.to_s
+        raise Exception, fault.to_s
       end
       
       # Extract data
@@ -297,8 +331,17 @@ module Argos
       # Handle errors
       ng = Nokogiri.XML(xml)
       ng.xpath("/data/errors/error").each do | error |
-        raise error.to_s
-        # FIXME Custom exception so that it mighht be trapped on raw responses...
+        if error.key?("code")
+          case error["code"]
+          when "4"
+            raise NodataException
+          end
+          #<error code="2">max response reached</error>
+          #<errors><error code="9">start date upper than end date</error></errors>
+
+      else
+          raise error
+        end
       end
       
       # Validation
