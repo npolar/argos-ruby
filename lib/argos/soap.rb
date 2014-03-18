@@ -21,19 +21,19 @@ module Argos
     # A "simple" Soap client for Argos-system satellite tracking webservice
     # http://wanderingbarque.com/nonintersecting/2006/11/15/the-s-stands-for-simple/   
     
-    # client [Savon] 
+    # client [Savon] (version 3)
     # request [String] Soap:Envelope (XML request body)
     # response [Savon::Response]
     # operation [Savon::Operation]
+    # log [Logger]
     # xml [String] (Extracted, inner) XML
-    # filter FIXME
+    # filter 
     # platformId [String] Comma-separated list of platforms
     # programNumber [String] Comma-separated list of programs
     # nbDaysFromNow
     # period
-    attr_accessor :client, :request, :response, :operation, :xml, :filter,
+    attr_accessor :client, :request, :response, :operation, :log, :xml, :filter,
       :platformId, :programNumber, :nbDaysFromNow, :period
-    
     # username [String]
     # password [String]
     attr_writer :username, :password
@@ -78,7 +78,7 @@ module Argos
         end
       end
     end
-
+    
     # Build baseRequest Hash
     # The service requires programNumber or PlatformId, but if you do not provide any,
     # this method will call the service (@see #programs) and get the current user's programs
@@ -92,11 +92,11 @@ module Argos
       if @programNumber.nil? and @platformId.nil?
         # Fetch all programs if neither is provided
         baseRequest[:programNumber] = programs.map {|p|p.to_s}.join(",")
-      elsif @programNumber =~ /\d+/ and @platformId =~ /\d+/
-        raise "Cannot provide both programNumber and platformId"
-      elsif @programNumber =~ /\d+/ 
+      elsif @programNumber.to_s =~ /\d+/ and @platformId.to_s =~ /\d+/
+        baseRequest[:platformId] = @platformId # ignores programNumber
+      elsif @programNumber.to_s =~ /\d+/ 
         baseRequest[:programNumber] = @programNumber
-      elsif @platformId =~ /\d+/
+      elsif @platformId.to_s =~ /\d+/
         baseRequest[:platformId] = @platformId
       end
       
@@ -112,13 +112,14 @@ module Argos
         baseRequest[:period] = @period
       end
       
-      baseRequest = baseRequest.merge({ 
+      #baseRequest = baseRequest.merge({
+        # @todo 
         #<xs:element minOccurs="0" name="referenceDate" type="tns:referenceDateType"/>
         #<xs:element minOccurs="0" name="locClass" type="xs:string"/>
         #<xs:element minOccurs="0" name="geographicArea" type="xs:string"/>
         #<xs:element minOccurs="0" name="compression" type="xs:int"/>
         #<xs:element minOccurs="0" name="mostRecentPassages" type="xs:boolean"/>
-      })
+      #})
       baseRequest
       
     end
@@ -231,17 +232,19 @@ module Argos
     
     # Platforms: array of platformId integers
     # @return [Array] of [Integer]
-    def platforms(programNumber=nil)
+    def platforms
       platforms = []
 
       platformListPrograms = getPlatformList["data"]["program"]
 
-      if programNumber.to_s =~ /\d+/
-        platformListPrograms.select! {|p| p["programNumber"].to_i == programNumber.to_i }
+      if @programNumber.to_s =~ /\d+/
+        platformListPrograms.select! {|p| p["programNumber"].to_i == @programNumber.to_i }
       end
+      
       platformListPrograms.each do |program|
         platforms  += program["platform"].map {|p| p["platformId"].to_i}
       end
+      
       platforms
     end
     
@@ -268,7 +271,11 @@ module Argos
     
     # @return [String]
     def request
-      operation.build
+      if operation.nil?
+        nil
+      else
+        operation.build
+      end
     end
     
     # @return [Hash] {"DixService":{"ports":{"DixServicePort":{"type":"http://schemas.xmlsoap.org/wsdl/soap12/","location":"http://ws-argos.cls.fr/argosDws/services/DixService"}}}}
@@ -339,9 +346,8 @@ module Argos
           #<error code="2">max response reached</error>
           #<error code="3">authentification error</error>
           #<error code="9">start date upper than end date</error>
-
-      else
-          raise error
+        else
+          raise Exception, error
         end
       end
       

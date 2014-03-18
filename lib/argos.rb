@@ -1,7 +1,7 @@
 require "bundler/setup"
 require "bigdecimal"
 require "date"
-require "time" # for iso8601
+require "time" # for #iso8601
 require "digest/sha1"
 require "json"
 require "logger"
@@ -12,9 +12,9 @@ require_relative "argos/ascii"
 require_relative "argos/ds"
 require_relative "argos/diag"
 require_relative "argos/soap"
-#require_relative "argos/download"
+require_relative "argos/download"
 
-# Argos library containg
+# [Argos](http://www.argos-system.org) satellite tracking data tools
 # * Parsers for Argos legacy ASCII files (DS/DAT and DIAG files)
 # * Soap web service client and Argos XML download tool
 #

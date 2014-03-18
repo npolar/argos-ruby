@@ -116,17 +116,28 @@ module Argos
             @param[:password] = password
           end
         end
+        
+        opts.on("--download=archive", "Download") do |archive|
+          @param[:archive] = archive
+        end
 
       end
       option_parser.parse!
       
+      @log = Logger.new(STDERR)
+      @log.level = param[:level].to_i
+      
+      if not @param[:archive].nil?
+        Argos::Download.download(param[:username], param[:password], param[:archive], log)
+        exit(true)
+      end
+    
       if operation.nil?
         STDOUT.write option_parser.help
         exit(false)
       end
       
-      @log = Logger.new(STDERR)
-      @log.level = param[:level].to_i
+
     end
     
     def debug?
@@ -159,7 +170,7 @@ module Argos
         when :operations
           @result = soap.operations
         when :platforms
-          @result = soap.platforms(param[:programNumber])
+          @result = soap.platforms
         when :programs
           @result = soap.programs
         when :services
@@ -185,7 +196,9 @@ module Argos
       
       if debug?
         log.debug "#{CMD} param: #{param.to_json}"
-        log.debug "$ curl -XPOST #{Argos::Soap::URI} -d'#{soap.request}' -H \"Content-Type: application/soap+xml\""
+        unless soap.request.nil?
+          log.debug "$ curl -XPOST #{Argos::Soap::URI} -d'#{soap.request}' -H \"Content-Type: application/soap+xml\""
+        end
       end
       
       if result.is_a? Savon::Response
