@@ -3,24 +3,28 @@
 A Ruby library and command-line tool accessing data from the [Argos](http://www.argos-system.org) tracking system operated by [CLS](http://www.cls.fr/welcome_en.html).
 
 ## argos-soap (webservice client)
-The ``argos-soap`` command supports the full list of operations supported by the SOAP web service.
 
+**List operations**
+The ``argos-soap`` command supports the full list of operations supported by the SOAP web service.
   $ argos-soap --operations
 ```json
 ["getCsv","getStreamXml","getKml","getXml","getXsd","getPlatformList","getObsCsv","getObsXml"]
 ```
-The service delivers data in XML and CSV.
 
-**All programs**
-Data from all programs and all platforms are fetched by default
+Get XML
+  $ argos-soap --operation=getXml > [getXml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.xml)
 
-* $ argos-soap --operation=getXml > [getXml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.xml)
-* $ argos-soap --operation=getXml --format=json > [getXml.json](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.json)
-* $ argos-soap --operation=getKml > [getKml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getKml.xml)
-* $ argos-soap --operation=getCsv --format=text > [getCsv.csv](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getCsv.csv)
+Get XML -> JSON
+  $ argos-soap --operation=getXml --format=json > [getXml.json](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.json)
+
+Get KML
+  $ argos-soap --operation=getKml > [getKml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getKml.xml)
+  
+Get CSV
+  * $ argos-soap --operation=getCsv --format=text > [getCsv.csv](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getCsv.csv)
 
 **Select program(s)**
-argos-soap --operation getXml --programNumber 9660
+$ argos-soap --operation getXml --programNumber 9660
 
 **Select platformId(s)**
 $ argos-soap --operation getXml --platformId 81308
