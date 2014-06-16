@@ -1,6 +1,6 @@
 # argos-ruby
 
-A Ruby library and command-line tool accessing data from the [Argos](http://www.argos-system.org) tracking system operated by ([CLS]http://www.cls.fr/welcome_en.html)
+A Ruby library and command-line tool accessing data from the [Argos](http://www.argos-system.org) tracking system operated by [CLS](http://www.cls.fr/welcome_en.html)
 
 ## argos-soap (webservice client)
 The ``argos-soap`` command supports the full list of operations supported by the SOAP web service.
