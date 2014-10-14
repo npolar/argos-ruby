@@ -3,38 +3,7 @@
 A Ruby library and command-line tool accessing data from the [Argos](http://www.argos-system.org) tracking system operated by [CLS](http://www.cls.fr/welcome_en.html).
 
 ## argos-soap (webservice client)
-
-**List operations**
-The ``argos-soap`` command supports the full list of operations supported by the SOAP web service.
-  $ argos-soap --operations
-```json
-["getCsv","getStreamXml","getKml","getXml","getXsd","getPlatformList","getObsCsv","getObsXml"]
-```
-
-**XML**
-  [`$ argos-soap --operation=getXml`](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.xml)
-
-**JSON**
-  [`$ argos-soap --operation=getXml --format=json`](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.json)
-
-Get KML
-  $ argos-soap --operation=getKml > [getKml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getKml.xml)
-  
-Get CSV
-  * $ argos-soap --operation=getCsv --format=text > [getCsv.csv](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getCsv.csv)
-
-**Select program(s)**
-$ argos-soap --operation getXml --programNumber 9660
-
-**Select platformId(s)**
-$ argos-soap --operation getXml --platformId 81308
-
-**Authentication**
-Either set your credentials on the command line
-
-  $ argos-soap --operation=getPlatformList --username=myusername --password=mypassword
-  
-Or set environmental variables ARGOS_SOAP_USERNAME and ARGOS_SOAP_PASSWORD
+See [[argos-soap]]
 
 ## Argos file parsing
 ### DS/DIAG to JSON
