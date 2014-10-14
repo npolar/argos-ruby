@@ -11,11 +11,11 @@ The ``argos-soap`` command supports the full list of operations supported by the
 ["getCsv","getStreamXml","getKml","getXml","getXsd","getPlatformList","getObsCsv","getObsXml"]
 ```
 
-Get XML
-  $ argos-soap --operation=getXml > [getXml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.xml)
+**XML**
+  [`$ argos-soap --operation=getXml`](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.xml)
 
-Get XML -> JSON
-  $ argos-soap --operation=getXml --format=json > [getXml.json](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.json)
+**JSON**
+  [`$ argos-soap --operation=getXml --format=json`](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getXml.json)
 
 Get KML
   $ argos-soap --operation=getKml > [getKml.xml](https://github.com/npolar/argos-ruby/blob/master/spec/argos/_soap/getKml.xml)
