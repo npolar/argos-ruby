@@ -1,12 +1,12 @@
 # argos-ruby
 
-[argos-ruby](https://github.com/npolar/argos-ruby) contains tools towork with
+[argos-ruby](https://github.com/npolar/argos-ruby) contains tools for working with
 [Argos](http://www.argos-system.org) satellite tracking data and services:
 
-* Parsers for Argos legacy ASCII files (DS/DAT and DIAG/DIA files)
+* Parsers for Argos legacy ASCII (DS/DAT and DIAG/DIA files)
 * SOAP web service client
 * Web service download tool
-* JSON conversion from both legacy ASCII and data XML
+* JSON conversion from ASCII and XML
 
 Developed by staff at the [Norwegian Polar Data Centre](http://data.npolar.no), [Norwegian Polar Institute](http://npolar.no).
 
