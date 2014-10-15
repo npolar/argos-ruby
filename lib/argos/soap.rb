@@ -281,6 +281,18 @@ module Argos
       client.services
     end
     
+    def schema
+      Nokogiri::XML::Schema(File.read("#{__dir__}/_xsd/argos-data.xsd"))
+    end
+    
+    def validate(xml)
+      if xml.is_a? String
+        xml = Nokogiri.XML(xml)
+      end
+      schema.validate(xml)
+      
+    end
+    
     # @return [String]
     def text
       @text||=""

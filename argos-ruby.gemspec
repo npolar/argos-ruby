@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Argos satellite tracking library and command-line tools}
   s.description = %q{Argos (http://www.argos-system.org/) webservice client and Argos legacy file (DS/DAT and DIAG/DIA) parser.}
   s.license = "GPL-3.0"
-  s.add_development_dependency "rspec"
+  s.add_development_dependency 'rspec', '~> 3'
   s.files         = `git ls-files`.split("\n")
   s.executables      = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

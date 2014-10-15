@@ -5,9 +5,9 @@
   Transform Argos data XML to Tracking JSON (http://api.npolar.no/schema/tracking)
 
   Usage:
-    xsltproc argos-xml-to-tracking-json.xslt argos.xml
+    xsltproc argos-json.xslt argos.xml
     
-    xsltproc argos-xml-to-tracking-json.xslt - -stringparam filename "argos-2014-06-11-platform-129654.xml" argos-2014-06-11-platform-129654.xml
+    xsltproc argos-json.xslt - -stringparam filename "argos-2014-06-11-platform-129654.xml" argos-2014-06-11-platform-129654.xml
     
     @todo param name system to force gps on known gps devices?
     @todo test with errors
@@ -72,7 +72,7 @@
   "collection": "tracking",
   "technology": "argos",
   "system": "<xsl:choose><xsl:when test="number($location/diagnostic/gpsSpeed) = $location/diagnostic/gpsSpeed">gps</xsl:when><xsl:otherwise>argos</xsl:otherwise></xsl:choose>",
-  "parser": "argos-xml-to-tracking-json.xslt",
+  "parser": "argos-json.xslt",
   "type": "xml"</xsl:when></xsl:choose><xsl:choose><xsl:when test="count(/data/errors/error) &gt; 0">,
   "warn": [<xsl:for-each select="/data/errors/error">"<xsl:value-of select="."/> (argos webservice error code <xsl:value-of select="@code"/>)"<xsl:choose><xsl:when test="position() &lt; last()">,</xsl:when></xsl:choose></xsl:for-each>]</xsl:when></xsl:choose>}<xsl:choose><xsl:when test="position() &lt; last()">,</xsl:when></xsl:choose>
 </xsl:for-each>]

@@ -7,9 +7,6 @@ gem "hashie", git:  "git://github.com/intridea/hashie.git"
 gem "savon", github: "savonrb/savon", branch: "version3"
 
 group :development, :test do
-  gem "thin"
-  gem "shotgun"
   gem "rspec"
   gem "simplecov"
-  gem "ruby-prof"
 end

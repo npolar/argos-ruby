@@ -4,13 +4,12 @@
 # Ruby-based command line client for Argos' Soap webservice
 #
 # For more information:
-# $ ./bin/argos-soap --help
+# $ argos-soap --help
 # https://github.com/npolar/argos-ruby/blob/master/README.md
 
 Dir.chdir(__dir__) do
-
   require_relative "../lib/argos"
   require_relative "../lib/argos/soap_command"
-
-  Argos::SoapCommand.run
 end
+Argos::SoapCommand.run
+

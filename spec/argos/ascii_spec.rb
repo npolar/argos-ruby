@@ -28,7 +28,7 @@ module Argos
 :messages=>449,
 :filter=>nil,
 :size=>843,
-:modified =>  "2014-10-15T07:51:58Z",
+:modified => File.mtime(dsfile("990660_A.DAT")).to_time.utc.iso8601,
 :parser=>Argos.library_version }
         end
         
@@ -54,7 +54,7 @@ module Argos
 :longitude_mean=>30.752,
 :file=>"file://#{diagfile("990660_A.DIA")}",
 :bytes=>222056,
-:modified=>"2014-10-15T07:51:58Z",
+:modified=> File.mtime(diagfile("990660_A.DIA")).to_time.utc.iso8601,
 :messages=>448,
 :filter=>nil,
 :size=>448,
