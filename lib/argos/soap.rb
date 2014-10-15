@@ -334,6 +334,7 @@ module Argos
       end
       
       # Handle errors
+
       ng = Nokogiri.XML(xml)
       ng.xpath("/data/errors/error").each do | error |
         if error.key?("code")
@@ -349,9 +350,10 @@ module Argos
         end
       end
       
-      # Validation - only for :getXml?
+      # Validation - only :getXml
       if [:getXml].include? op_sym
-        # Validation against XSD does not work: ["Element 'data': No matching global declaration available for the validation root."]
+        # Validation against getXSD schema does not work: ["Element 'data': No matching global declaration available for the validation root."]
+        # See https://github.com/npolar/argos-ruby/commit/219e4b3761e5265f8f9e8b924bcfc23607902428 for the fix
         schema = Nokogiri::XML::Schema(File.read("#{__dir__}/_xsd/argos-data.xsd"))
         v = schema.validate(ng)
         if v.any?
