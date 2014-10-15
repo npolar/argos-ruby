@@ -17,7 +17,7 @@ $ argos-soap --download archive/tracking/CLS  --username=USERNAME --password=PAS
 $ argos-soap -o getXml --username=USERNAME --password=PASSWORD
 
 ```
-See [argos-soap] for more usage examples.
+See [argos-soap](https://github.com/npolar/argos-ruby/wiki/argos-soap) for more usage examples.
 
 ### Legacy file parsing
 
