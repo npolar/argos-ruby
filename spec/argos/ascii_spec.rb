@@ -28,7 +28,7 @@ module Argos
 :messages=>449,
 :filter=>nil,
 :size=>843,
-:modified =>  "2013-10-21T17:02:32Z",
+:modified =>  "2014-10-15T07:51:58Z",
 :parser=>Argos.library_version }
         end
         
@@ -54,7 +54,7 @@ module Argos
 :longitude_mean=>30.752,
 :file=>"file://#{diagfile("990660_A.DIA")}",
 :bytes=>222056,
-:modified=>"2013-10-21T18:31:55Z",
+:modified=>"2014-10-15T07:51:58Z",
 :messages=>448,
 :filter=>nil,
 :size=>448,
