@@ -14,15 +14,11 @@ module Argos
         end
         
         def body
-          filename = "getXml-raw.txt"
+          filename = "getXml.xop"
           rawfile = File.expand_path(File.dirname(__FILE__)+"/_soap/#{filename}")
           File.read(rawfile)
         end
         
-        def lastSatellitePass
-          {"satellite"=>"NP", "bestMsgDate"=>"2014-03-05T10:37:18.000Z", "duration"=>"183", "nbMessage"=>"3", "message120"=>"0", "bestLevel"=>"-133", "frequency"=>"4.0163995497E8", "location"=>{"locationDate"=>"2014-03-05T10:36:47.000Z", "latitude"=>"77.5266", "longitude"=>"17.60675", "altitude"=>"44.0", "locationClass"=>"A", "diagnostic"=>{"latitude2"=>"74.0082", "longitude2"=>"0.82916", "altitude2"=>"0.0", "index"=>"8", "nopc"=>"3", "errorRadius"=>"0.0", "semiMajor"=>"0.0", "semiMinor"=>"0.0", "orientation"=>"87.0", "hdop"=>"542"}}, "message"=>[{"bestDate"=>"2014-03-05T10:35:16.000Z", "compression"=>"1", "collect"=>{"type"=>"L", "alarm"=>"N", "concatenated"=>"N", "date"=>"2014-03-05T10:35:16.000Z", "level"=>"-136.0", "doppler"=>"-5232.054", "rawData"=>"2800006E729E03"}, "format"=>{"formatOrder"=>"1", "formatName"=>"FORMAT TEMPL. TELONICS-1-7-16-8 #1", "sensor"=>[{"order"=>"1", "name"=>"LOW VOLTAGE FLAG", "valueType"=>"I", "value"=>"0"}, {"order"=>"2", "name"=>"TEMPERATURE", "valueType"=>"I", "value"=>"40"}, {"order"=>"3", "name"=>"ACTIVITY", "valueType"=>"I", "value"=>"0"}, {"order"=>"4", "name"=>"ERROR DETECTION BYTE", "valueType"=>"I", "value"=>"110"}]}}, {"bestDate"=>"2014-03-05T10:37:18.000Z", "compression"=>"1", "collect"=>{"type"=>"L", "alarm"=>"N", "concatenated"=>"N", "date"=>"2014-03-05T10:37:18.000Z", "level"=>"-133.0", "doppler"=>"-13160.484", "rawData"=>"2800006E3B65C0"}, "format"=>{"formatOrder"=>"1", "formatName"=>"FORMAT TEMPL. TELONICS-1-7-16-8 #1", "sensor"=>[{"order"=>"1", "name"=>"LOW VOLTAGE FLAG", "valueType"=>"I", "value"=>"0"}, {"order"=>"2", "name"=>"TEMPERATURE", "valueType"=>"I", "value"=>"40"}, {"order"=>"3", "name"=>"ACTIVITY", "valueType"=>"I", "value"=>"0"}, {"order"=>"4", "name"=>"ERROR DETECTION BYTE", "valueType"=>"I", "value"=>"110"}]}}, {"bestDate"=>"2014-03-05T10:38:19.000Z", "compression"=>"1", "collect"=>{"type"=>"L", "alarm"=>"N", "concatenated"=>"N", "date"=>"2014-03-05T10:38:19.000Z", "level"=>"-139.0", "doppler"=>"-16021.284", "rawData"=>"2800006EACB391"}, "format"=>{"formatOrder"=>"1", "formatName"=>"FORMAT TEMPL. TELONICS-1-7-16-8 #1", "sensor"=>[{"order"=>"1", "name"=>"LOW VOLTAGE FLAG", "valueType"=>"I", "value"=>"0"}, {"order"=>"2", "name"=>"TEMPERATURE", "valueType"=>"I", "value"=>"40"}, {"order"=>"3", "name"=>"ACTIVITY", "valueType"=>"I", "value"=>"0"}, {"order"=>"4", "name"=>"ERROR DETECTION BYTE", "valueType"=>"I", "value"=>"110"}]}}]}
-        end
-
       end
       
       it "should extract data Hash from raw response" do
@@ -39,9 +35,9 @@ module Argos
         operation.should_receive(:body=).with(xmlRequest)
         operation.should_receive(:call).and_return(response)
         
-        response.should_receive(:raw).with().at_least(:once).and_return(body)
+        response.should_receive(:raw).with(no_args()).at_least(:once).and_return(body)
         
-        soap.getXml["data"]["program"]["platform"].last["satellitePass"].last.should == lastSatellitePass
+        soap.getXml["data"]["program"]["platform"].should == {"platformId"=>"105605", "platformType"=>"GULL", "platformModel"=>"M-9.5GS", "platformHexId"=>"4F0F25F", "satellitePass"=>{"satellite"=>"NK", "bestMsgDate"=>"2014-09-25T16:53:52.000Z", "duration"=>"0", "nbMessage"=>"1", "message120"=>"0", "bestLevel"=>"-136", "frequency"=>"4.016759502E8", "message"=>{"bestDate"=>"2014-09-25T16:53:52.000Z", "compression"=>"1", "collect"=>{"type"=>"L", "alarm"=>"N", "concatenated"=>"N", "date"=>"2014-09-25T16:53:52.000Z", "level"=>"-136.0", "doppler"=>"27793.756", "rawData"=>"4DD28F"}, "format"=>{"formatOrder"=>"1", "formatName"=>"NORMAL FRAME #1", "sensor"=>[{"order"=>"1", "name"=>"TEMPERATURE", "valueType"=>"I", "value"=>"77"}, {"order"=>"2", "name"=>"BATTERY VOLTS", "valueType"=>"I", "value"=>"210"}, {"order"=>"3", "name"=>"COUNTER", "valueType"=>"I", "value"=>"2"}, {"order"=>"4", "name"=>"ACTIVITY", "valueType"=>"I", "value"=>"15"}]}}}}
         
       end
       
