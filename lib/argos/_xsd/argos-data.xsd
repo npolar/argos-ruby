@@ -4,13 +4,15 @@
 <!-- W3C specifications   http://www.w3.org/TR/xmlschema-0  -->
 
 <!-- DATA DECLARATION -->
-<xs:complexType name="data">
-  <xs:sequence>
-    <xs:element name="program" type="program" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:element name="errors" type="errors" minOccurs="0"/>
-  </xs:sequence>
-  <xs:attribute name="version" type="xs:string"/>
-</xs:complexType>
+<xs:element name="data">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="program" type="program" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="errors" type="errors" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="xs:string"/>
+  </xs:complexType>
+</xs:element>
 
 <!-- PROGRAM DECLARATION -->
 <xs:complexType name="program">
