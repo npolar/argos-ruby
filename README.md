@@ -15,7 +15,6 @@ Developed by staff at the [Norwegian Polar Data Centre](http://data.npolar.no), 
 ```sh
 $ argos-soap --download archive/tracking/CLS  --username=USERNAME --password=PASSWORD --debug
 $ argos-soap -o getXml --username=USERNAME --password=PASSWORD
-
 ```
 See [argos-soap](https://github.com/npolar/argos-ruby/wiki/argos-soap) for more usage examples.
 
@@ -25,12 +24,13 @@ See [argos-soap](https://github.com/npolar/argos-ruby/wiki/argos-soap) for more 
 $ argos-ascii spec/argos/_ds/*.DAT
 $ argos-ascii --action=source "spec/argos/_d*"
 $ argos-ascii --filter='lambda {|d| d[:program] == 9660 and d[:platform] == 2189 }' spec/argos/_ds/990660_A.DAT
-
 ```
 The **source** action provides a metadata summary, list of programs, platforms, etc.
 
-### JSON
-
+### JSON (via XSLT)
+```sh
+$ xsltproc lib/argos/_xslt/argos-json.xslt spec/argos/_soap/getXml.xml 
+```
 
 ## Install
 ```sh
