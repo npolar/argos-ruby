@@ -1,0 +1,13 @@
+
+--uuid:a0bec9ce-e6e6-43ef-bcf0-61d384305561
+Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml";
+Content-Transfer-Encoding: binary
+Content-ID: <root.message@cxf.apache.org>
+
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Body><observationResponse xmlns="http://service.dataxmldistribution.argos.cls.fr/types"><return>&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;DIST/>
+&#xd;
+</return></observationResponse></soap:Body></soap:Envelope>
+--uuid:a0bec9ce-e6e6-43ef-bcf0-61d384305561--
+

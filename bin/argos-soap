@@ -7,7 +7,10 @@
 # $ ./bin/argos-soap --help
 # https://github.com/npolar/argos-ruby/blob/master/README.md
 
-require_relative "../lib/argos"
-require_relative "../lib/argos/soap_command"
+Dir.chdir(__dir__) do
 
-Argos::SoapCommand.run
+  require_relative "../lib/argos"
+  require_relative "../lib/argos/soap_command"
+
+  Argos::SoapCommand.run
+end

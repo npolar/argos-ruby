@@ -2,10 +2,14 @@ require "argos"
 
 RSpec.configure do |config|
   # Use color in STDOUT
-  config.color_enabled = true
+  config.color = true
+
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
 
   # Use color not only in STDOUT but also in pagers and files
-  config.tty = true
+  config.tty = false
 
   # Use the specified formatter
   config.formatter =  :documentation #:progress,  :html, :textmate

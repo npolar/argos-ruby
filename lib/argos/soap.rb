@@ -18,8 +18,7 @@ end
 module Argos
   class Soap
 
-    # A "simple" Soap client for Argos-system satellite tracking webservice
-    # http://wanderingbarque.com/nonintersecting/2006/11/15/the-s-stands-for-simple/   
+    # A [simple](http://wanderingbarque.com/nonintersecting/2006/11/15/the-s-stands-for-simple/) Soap client for the Argos satellite tracking webservice operated by CLS
     
     # client [Savon] (version 3)
     # request [String] Soap:Envelope (XML request body)
@@ -244,7 +243,6 @@ module Argos
       platformListPrograms.each do |program|
         platforms  += program["platform"].map {|p| p["platformId"].to_i}
       end
-      
       platforms
     end
     
@@ -351,11 +349,17 @@ module Argos
         end
       end
       
-      # Validation
-      # Validation against XSD does not work: ["Element 'data': No matching global declaration available for the validation root."]
-      # schema = Nokogiri::XML::Schema(File.read("/tmp/argos-data.xsd"))
-      # v = schema.validate(ng)
+      # Validation - only for :getXml?
+      if [:getXml].include? op_sym
+        # Validation against XSD does not work: ["Element 'data': No matching global declaration available for the validation root."]
+        schema = Nokogiri::XML::Schema(File.read("#{__dir__}/_xsd/argos-data.xsd"))
+        v = schema.validate(ng)
+        if v.any?
+          log.debug "#{v.size} errors: #{v.map{|v|v.to_s}.uniq.to_json}"
+        end
+      end
       
+
       # Convert XML to Hash
       nori = Nori.new
       nori.parse(xml)

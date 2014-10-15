@@ -117,7 +117,7 @@ module Argos
           end
         end
         
-        opts.on("--download=archive", "Download") do |archive|
+        opts.on("--download=/path/to/archive", "Download") do |archive|
           @param[:archive] = archive
         end
 
@@ -178,7 +178,7 @@ module Argos
         else
           raise ArgumentError, "Unspported operation: #{param[:operation]}"  
         end
-        puts output
+        puts output.to_s
         
       rescue NodataException
         log.debug output
@@ -216,8 +216,7 @@ module Argos
       when :raw
         soap.raw
       when :xml
-        # Return XML with parameter and time in trailing comment
-        soap.xml+xml_trailer
+        soap.xml+"\n"
       else
         raise ArgumentError, "Unknown format: #{format}"
       end
@@ -236,9 +235,9 @@ module Argos
       [:getCsv, :getStreamXml, :getKml, :getXml, :getXsd, :getPlatformList, :getObsCsv, :getObsXml] 
     end
     
-    def xml_trailer
-      "<!-- #{Argos.library_version} #{param.reject {|k,v| k =~ /^password$/}.to_json} now: #{Time.now.utc.xmlschema} -->"
-    end
-    
+    #def xml_trailer
+    #  "<!-- #{Argos.library_version} #{param.reject {|k,v| k =~ /^password$/}.to_json} now: #{Time.now.utc.xmlschema} -->\n"
+    #end
+    #
   end
 end
