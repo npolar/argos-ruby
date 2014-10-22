@@ -25,7 +25,7 @@ require_relative "argos/download"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.2.0"
+  VERSION = "1.2.1"
   
   def self.library_version
     "argos-ruby-#{VERSION}" 
