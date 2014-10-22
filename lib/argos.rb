@@ -6,6 +6,7 @@ require "digest/sha1"
 require "json"
 require "logger"
 require "cgi"
+require "savon"
 
 require_relative "argos/exception"
 require_relative "argos/ascii"
@@ -25,7 +26,7 @@ require_relative "argos/download"
 # 
 # For information about Argos, see: http://www.argos-system.org
 module Argos
-  VERSION = "1.2.1"
+  VERSION = "1.2.2"
   
   def self.library_version
     "argos-ruby-#{VERSION}" 
