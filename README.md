@@ -13,6 +13,7 @@ Developed by staff at the [Norwegian Polar Data Centre](http://data.npolar.no), 
 ## Webservice
 
 ```sh
+$ argos-soap -o getXsd # does not require authentication
 $ argos-soap --download archive/tracking/CLS  --username=USERNAME --password=PASSWORD --debug
 $ argos-soap -o getXml --username=USERNAME --password=PASSWORD
 ```
