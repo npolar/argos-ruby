@@ -36,7 +36,10 @@ $ xsltproc lib/argos/_xslt/argos-json.xslt spec/argos/_soap/getXml.xml
 ## Install
 ```sh
 $ gem install argos-ruby
+$ cd /home/rubyuser/.rvm/gems/ruby-2.1.3/gems/argos-ruby-1.2.3/ # Path depends on your ruby user and gem version
+$ bundle install
 ```
+Note: The extra step is a [bug](https://github.com/npolar/argos-ruby/issues/1)
 
 ## Links
 * https://github.com/npolar/api.npolar.no/wiki/Tracking-API-JSON
