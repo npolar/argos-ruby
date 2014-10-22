@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# argos-ruby /path/argos/ --dest=/path/dest --level=info 2>> /path/argos-json.log 
+# argos-ascii /path/argos/ --dest=/path/dest --level=info 2>> /path/argos-json.log 
 require_relative "../lib/argos"
 
 require "optparse"
@@ -55,6 +55,11 @@ optparser = OptionParser.new(ARGV) do |opts|
       else
         param[:level]
     end
+  end
+  
+   opts.on("--debug") do
+
+    param[:level] = Logger::DEBUG
   end
 
 end
