@@ -1,11 +1,8 @@
+# http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
 source "https://rubygems.org"
-gem "yajl-ruby", require: "yajl" # git: "git://github.com/brianmario/yajl-ruby.git"
-gem "uuidtools"
-gem "hashie" #git:  "git://github.com/intridea/hashie.git"
-#gem "json-schema", git:  "git://github.com/hoxworth/json-schema.git"
+gem "codeclimate-test-reporter", group: :test, require: nil
+
 gem "savon", github: "savonrb/savon", branch: "version3"
 
-group :development, :test do
-  gem "rspec"
-  gem "simplecov"
-end
+gemspec
+
