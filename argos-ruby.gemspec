@@ -25,9 +25,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'hashie'
   s.add_dependency 'json-schema'
 
-  s.files         = `git ls-files`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  #s.files         = `git ls-files`.split("\n")
+  #s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  #s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  #s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  
+  ignores = File.readlines('.gitignore').grep(/\S+/).map {|s| s.chomp }
+  dotfiles = [ '.gitignore', '.rspec', '.travis.yml', '.yardopts' ]
+  s.files = (Dir["**/*"].reject { |f| File.directory?(f) || ignores.any? { |i| File.fnmatch(i, f) } } + dotfiles).sort
+  
   s.require_paths = ["lib"]
 end
