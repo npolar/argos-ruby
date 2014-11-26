@@ -18,21 +18,16 @@ Gem::Specification.new do |s|
   s.license = "GPL-3.0"
 
   s.add_development_dependency 'rspec', '~> 3'
-  s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'simplecov', '~> 0'
 
-  s.add_dependency 'yajl-ruby'
-  s.add_dependency 'uuidtools'
-  s.add_dependency 'hashie'
-  s.add_dependency 'json-schema'
-
-  #s.files         = `git ls-files`.split("\n")
-  #s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  #s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  #s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.add_dependency 'yajl-ruby', '~> 1'
+  s.add_dependency 'uuidtools', '~> 2'
+  s.add_dependency 'hashie', '~> 3'
+  s.add_dependency 'json-schema', '~> 2'
   
-  ignores = File.readlines('.gitignore').grep(/\S+/).map {|s| s.chomp }
-  dotfiles = [ '.gitignore', '.rspec', '.travis.yml', '.yardopts' ]
-  s.files = (Dir["**/*"].reject { |f| File.directory?(f) || ignores.any? { |i| File.fnmatch(i, f) } } + dotfiles).sort
+  ignores = File.readlines('.gitignore').grep(/\S+/).map {|s| s.chomp } + [ '.gitignore', '.rspec', '.travis.yml', '.yardopts']
+  s.files = (Dir["**/*"].reject { |f| File.directory?(f) || ignores.any? { |i| File.fnmatch(i, f) } } ).sort
+  s.executables  = ["argos-ascii", "argos-soap"]
   
   s.require_paths = ["lib"]
 end
