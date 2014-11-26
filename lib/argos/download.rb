@@ -37,7 +37,11 @@ module Argos
       
         platforms = soap.platforms
         
+        # inactive (no last collect)
+        inactive = program["platform"]
+        
         active = program["platform"].select {|platform|
+          platform.key? "lastCollectDate" and platform.key? "lastLocationDate"}.select {|platform|
           
           lastCollectDate = DateTime.parse(platform["lastCollectDate"])
           lastLocationDate = DateTime.parse(platform["lastLocationDate"])
@@ -47,10 +51,9 @@ module Argos
           (lastCollectDate > twentydays or lastLocationDate > twentydays)
           
         }
-        
-        
+        # inactive = platforms where last collect date is missing or > 20 days
         inactive = program["platform"] - active
-        
+
         active.each_with_index do |a,m|
           log.debug "Active [#{m+1}/#{active.size}]: #{a.reject{|k,v| k =~ /location/i }.to_json}"
         end
