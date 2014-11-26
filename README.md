@@ -16,7 +16,9 @@ Developed by staff at the [Norwegian Polar Data Centre](http://data.npolar.no), 
 $ argos-soap -o getXsd # does not require authentication
 $ argos-soap --download archive/tracking/CLS  --username=USERNAME --password=PASSWORD --debug
 $ argos-soap -o getXml --username=USERNAME --password=PASSWORD
+
 ```
+
 See [argos-soap](https://github.com/npolar/argos-ruby/wiki/argos-soap) for more usage examples.
 
 ### Legacy file parsing
@@ -36,7 +38,7 @@ $ xsltproc lib/argos/_xslt/argos-json.xslt spec/argos/_soap/getXml.xml
 ## Install
 ```sh
 $ gem install argos-ruby
-$ cd /home/rubyuser/.rvm/gems/ruby-2.1.3/gems/argos-ruby-1.2.3/ # Path depends on your ruby user and gem version
+$ cd `gem environment gemdir`/gems/argos-ruby-1.2.4
 $ bundle install
 ```
 Note: The extra step is a [bug](https://github.com/npolar/argos-ruby/issues/1)
