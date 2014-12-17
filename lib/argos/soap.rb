@@ -165,10 +165,18 @@ module Argos
       if platformList["data"]["program"].nil?
         raise platformList.to_json
       end
-      # Force Array
+      # Force Arrays
       if not platformList["data"]["program"].is_a? Array
         platformList["data"]["program"] = [platformList["data"]["program"]]
       end
+      
+      platformList["data"]["program"].map! {|program|
+        if program["platform"].is_a? Hash
+          program["platform"] = [program["platform"]]
+        end
+        program 
+      }
+      
       platformList
     end
     
@@ -224,7 +232,11 @@ module Argos
       end
       
       platformListPrograms.each do |program|
-        platforms  += program["platform"].map {|p| p["platformId"].to_i}
+        if program.key?("platform") and not program["platform"].is_a?(Array)
+          platforms << program["platform"]["platformId"].to_i
+        else
+          platforms  += program["platform"].map {|p| p["platformId"].to_i}
+        end
       end
       platforms
     end
@@ -239,7 +251,12 @@ module Argos
     def programs
       platformList = getPlatformList
       if platformList.key?("data") and platformList["data"].key?("program")
-        platformList["data"]["program"].map {|p| p["programNumber"].to_i }
+        
+        platformList_data_program = platformList["data"]["program"].is_a?(Array) ? platformList["data"]["program"] : [platformList["data"]["program"]]
+        
+        platformList_data_program.map {|p| p["programNumber"].to_i }
+        
+        
       else
         raise platformList
       end
