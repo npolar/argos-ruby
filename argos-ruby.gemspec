@@ -22,8 +22,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'yajl-ruby', '~> 1'
   s.add_dependency 'uuidtools', '~> 2'
-  s.add_dependency 'hashie', '~> 3'
-  s.add_dependency 'json-schema', '~> 2'
+  s.add_dependency 'hashie', '~> 3.3'
+  s.add_dependency 'json-schema', '~> 2.5'
+  s.add_dependency 'addressable' , '~> 2.3'
   
   # ignores = File.readlines('.gitignore').grep(/\S+/).map {|s| s.chomp } + 
   ignores = ['.gitignore', '.rspec', '.travis.yml', '.yardopts']

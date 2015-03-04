@@ -14,10 +14,12 @@ require_relative "argos/ds"
 require_relative "argos/diag"
 require_relative "argos/soap"
 require_relative "argos/download"
+require_relative "argos/sensor"
+require_relative "argos/kiwisat303"
 
 # [Argos](http://www.argos-system.org) satellite tracking data tools
-# * Parsers for Argos legacy ASCII files (DS/DAT and DIAG files)
-# * Soap web service client and Argos XML download tool
+# * Parsers for Argos legacy ASCII files (DS/DAT and DIAG/DIA files)
+# * SOAP web service client and Argos XML download tool
 #
 # https://github.com/npolar/argos-ruby
 #
