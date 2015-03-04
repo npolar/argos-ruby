@@ -32,15 +32,9 @@ module Argos
     
     protected
     
-    # Negative numbers: complement the number and then add a one to the result
-   # , remembering to append the negative sign to the number. For example, signed integer ECH is converted to a "signed" number as follows,
-#
-#              ECH = 1110 1100   (binary)
-#    Complement of ECH = 0001 0011
-#Two's complement of ECH = (-) (0001 0011) + (0000 0001) = (-) (0001 0100) (binary) = (-) 14H (hexadecimal) = (-) 20 (decimal)
-    
+    # Negative numbers: complement (flip) the binary, add 1 (and set to negative)
     def negative_temperature
-      b = - (flip(binary(sensor_data[2])).to_i(2) + 1)
+      -(flip(binary(sensor_data[2])).to_i(2) + 1)
     end
     
   end
