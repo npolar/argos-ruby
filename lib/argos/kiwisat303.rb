@@ -12,16 +12,7 @@ module Argos
   # * [21..23] = day type (transmission scheduling)
   class Kiwisat303
     
-    @sensor_data_format = "integer"
-    
-    attr_reader :sensor_data
-    attr_writer :sensor_data_format
-    
-    # Fixed-length (defaults to 8 bits) binary from integer-forced number
-    # @return [String]
-    def binary(number, bits=8)
-      number.to_i.to_s(2).rjust(bits, "0")
-    end
+    include SensorData
     
     # @return [Hash]
     def data
@@ -105,15 +96,7 @@ module Argos
       binary_sensor_data[7..11].to_i(2)*128
     end
     # R: transmissions <- bin2dec(substr(bin,8,12)) * 128
-    
-    # @return [String]   
-    def binary_sensor_data
-      if sensor_data.size < 3
-        raise ArgumentError, "Missing sensor data"
-      end      
-      sensor_data.map {|sd| binary(sd) }.join("")
-    end
-    
+        
     # @return [Float]
     def voltage
       (binary_sensor_data[3..6].to_i(2) * 0.064 + 2.704).round(4)
@@ -121,4 +104,8 @@ module Argos
     # R: voltage <- bin2dec(substr(bin,4,7)) * 0.064 + 2.704
     
   end
+  
+  class KiwiSat303  < Kiwisat303
+  end
+  
 end
