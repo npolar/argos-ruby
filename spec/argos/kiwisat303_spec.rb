@@ -54,7 +54,7 @@ module Argos
       
       describe "#voltage" do
         it do
-          expect(@kiwisat.voltage).to be_within(0.0001).of(@expected[:voltage])
+          expect(@kiwisat.voltage).to eq(@expected[:voltage])
         end
       end
     

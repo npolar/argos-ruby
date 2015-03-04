@@ -1,6 +1,15 @@
 module Argos
   
   # KiwiSat 303 sensor data extractor
+  #
+  # The sensor data consists of a 24 bit / 3 byte sequence (#binary_sensor_data)
+  #
+  # Binary sensor data, from left:
+  # * [00..02] = message_type (where 0 is data, 7 is diagnostics)
+  # * [03..06] = voltage
+  # * [07..11] = transmissions (count)
+  # * [12..20] = temperature
+  # * [21..23] = day type (transmission scheduling)
   class Kiwisat303
     
     attr_reader :sensor_data
@@ -60,8 +69,8 @@ module Argos
       t = (0.00000015762 * (t**3)) - (0.0001034 * (t**2)) + (0.1213*t) - 10.045
       t.round(4)
     end
-    # R: tmp <- bin2dec(substr(bin,13,21))
-    # R: tmp <- (0.00000015762 * (tmp^3)) - (0.0001034 * (tmp^2)) + (0.1213*tmp) - 10.045
+    # R: temperature <- bin2dec(substr(bin,13,21))
+    # R: temperature <- (0.00000015762 * (temperature^3)) - (0.0001034 * (temperature^2)) + (0.1213*temperature) - 10.045
     
     # @return [Integer]
     def message_type
@@ -84,7 +93,7 @@ module Argos
     
     # @return [Float]
     def voltage
-      binary_sensor_data[3..6].to_i(2) * 0.064 + 2.704
+      (binary_sensor_data[3..6].to_i(2) * 0.064 + 2.704).round(4)
     end
     # R: voltage <- bin2dec(substr(bin,4,7)) * 0.064 + 2.704
     
