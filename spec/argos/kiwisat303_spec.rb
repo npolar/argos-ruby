@@ -115,6 +115,14 @@ module Argos
         end
       end
       
+      it "Hex arrays when sensor_data_format != \"hex\" raises ArgumentError" do    
+        expect {
+          kiwisat = Argos::Kiwisat303.new
+          kiwisat.sensor_data = ["AA","BB", "FF"]
+          }.to raise_error(ArgumentError)
+      end
+      
+      
     end
     
   
