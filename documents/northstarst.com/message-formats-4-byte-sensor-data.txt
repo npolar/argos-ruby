@@ -1,0 +1,339 @@
+MESSAGE FORMATS
+FOR THE
+FOUR-BYTE SENSOR DATA
+BROADCAST BY
+North Star PTT TRANSMITTERS
+
+
+A. Introduction
+
+This document describes the message formats used to transmit sensor data collected by North Star 20gm, 30gm and 80gm, and 40 gm solar Argos certified transmitters (in fact, all North Star birdborne PTTs). Each of the message formats used will be discussed along with examples of how each message is decoded.
+
+B. Sensor Data Collected
+
+The standard sensor data collected and broadcast by the North Star transmitters are;
+
+Current Season
+Activity Counter
+Transmission Counter
+Battery Voltage
+Temperature
+System Week
+and,	System Hour.
+
+The following describes each of these in greater detail.
+
+(1) Current Season - A season is defined as an ON/OFF transmit sequence over a specified number of cycles. For example, one season may consist ten repetitions (cycles) of transmissions (ON) every 61 seconds for 8 hours followed by no transmissions (OFF) for 22 hours. Each transmitter typically operates through 6-7 predefined seasons. The "current season" is a number typically 1-7 indicating the ON/OFF sequence currently in effect.
+
+(2) Activity Counter - This is a single byte (8-bit) counter used to give a relative indication of transmitter movement. The transmitter checks the state of an on-board mercury switch every system minute (approximately 61.44 sec.) to see if the current state is different from the previous state. If the state has changed the Activity Counter is incremented. This counter rolls-over whenever the maximum value of 255 is reached (i.e. 254, 255, then 0, 1, etc.). The Activity Counter is updated every system minute throughout the life of the transmitter. This includes the period during which the transmitter is disabled, and during both the periods of transmission ON of OFF while the transmitter is enabled.
+
+(3) Transmission Counter - The transmission counter is a two-byte counter, which records the total number of transmissions since the battery was applied. A total of 65535 counts occur before counter roll-over. This counter provides a good indication of the remaining life of a transmitter.
+
+(4) Battery Voltage - The battery voltage is measured while the transmitter is performing a dummy transmission load on the battery. After the transmitter is enabled (i.e. the magnetic is removed) a battery voltage measurement is made within the first system minute (61.44 sec.) and will there afterwards be made whenever the transmitter transitions from the ON transmit segment to the OFF transmit segment of each cycle within a season. The battery voltage is a single byte unsigned integer computed using the following formula:
+Battery Voltage = 2 x (Bat_volt_byte) x (0.01)
+
+(5) Temperature - The temperature is in degrees centegrade. Negative temperatures are given in two's complement representation. The temperature is a single byte signed (two's complement) integer.
+
+(6) System Hour - The "System Hour" count is a single byte counter, which records the actual number of hours since the battery was connected. This counter increments independent of whether the transmitter is enabled.
+Note: The on-board system minutes counter is incremented every 61.44 seconds (based on a 32 Khz oscillator). The "System Hours" approximates standard hours by using only 59 system minutes. Thus, 59 [system minutes] x 61.44 [seconds/system minutes] = 3624.96 [standard seconds] which is about 25 seconds more than a standard Hour (3600 standard seconds).
+
+(7) System Week - The "System Week" count is a single byte counter, which records the number of hours since the battery was connected. This counter increments independent of whether the transmitter is enabled. The "System Week" is 167 "System Hours" which exceeds the standard week by about 568 seconds (about 9.5 minutes).
+
+C. Sensor Message Decoding
+
+Each message consists of a 4-byte data stream, which contains three sections; a message ID, the sensor data, and the message checksum. Thus the 4-byte data stream has the following format;
+
+Message Byte	Description
+0	Message_ID
+1	Sensor_Byte_0
+2	Sensor_Byte_1
+3	Message_Checksum
+The following messages are currently used;
+
+Message_ID	Sensor_Byte_0	Sensor_Byte_1
+00	Current Season	Activity Count
+01	Tx Count (MSB)	Tx Count (LSB)
+02	Battery Voltage	Temperature (C)
+03	System Week	System Hour
+
+The message ID is a unique single byte number identifying the sensor data which is contained in the message. For example message 00 will always contain the Current Season (Sensor_Byte_0) and the Activity Count (Sensor_Byte_1). As new sensors become available new unique message IDs will be assigned.
+
+The Message Checksum is simply formed by exclusive ORing the Message_ID byte, Sensor_Byte_0 and Sensor_Byte_1.
+For example suppose (using hexadecimal numbers, i.e. number base is 8 and denoted using the suffix "H") the Message_ID = 02H, Sensor_Byte_0 (Battery Voltage) = B7H, and Sensor_Byte_1 (Temperature, Celsius) = 14H. Then the checksum would be,
+
+(02H) XOR (B7H) XOR (14H) = A1H
+
+or in decimal notation,
+
+(02) XOR (183) XOR (20) = 161.
+
+
+The sensor data is decoded as follows;
+
+(1) Current Season
+This is the integer value of the data received.
+
+(2) Activity Count
+This is the integer value of the data received.
+(3) Transmission Counter
+Combine the hexadecimal value of the two bytes received and convert to decimal notation. For example, if the Transmission Counter is given as,
+
+Sensor_Byte_0 = 03	(decimal)
+Sensor_Byte_1 = 245	(decimal).
+
+First convert to hexadecimal notation,
+
+Sensor_Byte_0 = 03	=> 03H
+Sensor_Byte_1 = 245	=> F5H.
+
+Next form a single (two-byte) number,
+
+03H and F5H become 03F5H.
+
+Finally, convert the number to decimal,
+
+03F5H => 1013 (decimal).
+(4) Battery Voltage (volts)
+Convert the received data (Bat_volt_byte) using the following formula;
+Battery Voltage = 2 x (Bat_volt_byte) x (0.01)
+
+For example, if the Bat_volt_byte received is B7H (i.e. 183 decimal) then the actual battery voltage is
+
+Battery Voltage = 2 X (183) X (0.01) (volts)
+or,
+Battery Voltage = 3.66 (volts).
+(5) Temperature (Centigrade)
+This is the signed integer value of the received data in whole degrees. Signed integers use the most significant bit to indicate whether the number is positive (in binary notation bit 7 = 0) or negative (bit 7 = 1).
+Positive numbers are converted directly to integers. Negative numbers require that a two's complement conversion of the received data be performed to get the signed integer result. In order to perform a two's complement conversion,
+first complement the number and then add a one to the result, remembering to append the negative sign to the number. For example, signed integer ECH is converted to a "signed" number as follows,
+
+ECH = 1110 1100 (binary)
+Complement of ECH = 0001 0011
+Two's complement of ECH = (-) (0001 0011) + (0000 0001)
+= (-) (0001 0100) (binary)
+= (-) 14H	(hexadecimal)
+= (-) 20 (decimal)
+
+On the other hand, if the temperature data is 14H then since the sign bit (bit 7) is positive the temperature is positive,
+
+Temperature = 14H = 0001 0100 (binary) = 20 (decimal)
+Temperature = (+) 20 centigrade.
+
+(6) System Hour Count
+This is the integer value of the data received. Remember a "System Hour" equals about 3624.96 standard seconds.
+(7) System Week Count
+This is the integer value of the data received.	Remember a "System Week" is 167 "System Hours". Thus a "System Week" is about 605368.32 standard seconds which is exceeds a standard week by about 568 seconds.
+
+D. Examples of Sensor Message Decoding
+
+This section will decode data from an actual report received from Service Argos. The report segment is as follows;
+
+xxxxx 12927 9 4 J 3 1999-05-12 20:39:41 43.118 281.719 1.000 401649865
+1999-05-12 20:36:06 1 01 32 55 22
+1999-05-12 20:37:07 1 02 164 35 133
+1999-05-12 20:38:08 1 03 02 162 163
+1999-05-12 20:39:10 1 00 01 47 46
+1999-05-12 20:40:11 1 01 32 59 26
+1999-05-12 20:41:13 1 02 164 35 133
+1999-05-12 20:42:14 1 03 02 162 163
+1999-05-12 20:43:16 1 00 01 47 46
+
+Notice that there are four bytes of data and that the data is given in decimal. Thus the two-byte Transmission counter will be the only conversion requiring a additional computation. There are four different message IDs found in this example; Message_IDs 00, 01, 02, and 03.
+
+(1) Sample Message ID 00 Decoding
+
+Using the following transmitted data,
+
+a	b c d
+1999-05-12 20:39:10 1 00 01 47 46
+
+we have,
+a => Message_ID = 00
+thus,
+b => Sensor_Byte_0 = Current Season = 01
+c => Sensor_Byte_1 = Activity Count = 47
+and,
+d => Message_Checksum = 46
+
+The first step is to verify that there is a low probability of data errors by computing the "received" checksum and comparing it to the "Sent" Message_Checksum. The two numbers should be equal.
+
+The "received" checksum is found by exclusive ORing (EOR) the first three bytes of the message. The definition of Exclusive OR is as follows:
+
+Exclusive OR - A Boolean logic operation performed between specified numbers on a bit-by-bit basis. A logic one is left in the result if either bit in any bit position of either number is a one. A logic zero is left if both are logic one or both are logic zero.
+
+Thus,
+first convert the decimal data to binary numbers
+a => Message_ID = 00 = 00H = 0000 0000
+b => Sensor_Byte_0	= 01 = 01H = 0000 0001
+c => Sensor_Byte_1	= 47 = 2FH = 0010 1111,
+next compute the received checksum,
+
+Received Checksum = 00 EOR 01 EOR 47
+Received Checksum = 0000 0000
+EOR	0000 0001
+EOR	0010 1111
+---------
+Received Checksum = 0010 1110 (binary)
+Received Checksum = 2EH (hexadecimal)
+Received Checksum = 46 (decimal)
+
+So the "received" checksum equals the "transmitted" checksum.
+
+The next step is to decode Sensor_Byte_0 (b), which for Message_ID 00 is the Current Season. The current season is simply 01.
+Finally, decode Sensor_Byte_1 (c) which for Message_ID 00 is the Activity Count. The Activity Count is simply 47.
+
+
+(2) Sample Message ID 01 Decoding
+
+Using the following transmitted data,
+
+a	b c d
+1999-05-12 20:40:11 1 01 32 59 26
+
+we have,
+a => Message_ID = 01
+thus,
+b => Sensor_Byte_0 = Tx Count (MSB) = 32
+c => Sensor_Byte_1 = Tx Count (LSB) = 59
+and,
+d => Message_Checksum = 26
+
+The first step is to verify that there is a low probability of data errors by computing the "received" checksum and comparing it to the "Sent" Message_Checksum. The two numbers should be equal.
+
+The "received" checksum is found by exclusive ORing (EOR) the first three bytes of the message
+
+Thus,
+first convert the decimal data to binary numbers
+a => Message_ID = 01 = 01H = 0000 0001
+b => Sensor_Byte_0	= 32 = 20H = 0010 0000
+c => Sensor_Byte_1	= 59 = 3BH = 0011 1011,
+next compute the received checksum,
+
+Received Checksum = 01 EOR 32 EOR 59
+Received Checksum = 0000 0001
+EOR	0010 0000
+EOR	0011 1011
+---------
+Received Checksum = 0001 1010 (binary)
+Received Checksum = 1AH (hexadecimal)
+Received Checksum = 26 (decimal)
+So the "received" checksum equals the "transmitted" checksum.
+
+Since the Transmission count consists of two bytes, first convert the data to hexadecimal notation, combine, and reconvert back to decimal. Thus,
+
+Sensor_Byte_0 = Tx Count (MSB) = 32 = 20H
+Sensor_Byte_1 = Tx Count (LSB) = 59 = 3BH.
+
+The combined (two-byte) transmission count is then,
+
+Tx Count = 203BH (hexadecimal) = 8251 (decimal).
+
+
+(3) Sample Message ID 02 Decoding
+
+Using the following transmitted data,
+
+a	b c d
+1999-05-12 20:41:13 1 02 164 35 133
+
+we have,
+a => Message_ID = 02
+thus,
+b => Sensor_Byte_0 = Battery_Voltage = 164
+c => Sensor_Byte_1 = Temperature = 35
+and,
+d => Message_Checksum = 133
+
+The first step is to verify that there is a low probability of data errors by computing the "received" checksum and comparing it to the "Sent" Message_Checksum. The two numbers should be equal.
+
+The "received" checksum is found by exclusive ORing (EOR) the first three bytes of the message. Note that exclusive ORing the decimal values produces the same result as the binary values.
+
+Thus, using the decimal values,
+a => Message_ID = 02
+b => Sensor_Byte_0	= 164
+c => Sensor_Byte_1	= 35,
+next compute the received checksum,
+
+Received Checksum = 02 EOR 164 EOR 35
+Received Checksum = 133 (decimal)
+
+So the "received" checksum equals the "transmitted" checksum.
+
+The next step is to decode Sensor_Byte_0 (b) which for Message_ID 02 is the Battery voltage. The raw battery voltage data (Bat_volt_byte) is converted to the actual battery voltage using the formula:
+
+Battery Voltage = 2 x (Bat_volt_byte) x (0.01)
+
+Thus, here
+bat_volt_byte = 164	(decimal)
+so,
+Battery Voltage = 2 x (164) x (0.01) [volts]
+or.
+Battery Voltage = 3.28 [volts].
+Finally, decode Sensor_Byte_1 (c) which for Message_ID 02 is the Temperature (centigrade). The value received for the temperature is 35 (decimal). First check the value of the sign bit by converting to binary,
+
+temperature = 35 (decimal)
+= 23H (hexadecimal)
+= 0010 0011	(binary).
+
+Since the sign bit is 0 the temperature is positive and the decoding is straight forward. Thus,
+
+Temperature	= 35	[degrees Centigrade]
+or
+Temperature	= 95	[degrees Fahrenheit].
+
+
+(4) Sample Message ID 03 Decoding
+
+Using the following transmitted data,
+
+a	b c d
+1999-05-12 20:42:14 1 03 02 162 163
+
+we have,
+a => Message_ID = 03
+thus,
+b => Sensor_Byte_0 = System Week = 02
+c => Sensor_Byte_1 = System Hour = 162
+and,
+d => Message_Checksum = 163
+
+The first step is to verify that there is a low probability of data errors by computing the "received" checksum and comparing it to the "Sent" Message_Checksum. The two numbers should be equal.
+
+The "received" checksum is found by exclusive ORing (EOR) the first three bytes of the message.
+
+Thus, using the decimal values,
+a => Message_ID = 03
+b => Sensor_Byte_0	= 02
+c => Sensor_Byte_1	= 162,
+next compute the received checksum,
+
+Received Checksum = 03 EOR 02 EOR 162
+Received Checksum = 163 (decimal)
+So the "received" checksum equals the "transmitted" checksum.
+
+The next step is to decode Sensor_Byte_0 (b), which for Message_ID 03 is the System Week. The System Week is simply 02. Thus the number of weeks since the battery was first connected to the transmitter is 2.
+
+Finally, decode Sensor_Byte_1 (c) which for Message_ID 03 is the System Hour Count. Thus along with the System Week the transmitter has been connected to a battery for 2 weeks and 162 hours. Since this is in system time, standard time can be calculated using the formulas;
+1 System Minute = 61.44 standard seconds
+1 System Hour	= 59 System Minutes
+= 3624.96 standard seconds
+1 System Week	= 167 System Hours
+= 605368.32 standard seconds.
+
+Thus for the transmitted data the total run time of the transmitter in standard seconds is,
+
+Run Time = 2 System Weeks + 162 System Hours
+Run Time = 2 X (605368.32) + 162 X (3624.96) [sec]
+Run Time = 1,797,980.16 [sec]
+
+and since
+1 Hour = 3600 seconds
+1 Week = (7 days) X (24 Hours) X (3600 seconds)
+= 604,800 seconds,
+
+Run Time = 2 standard weeks + 163.43 standard hours .
+
+
+
+14
+
