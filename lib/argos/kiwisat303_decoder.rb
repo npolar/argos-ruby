@@ -10,7 +10,7 @@ module Argos
   # * [07..11] = transmissions (count)
   # * [12..20] = temperature
   # * [21..23] = day type (transmission scheduling)
-  class Kiwisat303
+  class KiwiSat303Decoder
     
     include SensorData
     
@@ -103,9 +103,6 @@ module Argos
     end
     # R: voltage <- bin2dec(substr(bin,4,7)) * 0.064 + 2.704
     
-  end
-  
-  class KiwiSat303  < Kiwisat303
   end
   
 end

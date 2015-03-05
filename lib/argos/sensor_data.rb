@@ -24,7 +24,14 @@ module Argos
       sensor_data.map {|sd| binary(sd) }.join("")
     end
     
-        # Set sensor data, as one of:
+    # Fixed-length (defaults to 2 digits) hex string from integer-forced number
+    # @return [String]
+    def hex(number, digits=2)
+      number.to_i.to_s(16).rjust(digits, "0")
+    end
+    
+    
+    # Set sensor data, as one of:
     # * array of numbers (integers)
     # * array of strings containing integers or 2-digit hex numbers (*)
     # * hex string

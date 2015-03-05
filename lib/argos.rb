@@ -15,8 +15,8 @@ require_relative "argos/diag"
 require_relative "argos/soap"
 require_relative "argos/download"
 require_relative "argos/sensor_data"
-require_relative "argos/kiwisat303"
-require_relative "argos/northstar_4bytes"
+require_relative "argos/kiwisat303_decoder"
+require_relative "argos/northstar_4bytes_decoder"
 
 # [Argos](http://www.argos-system.org) satellite tracking data tools
 # * Parsers for Argos legacy ASCII files (DS/DAT and DIAG/DIA files)

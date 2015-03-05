@@ -1,12 +1,12 @@
 require 'spec_helper.rb'
 
 module Argos
-  describe Kiwisat303 do
+  describe KiwiSat303Decoder do
 
     context "sensor data = (integer/string array) [\"27\", 150, 201]" do
       
       before do
-        @kiwisat = Argos::Kiwisat303.new
+        @kiwisat = Argos::KiwiSat303Decoder.new
         @kiwisat.sensor_data = ["27", 150, 201]
         @expected = { message_type: 0,
           voltage: 3.536,
@@ -63,7 +63,7 @@ module Argos
     context "sensor data = (hex string) \"464F96[..]\"" do
       
       before do
-        @kiwisat = Argos::Kiwisat303.new
+        @kiwisat = Argos::KiwiSat303Decoder.new
         @kiwisat.sensor_data = "464F96C20F98CD8BE2C02FE5D56BC9DFE6A0D836876F2796443FF8"
         @expected = { message_type: 2,
           voltage: 2.896,
@@ -97,7 +97,7 @@ module Argos
     context "sensor data = (hex array) [\"19\",\"04\", \"A1\"]" do
       
       before do
-        @kiwisat = Argos::Kiwisat303.new
+        @kiwisat = Argos::KiwiSat303Decoder.new
         @kiwisat.sensor_data_format="hex"
         @kiwisat.sensor_data = ["19","04", "A1"]
         @expected = {:message_type=>0, :voltage=>3.472, :transmissions=>2048, :temperature=>6.1535}
@@ -117,7 +117,7 @@ module Argos
       
       it "Hex arrays when sensor_data_format != \"hex\" raises ArgumentError" do    
         expect {
-          kiwisat = Argos::Kiwisat303.new
+          kiwisat = Argos::KiwiSat303Decoder.new
           kiwisat.sensor_data = ["AA","BB", "FF"]
           }.to raise_error(ArgumentError)
       end

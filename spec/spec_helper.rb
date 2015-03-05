@@ -1,6 +1,10 @@
+require "simplecov"
+SimpleCov.start
+
 require "argos"
 
 RSpec.configure do |config|
+  
   # Use color in STDOUT
   config.color = true
 
