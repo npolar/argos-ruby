@@ -1,0 +1,4 @@
+#!/bin/sh
+ARGOS_JSON_XSLT=`dirname $0`/../lib/argos/_xslt/argos-json.xslt
+f=$1
+xsltproc --param npolar "'true'" --param filename "'file://$f'" $ARGOS_JSON_XSLT "$f"
