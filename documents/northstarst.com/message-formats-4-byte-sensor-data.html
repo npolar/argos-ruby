@@ -1,0 +1,1218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>MESSAGE FORMATS</title>
+	<meta name="generator" content="LibreOffice 4.2.7.2 (Linux)">
+	<meta name="author" content="M. Blake Henke">
+	<meta name="created" content="20150210;80700000000000">
+	<meta name="changedby" content="eva">
+	<meta name="changed" content="20150210;80700000000000">
+	<style type="text/css">
+	<!--
+		@page { size: 21.59cm 27.94cm; margin-right: 3.18cm; margin-top: 2.54cm; margin-bottom: 1.27cm }
+		p { margin-bottom: 0.25cm; direction: ltr; color: #000000; line-height: 120%; widows: 2; orphans: 2 }
+		p.western { font-family: "MS Sans Serif", sans-serif; font-size: 10pt; so-language: en-US }
+		p.cjk { font-family: "Times New Roman", serif; font-size: 10pt }
+		p.ctl { font-family: "MS Sans Serif", sans-serif; font-size: 10pt; so-language: ar-SA }
+	-->
+	</style>
+</head>
+<body lang="nn-NO" text="#000000" dir="ltr">
+<p lang="en-US" class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="4" style="font-size: 14pt"><b>MESSAGE
+FORMATS</b></font></font></p>
+<p lang="en-US" class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="4" style="font-size: 14pt"><b>FOR
+THE </b></font></font>
+</p>
+<p lang="en-US" class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="4" style="font-size: 14pt"><b>FOUR-BYTE
+SENSOR DATA</b></font></font></p>
+<p lang="en-US" class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="4" style="font-size: 14pt"><b>BROADCAST
+BY</b></font></font></p>
+<p lang="en-US" class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="4" style="font-size: 14pt"><b>North
+Star PTT TRANSMITTERS</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">A.
+ </font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><b>Introduction</b></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	This
+document describes the message formats used to transmit sensor data
+collected by North Star 20gm, 30gm and 80gm, and 40 gm solar Argos
+certified transmitters (in fact, all North Star birdborne PTTs). 
+Each of the message formats used will be discussed along with
+examples of how each message is decoded.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">B.
+ </font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><b>Sensor
+Data Collected</b></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+standard sensor data collected and broadcast by the North Star
+transmitters are;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Current
+Season</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Activity
+Counter</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Transmission
+Counter</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Battery
+Voltage</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Temperature</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			System
+Week</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		and,	System
+Hour.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+following describes each of these in greater detail.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(1)
+Current Season - A season is defined as an ON/OFF transmit sequence
+over a specified number of cycles. For example, one season may
+consist ten repetitions (cycles) of transmissions (ON) every 61
+seconds for 8 hours followed by no transmissions (OFF) for 22 hours. 
+Each transmitter typically operates through 6-7 predefined seasons. 
+The &quot;current season&quot; is a number typically 1-7 indicating
+the ON/OFF sequence currently in effect.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(2)
+Activity Counter - This is a single byte (8-bit) counter used to give
+a relative indication of transmitter movement.  The transmitter
+checks the state of an on-board mercury switch every system minute
+(approximately 61.44 sec.) to see if the current state is different
+from the previous state.  If the state has changed the Activity
+Counter is incremented.  This counter rolls-over whenever the maximum
+value of 255 is reached (i.e. 254, 255, then 0, 1, etc.).  The
+Activity Counter is updated every system minute throughout the life
+of the transmitter.  This includes the period during which the
+transmitter is disabled, and during both the periods of transmission
+ON of OFF while the transmitter is enabled.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(3)
+Transmission Counter - The transmission counter is a two-byte
+counter, which records the total number of transmissions since the
+battery was applied.  A total of 65535 counts occur before counter
+roll-over.  This counter provides a good indication of the remaining
+life of a transmitter.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(4)
+Battery Voltage - The battery voltage is measured while the
+transmitter is performing a dummy transmission load on the battery. 
+After the transmitter is enabled (i.e. the magnetic is removed) a
+battery voltage measurement is made within the first system minute
+(61.44 sec.) and will there afterwards be made whenever the
+transmitter transitions from the ON transmit segment to the OFF
+transmit segment of each cycle within a season.  The battery voltage
+is a single byte unsigned integer computed using the following
+formula:</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Battery
+Voltage = 2 x (Bat_volt_byte) x (0.01)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(5)
+Temperature - The temperature is in degrees centegrade. Negative
+temperatures are given in two's complement representation.  The
+temperature is a single byte signed (two's complement) integer.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(6)
+System Hour - The &quot;System Hour&quot; count is a single byte
+counter, which records the actual number of hours since the battery
+was connected.  This counter increments independent of whether the
+transmitter is enabled.</font></font></p>
+<p lang="en-US" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Note:
+The on-board system minutes counter is incremented every 61.44
+seconds (based on a 32 Khz oscillator).  The &quot;System Hours&quot;
+approximates standard hours by using only 59 system minutes.  Thus,
+59 [system minutes] x 61.44 [seconds/system minutes] = 3624.96
+[standard seconds] which is about 25 seconds more than a standard
+Hour (3600 standard seconds).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(7)
+System Week - The &quot;System Week&quot; count is a single byte
+counter, which records the number of hours since the battery was
+connected.  This counter increments independent of whether the
+transmitter is enabled.  The &quot;System Week&quot; is 167 &quot;System
+Hours&quot; which exceeds the standard week by about 568 seconds
+(about 9.5 minutes).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%; page-break-before: always">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">C.
+ </font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><b>Sensor
+Message Decoding</b></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Each
+message consists of a 4-byte data stream, which contains three
+sections; a message ID, the sensor data, and the message checksum.
+Thus the 4-byte data stream has the following format;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		</font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><u><b>Message
+Byte</b></u></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		</font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><u><b>Description</b></u></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			</font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO">0			Message_ID</span></font></font></font></p>
+<p lang="nb-NO" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			1			Sensor_Byte_0</font></font></p>
+<p lang="nb-NO" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			2			Sensor_Byte_1</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO">			</span></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">3			Message_Checksum</font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+following messages are currently used;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO"><u><b>Message_ID</b></u></span></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO">	</span></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO"><u><b>Sensor_Byte_0</b></u></span></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO">		</span></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO"><u><b>Sensor_Byte_1</b></u></span></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO">	
+   </span></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">00		Current
+Season		Activity Count</font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	
+   01		Tx Count (MSB)		Tx Count (LSB)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	
+   02		Battery Voltage	Temperature (C)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	
+   03		System Week		System Hour</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+message ID is a unique single byte number identifying the sensor data
+which is contained in the message. For example message 00 will always
+contain the Current Season (Sensor_Byte_0) and the Activity Count
+(Sensor_Byte_1).  As  new sensors become available new unique message
+IDs will be assigned.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+Message Checksum is simply formed by exclusive ORing the Message_ID
+byte, Sensor_Byte_0 and Sensor_Byte_1.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">For
+example suppose (using hexadecimal numbers, i.e. number base is 8 and
+denoted using the suffix &quot;H&quot;) the Message_ID = 02H,
+Sensor_Byte_0 (Battery Voltage) = B7H, and Sensor_Byte_1
+(Temperature, Celsius) = 14H.  Then the checksum would be,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(02H)
+XOR (B7H) XOR (14H) = A1H</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+  <font face="Courier New, monospace"><font size="3" style="font-size: 12pt">or
+in decimal notation,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(02)
+XOR (183) XOR (20) = 161.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+sensor data is decoded as follows;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(1)
+Current Season</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		This
+is the integer value of the data received.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(2)
+Activity Count</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		This
+is the integer value of the data received.	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(3)
+Transmission Counter</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Combine
+the hexadecimal value of the two bytes received and convert to
+decimal notation.  For example, if the Transmission Counter is given
+as,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Sensor_Byte_0
+= 03		(decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Sensor_Byte_1
+= 245		(decimal).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">First
+convert to hexadecimal notation,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			</font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><span lang="nb-NO">Sensor_Byte_0
+= 03	 =&gt; 03H</span></font></font></font></p>
+<p lang="nb-NO" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			Sensor_Byte_1
+= 245	 =&gt; F5H.</font></font></p>
+<p lang="nb-NO" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Next
+form a single (two-byte) number,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			03H
+and F5H  become 03F5H.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Finally,
+convert the number to decimal,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			03F5H
+=&gt; 1013  (decimal).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(4)
+Battery Voltage (volts)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Convert
+the received data (Bat_volt_byte) using the following formula;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Battery
+Voltage = 2 x (Bat_volt_byte) x (0.01)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">For
+example, if the Bat_volt_byte received is B7H (i.e. 183 decimal) then
+the actual battery voltage is</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Battery
+Voltage = 2 X (183) X (0.01)  (volts)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+    <font face="Courier New, monospace"><font size="3" style="font-size: 12pt">or,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Battery
+Voltage = 3.66  (volts).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">					
+</font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(5)
+Temperature (Centigrade)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		This
+is the signed integer value of the received data in whole degrees. 
+Signed integers use the most significant bit to indicate whether the
+number is positive (in binary notation bit 7 = 0) or negative (bit 7
+= 1).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Positive
+numbers are converted directly to integers.  Negative numbers require
+that a two's complement conversion of the received data be performed
+to get the signed integer result. In order to perform a two's
+complement conversion,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">first
+complement the number and then add a one to the result, remembering
+to append the negative sign to the number.  For example, signed
+integer ECH is converted to a &quot;signed&quot; number as follows,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			
+    	ECH = 1110 1100   (binary)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	
+     Complement of ECH = 0001 0011</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Two's
+complement of ECH = (-) (0001 0011) + (0000 0001)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">						=
+(-) (0001 0100)    (binary)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">						=
+(-) 14H		(hexadecimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">						=
+(-) 20 		(decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">On
+the other hand, if the temperature data is 14H then since the sign
+bit (bit 7) is positive the temperature is positive,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Temperature
+= 14H = 0001 0100 (binary) = 20 (decimal) </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Temperature
+= (+) 20  centigrade.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(6)
+System Hour Count</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		This
+is the integer value of the data received.  Remember a &quot;System
+Hour&quot; equals about 3624.96 standard seconds. </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(7)
+System Week Count</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		This
+is the integer value of the data received.	 Remember a &quot;System
+Week&quot; is 167 &quot;System Hours&quot;.  Thus a &quot;System
+Week&quot; is about 605368.32 standard seconds which is exceeds a
+standard week by about 568 seconds. </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">D.
+ </font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><b>Examples
+of Sensor Message Decoding</b></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><b>	</b></font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt">This
+section will decode data from an actual report received from Service
+Argos.  The report segment is as follows;</font></font></font><font color="#000000"><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><b>	</b></font></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="2" style="font-size: 9pt">xxxxx
+12927   9  4 J 3 1999-05-12 20:39:41  43.118  281.719  1.000
+401649865</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:36:06  1         01           32           55           22</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:37:07  1         02          164           35          133</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:38:08  1         03           02          162          163</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:39:10  1         00           01           47           46</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:40:11  1         01           32           59           26</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:41:13  1         02          164           35          133</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:42:14  1         03           02          162          163</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:43:16  1         00           01           47           46</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Notice
+that there are four bytes of data and that the data is given in
+decimal.  Thus the two-byte Transmission counter will be the only
+conversion requiring a additional computation. There are four
+different message IDs found in this example; Message_IDs 00, 01, 02,
+and 03. </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(1)
+Sample Message ID 00 Decoding </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Using
+the following transmitted data,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="2" style="font-size: 9pt">					
+  </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>a</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">		
+ </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>b</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>c</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>d</u></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:39:10  1         00           01           47           46</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		we
+have,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID = 00</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		thus,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0 = Current Season = 01</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1 = Activity Count = 47 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		and,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			d
+=&gt; Message_Checksum = 46</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+first step is to verify that there is a low probability of data
+errors by computing the &quot;received&quot; checksum and comparing
+it to the &quot;Sent&quot; Message_Checksum.  The two numbers should
+be equal.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+&quot;received&quot; checksum is found by exclusive ORing (EOR) the
+first three bytes of the message. The definition of Exclusive OR is
+as follows:</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Exclusive
+OR - A Boolean logic operation performed between specified numbers on
+a bit-by-bit basis.  A logic one is left in the result if either bit
+in any bit position of either number is a one.  A logic zero is left
+if both are logic one or both are logic zero.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Thus,
+</font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	first
+convert the decimal data to binary numbers</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID 	= 00 = 00H = 0000 0000</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0	= 01 = 01H = 0000 0001</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1	= 47 = 2FH = 0010 1111,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	next
+compute the received checksum,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 00  EOR  01  EOR 	47</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 		0000 0000 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">							EOR	0000
+0001</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">							EOR	0010
+1111</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">						
+ 		---------</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 		0010 1110 (binary)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 	2EH (hexadecimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 	46  (decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">So
+the &quot;received&quot; checksum equals the &quot;transmitted&quot;
+checksum.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+next step is to decode Sensor_Byte_0 (b), which for Message_ID 00 is
+the Current Season.  The current season is simply 01.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Finally,
+decode Sensor_Byte_1 (c) which for Message_ID 00 is the Activity
+Count.  The Activity Count is simply 47.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 100%; page-break-before: always">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">(2)
+Sample Message ID 01 Decoding </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Using
+the following transmitted data,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="2" style="font-size: 9pt">					
+  </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>a</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">		
+ </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>b</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>c</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>d</u></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:40:11  1         01           32           59           26</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		we
+have,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID = 01</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		thus,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0 = Tx Count (MSB) = 32</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1 = Tx Count (LSB) = 59 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		and,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			d
+=&gt; Message_Checksum = 26</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+first step is to verify that there is a low probability of data
+errors by computing the &quot;received&quot; checksum and comparing
+it to the &quot;Sent&quot; Message_Checksum.  The two numbers should
+be equal.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+&quot;received&quot; checksum is found by exclusive ORing (EOR) the
+first three bytes of the message</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Thus,
+</font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	first
+convert the decimal data to binary numbers</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID 	= 01 = 01H = 0000 0001</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0	= 32 = 20H = 0010 0000</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1	= 59 = 3BH = 0011 1011,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	next
+compute the received checksum,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 01  EOR  32  EOR 	59</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 		0000 0001 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">							EOR	0010
+0000</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">							EOR	0011
+1011</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">						
+ 		---------</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 		0001 1010 (binary)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 	1AH (hexadecimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 	26  (decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">So
+the &quot;received&quot; checksum equals the &quot;transmitted&quot;
+checksum.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Since
+the Transmission count consists of two bytes, first convert the data
+to hexadecimal notation, combine, and reconvert back to decimal. 
+Thus,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Sensor_Byte_0
+= Tx Count (MSB) = 32 = 20H</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Sensor_Byte_1
+= Tx Count (LSB) = 59 = 3BH.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-left: 1.27cm; margin-bottom: 0cm; line-height: 100%; page-break-before: always">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+combined (two-byte) transmission count is then,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Tx
+Count = 203BH (hexadecimal) = 8251 (decimal).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(3)
+Sample Message ID 02 Decoding</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Using
+the following transmitted data,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="2" style="font-size: 9pt">					
+  </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>a</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">		
+ </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>b</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>c</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>d</u></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:41:13  1         02          164           35          133</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		we
+have,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID = 02</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		thus,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0 = Battery_Voltage = 164</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1 = Temperature = 35 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		and,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			d
+=&gt; Message_Checksum = 133</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+first step is to verify that there is a low probability of data
+errors by computing the &quot;received&quot; checksum and comparing
+it to the &quot;Sent&quot; Message_Checksum.  The two numbers should
+be equal.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+&quot;received&quot; checksum is found by exclusive ORing (EOR) the
+first three bytes of the message.  </font></font><font face="Courier New, monospace"><font size="3" style="font-size: 12pt"><b>Note
+that exclusive ORing the decimal values produces the same result as
+the binary values.</b></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Thus,
+using the decimal values,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID 	= 02 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0	= 164 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1	= 35,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	next
+compute the received checksum,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 02  EOR  164  EOR  35</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 	133  (decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">So
+the &quot;received&quot; checksum equals the &quot;transmitted&quot;
+checksum.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+next step is to decode Sensor_Byte_0 (b) which for Message_ID 02 is
+the Battery voltage.  The raw battery voltage data (Bat_volt_byte) is
+converted to the actual battery voltage using the formula:</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Battery
+Voltage = 2 x (Bat_volt_byte) x (0.01)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%; page-break-before: always">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Thus,
+here</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			bat_volt_byte
+= 164		(decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	
+so,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Battery
+Voltage = 2 x (164) x (0.01)  [volts]</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	
+or.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Battery
+Voltage = 3.28   [volts].</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Finally,
+decode Sensor_Byte_1 (c) which for Message_ID 02 is the Temperature
+(centigrade).  The value received for the temperature is 35
+(decimal).  First check the value of the sign bit by converting to
+binary,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		temperature
+	= 35 		(decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">					=
+23H 		(hexadecimal) </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">					=
+0010 0011	(binary).</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Since
+the sign bit is 0 the temperature is positive and the decoding is
+straight forward.  Thus,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Temperature	=
+35		[degrees Centigrade]</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	or</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Temperature	=
+95		[degrees Fahrenheit].</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	(4)
+Sample Message ID 03 Decoding </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Using
+the following transmitted data,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="2" style="font-size: 9pt">					
+  </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>a</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">		
+ </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>b</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>c</u></font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt">
+           </font></font><font face="Courier New, monospace"><font size="2" style="font-size: 9pt"><u>d</u></font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+      <font face="Courier New, monospace"><font size="2" style="font-size: 9pt">1999-05-12
+20:42:14  1         03           02          162          163</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		we
+have,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID = 03</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		thus,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0 = System Week = 02</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1 = System Hour = 162 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		and,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			d
+=&gt; Message_Checksum = 163</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+first step is to verify that there is a low probability of data
+errors by computing the &quot;received&quot; checksum and comparing
+it to the &quot;Sent&quot; Message_Checksum.  The two numbers should
+be equal.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	The
+&quot;received&quot; checksum is found by exclusive ORing (EOR) the
+first three bytes of the message. </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Thus,
+using the decimal values,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			a
+=&gt; Message_ID 	= 03 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			b
+=&gt; Sensor_Byte_0	= 02 </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			c
+=&gt; Sensor_Byte_1	= 162,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	next
+compute the received checksum,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 03  EOR  02  EOR  162</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Received
+Checksum 	= 	163  (decimal)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">So
+the &quot;received&quot; checksum equals the &quot;transmitted&quot;
+checksum.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">The
+next step is to decode Sensor_Byte_0 (b), which for Message_ID 03 is
+the System Week.  The System Week is simply 02.  Thus the number of
+weeks since the battery was first connected to the transmitter is 2.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Finally,
+decode Sensor_Byte_1 (c) which for Message_ID 03 is the System Hour
+Count.  Thus along with the System Week the transmitter has been
+connected to a battery for 2 weeks and 162 hours.  Since this is in
+system time, standard time can be calculated using the formulas;</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		1
+System Minute = 61.44  standard seconds</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		1
+System Hour	=  59 System Minutes </font></font>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">					=
+ 3624.96  standard seconds</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		1
+System Week	=  167 System Hours</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">					=
+ 605368.32 standard seconds.</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">Thus
+for the transmitted data the total run time of the transmitter in
+standard seconds is,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Run
+Time = 2 System Weeks + 162 System Hours</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Run
+Time = 2 X (605368.32) + 162 X (3624.96) [sec]</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		Run
+Time = 1,797,980.16    [sec]</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	and
+since</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		1
+Hour = 3600 seconds</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">		1
+Week = (7 days) X (24 Hours) X (3600 seconds)</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">			
+ = 604,800 seconds,</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">	Run
+Time =  2 standard weeks + 163.43 standard hours .</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<font face="Courier New, monospace"><font size="3" style="font-size: 12pt">				</font></font></p>
+<p lang="en-US" class="western" style="margin-bottom: 0cm; line-height: 100%">
+<br>
+</p>
+<div title="footer">
+	<p lang="en-US" style="margin-top: 1.17cm; margin-bottom: 0cm; line-height: 100%">
+	<span id="Frame1" dir="ltr" style="position: absolute; top: 0cm; left: 0cm; width: 15.24cm; height: 0.06cm; border: none; padding: 0cm; background: #ffffff">
+		<p lang="en-US" style="margin-bottom: 0cm; line-height: 100%"><sdfield type=PAGE subtype=RANDOM format=PAGE>14</sdfield></p>
+		<p lang="en-US" style="margin-bottom: 0cm; line-height: 100%"><br>
+		</p>
+	</span><br>
+	</p>
+</div>
+</body>
+</html>
