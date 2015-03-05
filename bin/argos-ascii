@@ -1,8 +1,12 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# argos-ascii /path/argos/ --dest=/path/dest --level=info 2>> /path/argos-json.log 
-require_relative "../lib/argos"
+# argos-ascii /path/argos/ --dest=/path/dest --level=info 2>> /path/argos-json.log
+
+Dir.chdir(__dir__) do
+  require "bundler/setup"
+  require_relative "../lib/argos"
+end
 
 require "optparse"
 require "fileutils"
