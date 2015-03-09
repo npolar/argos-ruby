@@ -5,7 +5,7 @@ module Argos
   # The sensor data consists of a 24 bit / 3 byte sequence (#binary_sensor_data)
   #
   # Binary sensor data, from left:
-  # * [00..02] = message_type (0 is a data message, 2 and 7 ("10" and "111") are engineering diagnostics 
+  # * [00..02] = message_type
   # * [03..06] = voltage
   # * [07..11] = transmissions (count)
   # * [12..20] = temperature
