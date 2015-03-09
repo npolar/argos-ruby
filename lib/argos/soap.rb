@@ -1,3 +1,5 @@
+require "savon"
+
 module Argos
   class Soap
 
