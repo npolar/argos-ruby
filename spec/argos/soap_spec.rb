@@ -1,4 +1,5 @@
-require 'spec_helper.rb'
+require "spec_helper.rb"
+require "argos/soap"
 
 module Argos
   describe Soap do
