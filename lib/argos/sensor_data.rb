@@ -52,8 +52,8 @@ module Argos
       end
       
       # At least 3 members?
-      if not sensor_data.is_a? Array or sensor_data.size < 3
-        raise ArgumentError, "Sensor data should be an Array of at least 3 scalar elements"
+      if not sensor_data.is_a? Array or sensor_data.size == 0
+        raise ArgumentError, "Sensor data should be an Array of bytes or a hex string"
       end
       
       # Hex sensor data?
