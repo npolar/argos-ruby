@@ -16,12 +16,15 @@ module Argos
     
     # @return [Hash]
     def data
-      # @todo This depends on the message type
-      { message_type: message_type,
-        voltage: voltage, # in V
+      data = { message_type: message_type }
+      if message_type == 0
+        data = data.merge({ voltage: voltage, # in V
         transmissions: transmissions,
-        temperature: temperature # in Celsius
-      }
+        temperature: temperature, # in Celsius
+        day_type: day_type
+        })
+      end
+    data
     end
     
     # return [Integer]
