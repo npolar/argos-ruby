@@ -10,21 +10,33 @@ module Argos
   # * [07..11] = transmissions (count)
   # * [12..20] = temperature
   # * [21..23] = day type (transmission scheduling)
+  #
+  # Seven message types exists, the most common are data messages type 0 and 2,
+  # and engineering messages type 6 and 7
+  #
+  # Type distribution (N=131533): 0 (58481) 2 (43875) 6 (13591) 7 (13345) 3 (362) 4 (308) 1 (279) 5 (69)
   class KiwiSat303Decoder
     
     include SensorData
     
     # @return [Hash]
     def data
+
       data = { message_type: message_type }
+      
       if message_type == 0
         data = data.merge({ voltage: voltage, # in V
         transmissions: transmissions,
         temperature: temperature, # in Celsius
         day_type: day_type
         })
+      elsif message_type == 2
+        # Waiting for documentation from Sirtrack for type 2
+        # And type 6,7
+        # And type 1,3,4,5
       end
-    data
+      
+      data
     end
     
     # return [Integer]
