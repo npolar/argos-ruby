@@ -10,7 +10,7 @@ module Argos
         before do
           @kiwisat = Argos::KiwiSat303Decoder.new
           @kiwisat.sensor_data = [27, 150, 201]
-          @expected = { message_type: 0, voltage: 3.536, transmissions: 3200, temperature: 13.0187, day_type: 1 }
+          @expected = { message_type: 0, battery_voltage: 3.536, transmissions: 3200, temperature: 13.0, schedule: "A" }
         end
         
         describe "#sensor_data" do
@@ -21,8 +21,8 @@ module Argos
           it { expect(@kiwisat.data).to eq(@expected) }
         end
         
-        describe "#day_type" do
-          it { expect(@kiwisat.day_type).to eq(@expected[:day_type]) }
+        describe "#schedule 1" do
+          it { expect(@kiwisat.schedule).to eq(@expected[:schedule]) }
         end
 
         describe "#binary_sensor_data" do
@@ -41,18 +41,18 @@ module Argos
           it { expect(@kiwisat.transmissions).to eq(@expected[:transmissions]) }
         end
       
-        describe "#voltage" do
-          it { expect(@kiwisat.voltage).to eq(@expected[:voltage]) }
+        describe "#battery_voltage" do
+          it { expect(@kiwisat.battery_voltage).to eq(@expected[:battery_voltage]) }
         end
       
-      end # message type 0
+      end
     
       context "message type 2" do
           
         before do
           @kiwisat = Argos::KiwiSat303Decoder.new
           @kiwisat.sensor_data = "464F96C20F98CD8BE2C02FE5D56BC9DFE6A0D836876F2796443FF8"
-          @expected = {:message_type=>2} #{ message_type: 2, voltage: 3.536, transmissions: 3200, temperature: 13.0187, day_type: 1 }
+          @expected = {:message_type=>2, :activity_today=>25, :activity_yesterday=>31, :activity_3_days_ago=>22}
         end
           
         describe "#sensor_data (from hex string \"464F96C20F98CD8BE2C02FE5D56BC9DFE6A0D836876F2796443FF8\")" do
@@ -67,7 +67,52 @@ module Argos
           it { expect(@kiwisat.message_type).to eq(2) }
         end
           
-      end # message type 2
+      end
+      
+      context "message type 6" do
+          
+        before do
+          @kiwisat = Argos::KiwiSat303Decoder.new
+          @kiwisat.sensor_data =  ["215","73","34"]
+          @expected = {:message_type=>6, :battery_voltage =>3.444, :battery_current=>0.144, :reflection_coefficient=>34}
+        end
+          
+        describe "#sensor_data ([215,73,34])" do
+          it { expect(@kiwisat.sensor_data).to eq([215,73,34]) }
+        end
+          
+        describe "#data" do
+          it { expect(@kiwisat.data).to eq(@expected) }
+        end
+        
+        describe "#message_type" do
+          it { expect(@kiwisat.message_type).to eq(6) }
+        end
+          
+      end
+      
+      context "message type 7" do
+          
+        before do
+          @kiwisat = Argos::KiwiSat303Decoder.new
+          @kiwisat.sensor_data = "F0BBA8"
+          @expected = {:message_type=>7, :sensor_hour=>16, :sensor_minute=>46, :sensor_second=>58, :transmissions_total => 32768}
+        end
+          
+        describe "#sensor_data (from hex string \"F0BBA8\")" do
+          it { expect(@kiwisat.sensor_data).to eq([240,187,168]) }
+        end
+          
+        describe "#data" do
+          it { expect(@kiwisat.data).to eq(@expected) }
+        end
+        
+        describe "#message_type" do
+          it { expect(@kiwisat.message_type).to eq(7) }
+        end
+        
+      end
+      
     end # #data
     
     describe "#sensor_data=" do
@@ -85,11 +130,3 @@ module Argos
       
   end
 end
-
-# Questions
-#
-# 11-bytes array ["19", "208", "25", "91", "53", "104", "30", "241", "194", "131", "76"] is still message_type 0 ?
-# 113910  11660 77.86706  18.11291           A 2014-12-22T15:44:31Z  NN  NA 19|208|25|91|53|104|30|241|194|131|76          344            1833              64  771     NA Arctic fox
-#
-# 27-byte type 2?
-# "464F96C20F98CD8BE2C02FE5D56BC9DFE6A0D836876F2796443FF8"
