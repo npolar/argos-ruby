@@ -9,6 +9,7 @@
 
 Dir.chdir(__dir__) do
   require_relative "../lib/argos"
+  require_relative "../lib/argos/soap"
   require_relative "../lib/argos/soap_command"
 end
 Argos::SoapCommand.run
