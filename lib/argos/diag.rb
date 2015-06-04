@@ -233,17 +233,17 @@ module Argos
         sensor_data: sensor_data,
         technology: "argos",
         type: type,
-        file: "file://"+filename,
-        source: "#{sha1}",
+        #file: "file://"+filename,
+        #source: "#{sha1}",
       }
 
       idbase = diag.clone
       idbase.delete :file
       id = Digest::SHA1.hexdigest(idbase.to_json)
 
-      diag[:parser] = Argos.library_version
+      #diag[:parser] = Argos.library_version
       diag[:id] = id
-      diag[:bundle] = bundle
+      #diag[:bundle] = bundle
       if @program
         diag[:program] = @program
       end

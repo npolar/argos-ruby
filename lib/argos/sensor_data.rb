@@ -1,3 +1,4 @@
+require "logger"
 module Argos
   module SensorData
     
@@ -82,7 +83,20 @@ module Argos
     def flip(bin)
       bin.tr("01","10")
     end
+        
+    def bits(start,stop,base=10)
+      bits = binary_sensor_data[start..stop].to_i(2)
+      if base == 10
+        bits
+      else
+        bits.to_s(base)
+      end
+    end
+    alias :extract :bits
     
+    def log
+      @log ||= Logger.new(STDERR)
+    end
     
   end
 end

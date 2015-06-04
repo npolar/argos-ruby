@@ -1,5 +1,7 @@
 module Argos
   
+  # [Kiwisat303Decoder](https://github.com/npolar/argos-ruby/blob/master/lib/argos/kiwisat303_decoder.rb)
+  #
   # [KiwiSat 303](http://www.sirtrack.com/images/pdfs/303_K3HVHF.pdf) sensor data decoder
   #
   # Message specification courtesy of Sirtrack
@@ -84,7 +86,7 @@ module Argos
       case type
       when 0
         message_hash_0
-      when 1,3,5
+      when 1,3,4,5
         {}
       when 2
         message_hash_2
@@ -173,10 +175,7 @@ module Argos
         transmissions_total: binary_sensor_data[20..23].to_i(2)*4096
       }
     end
-    
 
-    
-    
   end
   
 end

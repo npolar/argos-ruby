@@ -227,7 +227,7 @@ module Argos
       end
         
       if latitude.nil? or longitude.nil?
-        warn << "missing-position"
+        #warn << "missing-position"
       else
       
         unless latitude.between?(-90, 90) and longitude.between?(-180, 180)
@@ -275,15 +275,16 @@ module Argos
     def unfold
 
       # First, grab all segments *without* measurements (if any)
-      unfolded = messages.reject {|ds| ds.key?(:measurements) or ds[:measurements].nil? }
+      unfolded = messages.reject {|ds| ds.key?(:measurements) or ds[:measurements].nil? }.map {|m| m[:cardinality] = 0 }
       log.debug "#{messages.size - unfolded.size} / #{messages.size} messages contained measurements"
 
       messages.select {|ds|
         ds.key?(:measurements) and not ds[:measurements].nil?
       }.each do |ds|
         
-        ds[:measurements].each do |measurement|
-          unfolded << merge(ds,measurement)
+        ds[:measurements].each_with_index do |measurement,cardinality|
+          # Cardinality 0 will filter out repeated positions due to higher sensor sampling rate...
+          unfolded << merge(ds,measurement, cardinality)
         end
       end
  
@@ -304,13 +305,15 @@ module Argos
 
     # Merges a DS header hash into each measurement
     # @return [Array] Measurements with header and static metadata merged in
-    def merge(ds, measurement)
+    def merge(ds, measurement, cardinality)
+      
       m = ds.select {|k,v| k != :measurements and k != :errors and k != :warn }     
       m = m.merge(measurement)          
       m = m.merge ({ technology: "argos",
         type: type,
-        file: "file://"+filename,
-        source: sha1
+        cardinality: cardinality
+        #file: "file://"+filename,
+        #source: sha1
       })
 
       if not ds[:errors].nil? and ds[:errors].any?
@@ -356,9 +359,10 @@ module Argos
       
       id = Digest::SHA1.hexdigest(idbase.to_json)
 
-      m[:parser] = Argos.library_version
+      #m[:parser] = Argos.library_version
       m[:id] = id
-      m[:bundle] = bundle
+      
+      #m[:bundle] = bundle
       m
     end
 
