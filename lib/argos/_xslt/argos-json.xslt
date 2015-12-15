@@ -9,9 +9,6 @@
     
     xsltproc argos-json.xslt - -stringparam filename "argos-2014-06-11-platform-129654.xml" argos-2014-06-11-platform-129654.xml
     
-    @todo param name system to force gps on known gps devices?
-    @todo test with errors
-    
 -->
   <xsl:param name="filename" select="''"/>
   <xsl:param name="npolar" select="'true'"/>
@@ -44,9 +41,9 @@
   "positioned": <xsl:choose><xsl:when test="$location/locationDate != ''">"<xsl:value-of select="$location/locationDate"/>"</xsl:when><xsl:otherwise>null</xsl:otherwise></xsl:choose>,
   "lc": <xsl:choose><xsl:when test="$location/locationClass != ''">"<xsl:value-of select="$location/locationClass"/>"</xsl:when><xsl:otherwise>null</xsl:otherwise></xsl:choose>,<xsl:choose><xsl:when test="$location/diagnostic">
   "lc_index": <xsl:choose><xsl:when test="number($location/diagnostic/index) = $location/diagnostic/index"><xsl:value-of select="$location/diagnostic/index"/></xsl:when><xsl:otherwise>null</xsl:otherwise></xsl:choose>,
-  "latitude2": <xsl:value-of select="$location/diagnostic/latitude2"/>,
-  "longitude2": <xsl:value-of select="$location/diagnostic/longitude2"/>,
-  "altitude2": <xsl:value-of select="$location/diagnostic/altitude2"/>,
+  "latitude2": <xsl:choose><xsl:when test="number($location/diagnostic/latitude2) = $location/diagnostic/latitude2"><xsl:value-of select="$location/diagnostic/latitude2"/></xsl:when><xsl:otherwise>null</xsl:otherwise></xsl:choose>,
+  "longitude2": <xsl:choose><xsl:when test="number($location/diagnostic/longitude2) = $location/diagnostic/longitude2"><xsl:value-of select="$location/diagnostic/longitude2"/></xsl:when><xsl:otherwise>null</xsl:otherwise></xsl:choose>,
+  "altitude2": <xsl:choose><xsl:when test="number($location/diagnostic/altitude2) = $location/diagnostic/altitude2"><xsl:value-of select="$location/diagnostic/altitude2"/></xsl:when><xsl:otherwise>null</xsl:otherwise></xsl:choose>,
   "nopc": <xsl:value-of select="$location/diagnostic/nopc"/>,
   "error_radius": <xsl:value-of select="$location/diagnostic/errorRadius"/>,
   "semi_major": <xsl:value-of select="$location/diagnostic/semiMajor"/>,

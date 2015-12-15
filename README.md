@@ -11,6 +11,8 @@
 argos-ruby is developed by staff at the [Norwegian Polar Data Centre](http://data.npolar.no).
 The library is fully unit tested and used in production in the [Tracking API](https://github.com/npolar/api.npolar.no/wiki/Tracking-API).
 
+[![Code Climate](https://codeclimate.com/github/npolar/argos-ruby/badges/gpa.svg)](https://codeclimate.com/github/npolar/argos-ruby)
+
 ## Argos ASCII to JSON
 The command-line tool ```argos-ascii``` converts DS or DIAG files to JSON using the ruby classes Argos::Ds and Argos::Diag.
 The data conversion in mostly Regexp-based so could easily be ported to other programming languages.
