@@ -59,11 +59,12 @@ module Argos
         :dist_track => nil,
         :technology=>"argos",
         :type=>"diag",
-        :file=>"file://"+VALID_DIAG,
-        :id => "a4e59580432b7b621f66c0cdc3087127554acd1d",
-        :parser => "argos-ruby-#{Argos::VERSION}",
-        :bundle => nil,
-        :source =>"f53ae3ab454f3e210347439aa440c084f775f9a4"}
+        :filename=>"file://"+VALID_DIAG,
+        :id => "c8cc36201653b341b0322a3dc4a71681e0f41a08"#,
+        #:parser => "argos-ruby-#{Argos::VERSION}",
+        #:bundle => nil,
+        #:source =>"f53ae3ab454f3e210347439aa440c084f775f9a4"
+        }
         end
       end
       

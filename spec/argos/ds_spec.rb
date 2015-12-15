@@ -43,7 +43,10 @@ module Argos
         @ds.parse(dsfile("dup.ds")).size.should == 3 # file contains 6
       end
       
-                  
+      #it "should unfold messages and mark cardinality" do        
+      #  @ds.parse(dsfile("fragment.ds")).should = []
+      #end
+      
       it "should store multiplicates" do
         @ds.parse(dsfile("dup.ds")).multiplicates.map {|m| m.keys }.should==3.times.map{[:program,
          :platform,
@@ -61,11 +64,8 @@ module Argos
          :sensor_data,
          :technology,
          :type,
-         :file,
-         :source,
-         :parser,
-         :id,
-         :bundle]}
+         :cardinality,
+         :id]}
       end
 
       it "should sort ascending on positioned, measured" do
@@ -91,9 +91,7 @@ module Argos
 :positioned=>"1999-12-30T18:41:56Z", :latitude=>79.828,
 :longitude=>22.319, :altitude=>0.0, :headers=>12,
 :measured=>"1999-12-30T18:43:52Z", :identical=>3, :sensor_data=>["78", "00", "00"],
-:technology=>"argos", :type=>"ds", :file=>"file://"+VALID_DS, :parser => "argos-ruby-#{Argos::VERSION}",
-:source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994", :id=>"4369c31c191bd55a998e6293ff4639da3984a95d",
-:bundle=>nil}]
+:technology=>"argos", :type=>"ds", cardinality: 0, :id=>"54bac430a791ae0fc4324e720b947d94309fa8d8"}]
           end
         end
       end
@@ -112,12 +110,9 @@ module Argos
 :latitude=>nil, :longitude=>nil, :altitude=>nil, :headers=>5,
 :measured=>"1999-12-16T00:46:49Z", :identical=>1,
 :sensor_data=>["92", "128", "130", "132"], :technology=>"argos",
-:type=>"ds", :file=> "file://"+VALID_DS,
-:source=>"3a39e0bd0b944dca4f4fbf17bc0680704cde2994",
-:warn=>["missing-position", "sensors-count-mismatch"],
-:parser=>"argos-ruby-#{Argos::VERSION}",
-:bundle=>nil,
-:id=>"f2c82a5ca1330b312925949a15ac300d07452a12"}]
+:type=>"ds", :warn=>["sensors-count-mismatch"],
+cardinality: 0,
+:id=>"7cb1bd408ce2e530fb75421ddd35aaca57d5a081"}]
       end
 
     end
@@ -132,15 +127,11 @@ module Argos
 
       it "sensors-count-mismatch" do
         @ds.parse @file
-        @ds[1][:warn].should_not include("sensors-count-mismatch")
+        @ds[1][:warn].should eq(nil)
         @ds[2][:warn].should include("sensors-count-mismatch")  
       end
 
-      it "missing-position"  do
-          @ds.parse @file
-          @ds[0][:warn].should include("missing-position")
-          @ds[3][:warn].should == nil
-      end
+
 
     end
 
