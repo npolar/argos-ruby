@@ -25,12 +25,9 @@ module Argos
         before do
           @metocean = Argos::MetOceanFID2125Decoder.new
           @metocean.sensor_data = "B84F155D23D62E2E8FE0BB2064247AC9C5D1FC776439C8F58385A3F9EEC8D0"
-          @expected = {}
+          @expected =  {:checksum=>184, :message_code=>1, :julian_day=>120, :fix_time=>21.0, :battery_voltage=>15.2, :internal_temperature=>-6.35, :internal_temperature1=>-6.35, :internal_temperature2=>-6.35, :barometric_pressure=>1021.3, :barometric_pressure1=>1021.4, :barometric_pressure2=>1021.2, :air_temperature=>-14.7, :air_temperature1=>-14.7, :air_temperature2=>-15.0, :latitude=>82.0194, :longitude=>13.7458, :latitude1=>82.0206, :longitude1=>13.7638, :latitude2=>82.0222, :longitude2=>13.7824, :time_to_fix=>0}
           @integer = [184, 79, 21, 93, 35, 214, 46, 46, 143, 224, 187, 32, 100, 36, 122, 201, 197, 209, 252, 119, 100, 57, 200, 245, 131, 133, 163, 249, 238, 200, 208]
-
         end
-        
-        #it { expect(@metocean.data).to eq() }
         
         describe "#binary_sensor_data.size" do
           it { expect(@metocean.binary_sensor_data.size).to eq(248) }
@@ -42,15 +39,15 @@ module Argos
         end
           
         describe "#data" do
-          #it { expect(@metocean.data).to eq([]) }
+          it { expect(@metocean.data).to eq(@expected) }
         end
         
         describe "#checksum == #calc_checksum == 184" do
           it { expect(@metocean.checksum).to eq(@metocean.calc_checksum) }
         end
         
-        describe "#message_type" do
-          it { expect(@metocean.message_type).to eq(1) }
+        describe "#message_code" do
+          it { expect(@metocean.message_code).to eq(1) }
         end
         
         describe "#julian_day" do
@@ -67,11 +64,11 @@ module Argos
         end
         
         describe "#internal_temperature" do
-          it { expect(@metocean.internal_temperature).to eq(37.45) }
+          it { expect(@metocean.internal_temperature).to eq(-6.35) }
         end
               
         describe "#barometric_pressure" do
-          it { expect(@metocean.barometric_pressure).to eq(918.9) }
+          it { expect(@metocean.barometric_pressure).to eq(1021.3) }
         end
         
         describe "#air_temperature" do
@@ -90,27 +87,17 @@ module Argos
           it { expect(@metocean.time_to_fix).to eq(0) }
         end
         
-        describe "#internal_temperature_1" do
-          it { expect(@metocean.internal_temperature_1).to eq(-6.35) }
+        describe "#internal_temperature2" do
+          it { expect(@metocean.internal_temperature2).to eq(-6.35) }
         end
          
-        describe "#barometric_pressure_1" do
-          it { expect(@metocean.barometric_pressure_1).to eq(864.4) }
+        describe "#barometric_pressure2" do
+          it { expect(@metocean.barometric_pressure2).to eq(1021.2) }
         end
         
-        describe "#air_temperature_1" do
-          it { expect(@metocean.air_temperature_1).to eq(-45.6) }
+        describe "#air_temperature2" do
+          it { expect(@metocean.air_temperature2).to eq(-15.0) }
         end
-
-        
-
-    # latitude_1
-    # longitude_1
-    # internal_temperature_2
-    # barometric_pressure_2
-    # air_temperature_2
-    # latitude_2
-    # longitude_2
     
       end
       

@@ -83,9 +83,15 @@ module Argos
     def flip(bin)
       bin.tr("01","10")
     end
-        
+    
+    # Number from binary sensor data bits [start..stop]    
     def bits(start,stop,base=10)
-      bits = binary_sensor_data[start..stop].to_i(2)
+      bits = binary_sensor_data[start..stop]
+      
+      if bits.nil?
+        return nil
+      end 
+      bits=bits.to_i(2)
       if base == 10
         bits
       else
