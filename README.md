@@ -64,6 +64,7 @@ $ xsltproc lib/argos/_xslt/argos-json.xslt spec/argos/_soap/getXml.xml
 ## Sensor data decoding
 * [NorthStar4BytesDecoder]
 * [KiwiSat303Decoder](https://github.com/npolar/argos-ruby/wiki/KiwiSat303Decoder)
+* [KiwiSat202Decoder](https://github.com/npolar/argos-ruby/wiki/KiwiSat202Decoder)
 
 ## Install
 
