@@ -9,7 +9,8 @@
 * Sensor data decoders
 
 argos-ruby is developed by staff at the [Norwegian Polar Data Centre](http://data.npolar.no).
-The library is fully unit tested and used in production in the [Tracking API](https://github.com/npolar/api.npolar.no/wiki/Tracking-API).
+
+The library is fully unit tested and used in production in various Tracking APIsthe [Tracking APIs](https://github.com/npolar/api.npolar.no/wiki/Tracking-APIs).
 
 [![Code Climate](https://codeclimate.com/github/npolar/argos-ruby/badges/gpa.svg)](https://codeclimate.com/github/npolar/argos-ruby)
 
@@ -61,22 +62,21 @@ $ xsltproc lib/argos/_xslt/argos-json.xslt spec/argos/_soap/getXml.xml
 ```
 
 ## Sensor data decoding
-* [[NorthStar4BytesDecoder]]
-* [[KiwiSat303Decoder]]
+* [NorthStar4BytesDecoder]
+* [KiwiSat303Decoder](https://github.com/npolar/argos-ruby/wiki/KiwiSat303Decoder)
+* [KiwiSat202Decoder](https://github.com/npolar/argos-ruby/wiki/KiwiSat202Decoder)
 
 ## Install
 
 ```sh
 $ gem install argos-ruby
-$ cd `gem environment gemdir`/gems/argos-ruby-1.3.0
+$ cd `gem environment gemdir`/gems/argos-ruby-1.6.0
 $ bundle install
 ```
 Note: The extra step is a [bug](https://github.com/npolar/argos-ruby/issues/1)
 
 ## Links
-* https://github.com/npolar/api.npolar.no/wiki/Tracking-API
 * [Argos User's Manual](http://www.argos-system.org/manual/)
-* [Argos Web Service Interface Specification v1.6](http://www.argos-system.org/files/pmedia/public/r1479_9_argos_webservices-1_6.pdf) [2015-02-27]
 * [Argos Web Service Interface Specification v1.7](http://www.argos-system.org/files/pmedia/public/r1626_9_argos_webservices-1_7.pdf) [issued 2015-09-25]
 * http://alaska.usgs.gov/science/biology/spatial/
 * http://gis-lab.info/programs/argos/argos-manual-eng.html
