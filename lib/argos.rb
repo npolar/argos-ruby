@@ -19,6 +19,9 @@ require_relative "argos/sensor_data"
 require_relative "argos/kiwisat303_decoder"
 require_relative "argos/northstar_4bytes_decoder"
 require_relative "argos/met_ocean_fid_2125_decoder"
+require_relative "argos/dbcp_m2_decoder"
+
+
 
 # [Argos](http://www.argos-system.org) satellite tracking data tools
 # * Parsers for Argos legacy ASCII files (DS/DAT and DIAG/DIA files)
@@ -28,10 +31,10 @@ require_relative "argos/met_ocean_fid_2125_decoder"
 #
 # Code written by staff at the [Norwegian Polar Data Centre](http://data.npolar.no),
 # [Norwegian Polar Institute](http://npolar.no)
-# 
+#
 # For information about Argos, see: http://www.argos-system.org
 module Argos
   def self.library_version
-    "argos-ruby-#{VERSION}" 
+    "argos-ruby-#{VERSION}"
   end
 end

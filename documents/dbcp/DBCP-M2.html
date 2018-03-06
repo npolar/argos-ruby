@@ -1,0 +1,966 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 2.0">
+<title>DBCP-M2 Recommended format</title>
+<link rel="shortcut icon" href="http://www.jcommops.org/graph_ref/dbcp32.jpg" />
+<link href="DBCP_NEW.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body  >
+
+<table border="0">
+    <tr>
+        <td width="621"><p align="center"><img src="graph_ref/dbcp_logo_130.gif" align="left"
+        hspace="15" >
+       
+        <h1>DBCP-M2
+        Recommended format<br />
+        (Meteo - 28 bit Argos ID)</h1>
+        </td>
+    </tr>
+</table>
+
+<hr>
+
+<p align="left"><b>This Argos
+message format is based upon </b><a
+href="fmt-dbcp-m1.html"><b>DBCP-M1</b></a><b> format which was modified to take
+28-bit Argos message IDs into account. </b><strong>See also
+complete list of </strong><a href="1ramf.html"><strong>DBCP recommended formats</strong></a></p>
+
+<div align="left">
+  <ul>
+    <li><b>Table of contents</b></li>
+  </ul>
+  <ol>
+    <li><a href="#Advantages">Advantages</a></li>
+    <li><a href="#Drawback"><u>Drawbacks</u></a></li>
+    <li><a href="#Description">Description</a></li>
+    <li><a href="#Format">Message
+      format</a></li>
+    <li><a href="#Examples">Examples</a></li>
+    <li>a) <a
+        href="#Basic">Basic (e.g. SVPB,
+      FGGE)</a></li>
+    <li>b) <a
+        href="#Wind">Wind (e.g. SVPBW,
+      wind FGGE)</a></li>
+  </ol>
+</div>
+<ol>
+</ol>
+<hr>
+
+<p align="left">
+<font color="#FF0000"><strong>ATTENTION: This format
+is used only for Argos messages transmitted using 28-bit Argos
+IDs.</strong></font></p>
+
+<p align="left">
+<a name="Advantages"><b><u>Advantages of this
+format are:</u></b></a></p>
+
+
+    <div align="left">
+      <ul>
+        <li>Manages Argos 28-bit ID numbers.</li>
+      </ul>
+      <ul>
+        <li>Format is independent of the strategy
+          used to collect the data: Users can transmit all the
+          memorised data or only the most recent data if they
+          wish. For memorized data, period between two
+          observations is flexible.</li>
+      </ul>
+      <ul>
+        <li>It is easy to add extra sensors: just
+          add them at the end of the Argos message.</li>
+      </ul>
+      <ul>
+        <li>Argos messages are short =&gt; low
+          power consumption =&gt; increased life-time</li>
+      </ul>
+      <ul>
+        <li>All blocks have the same format, hence
+          simplifying decoding software.</li>
+      </ul>
+      <ul>
+        <li>Observation time computed upon
+          reception is the exact time of observation even in
+          case the buoy onboard clock drifts with time.</li>
+      </ul>
+      
+      
+    </div>
+<p align="left"><a name="Drawback"><b><u>Drawbacks:</u></b></a></p>
+
+
+    <div align="left">
+      <ul>
+        <li>There is a risk of not receiving the
+          most recent observation during a satellite pass, if
+          too many blocks are transmitted in a cycle.
+          Therefore, for operational purposes, a certain amount
+          of caution is advised. One solution consists in
+          alternating the most recent observation with a stored
+          observation, different each time. Another solution
+          consists in optimising the number of blocks in a
+          cycle. </li>
+      </ul>
+      <ul>
+        <li>Less bits are being used for &quot;rank&quot;,
+          &quot;submergence&quot;, &quot;battery voltage&quot;,
+          and &quot;wind direction&quot; when compared with <a
+            href="fmt-dbcp-m1.html">DBCP-M1</a> format. Hence
+          resolution is a bit lower for these variables but
+          this is still considered as acceptable.</li>
+      </ul>
+      
+      
+    </div>
+<p align="left"><a name="Description"><b><u>Description</u></b></a></p>
+
+
+    <p align="left">With 28 bit Argos IDs, first block of data
+    is comprised of 24 bits; following blocks of data have 32
+    bits. DBCP-M2 contains a minimum of two blocks, i.e. 24+32
+    bits = 56 bits.</p>
+    <p align="left">Data are stored in the buoy memory in
+    blocks of observations. Each block contains one single
+    observation. Blocks are Block_Period minutes apart (e.g.
+    every 30 minutes, every hour)). Normally, buoys are turned on
+    at a round hour (e.g. 03h00) so that observations are made
+    exactly at a round hour. However, this may not be the case
+    and the on-board clock may drift in time. Transmitting the
+    age of the observation at the time the message is transmitted
+    to the satellite permits to recover the exact time of
+    observation even in case the buoy real time clock has
+    drifted.</p>
+    <p align="left">One block (one observation) is transmitted
+    in one Argos message. One Argos message contains only one
+    block.</p>
+    <p align="left">Hence, consecutive blocks can be
+    transmitted using consecutive Argos messages using a
+    transmission cycle. For example, if we pick a block_period of
+    one hour, we could transmit the observations in a cycle of 3
+    Argos messages like this:</p>
+
+<div align="center"><center>
+
+<table border="1" cellpadding="4" cellspacing="1" width="187"
+bordercolor="#000080">
+    <tr>
+        <td valign="top" width="63%" bgcolor="#000080"><font
+        color="#FFFFFF" size="2"><b>Block</b></td>
+        <td valign="top" width="37%" bgcolor="#000080"><font
+        color="#FFFFFF" size="2"><b>Rank</b></td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">&#133;</td>
+        <td valign="top" width="37%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">Block H</td>
+        <td valign="top" width="37%">0</td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">Block H-1</td>
+        <td valign="top" width="37%">1</td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">Block H-2</td>
+        <td valign="top" width="37%">2</td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">Block H</td>
+        <td valign="top" width="37%">0</td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">Block H-1</td>
+        <td valign="top" width="37%">1</td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">Block H-2</td>
+        <td valign="top" width="37%">2</td>
+    </tr>
+    <tr>
+        <td valign="top" width="63%">&#133;</td>
+        <td valign="top" width="37%">&nbsp;</td>
+    </tr>
+</table>
+</center></div>
+
+
+    <p align="left">Rank is encoded in the Argos message. Rank
+    of the most recent observation transmitted is 0. The rank of
+    a given observation is incremented each time a new
+    observation is carried out.</p>
+    <p align="left">Age of the observation at the time of the
+    next block update (AGEB) in the buoy memory is encoded in the
+    Argos message. Age of the observation at the time of the
+    Argos message transmission is therefore:</p>
+    <dir>
+        <li>
+          <div align="left"><b>Age = Rank x Block_Period + AGEB</b></div>
+        </li>
+    </dir>
+    <p align="left">And observation time can therefore be
+    computed as following: </p>
+    <dir>
+        <li>
+          <div align="left"><b>Observation time = Acquisition time
+            by the satellite - Age</b></div>
+        </li>
+    </dir>
+    <p align="left">If hourly observations are needed
+    (Block_Period=60), the buoy must be activated so that a new
+    observation is available on the hour. If synoptic
+    observations are requested (Block_Period=180), the buoy must
+    be activated accordingly. </p>
+
+
+<p align="left">&nbsp; </p>
+
+<p align="left"><a name="Format"><b><u>Message format</u></b></a></p>
+<div align="center"><center>
+
+<table border="1">
+    <tr>
+        <td bgcolor="#FFFFFF"><font color="#000000">In white are
+        the first mandatory two blocks of data, i.e. 56 bits
+        (24+32).</td>
+    </tr>
+    <tr>
+        <td bgcolor="#FFFF00"><font color="#000000">In yellow is
+        the following optional block of data, i.e. 32 bits</td>
+    </tr>
+    <tr>
+        <td bgcolor="#00FF00"><font color="#000000">In green are
+        the following optional blocks of data, i.e. 32 bits or
+        more.</td>
+    </tr>
+    <tr>
+        <td><strong>Total message length cannot exceed 248 bits.</strong></td>
+    </tr>
+</table>
+</center></div>
+
+<p>&nbsp;</p>
+<div align="center"><center>
+
+<table border="1" cellpadding="4" cellspacing="1" width="869"
+bordercolor="#000080">
+    <tr>
+        <td valign="top" width="7%" bgcolor="#000080">&nbsp;</td>
+        <td valign="top" width="19%" bgcolor="#000080"><p
+        align="center"><font color="#FFFFFF" size="1"><b>Item</b></p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#000080"><p align="center"><font color="#FFFFFF"
+        size="1"><b>Bits</b></p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#000080"><font color="#FFFFFF" size="1"><b>Pos</b></td>
+        <td valign="top" width="6%" bgcolor="#000080"><p
+        align="center"><font color="#FFFFFF" size="1"><b>Min</b></p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#000080"><p
+        align="center"><font color="#FFFFFF" size="1"><b>Max</b></p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#000080"><p
+        align="center"><font color="#FFFFFF" size="1"><b>Formula
+        / Comments (n = word value)</b></p>
+        </td>
+        <td width="14%" valign="top" bgcolor="#000080"><font color="#FFFFFF"
+        size="2"><strong>Fixed bits in block (o)</strong></td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">CHK</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Checksum</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">8</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">0</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">255</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">Checksum = Lower 8 bits of the sum of other
+        bytes</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">Rank</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Rank of observation</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">4</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">8</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">15</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">Rank = n (see § 3)</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">AGEB</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Age of observation at the time of next block
+        update</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">6</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">12</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">63</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">Age (minutes). This timer starts at 0 when the
+        sensor data is updated in the transmission and in
+        incremented in minutes until the next data update
+        (block).</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">BP</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Barometric Pressure</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">11</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">18</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">850.0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">1054.7</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">Press(hPa) = 0.1 n + 850</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">SST</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Sea Surface Temp.</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">9</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">29</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">-5.0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">35.88</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">SST(°C) = 0.08 n - 5</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">APT</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Air Pressure tendency</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">9</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">38</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">-25.5</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">25.6</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">APT(hPa) = 0.1 n - 25.5</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">SubM</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Submergence Count</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">6</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">47</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">100</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">Percent of time submerged = 100 n / 63</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><font
+        size="1">VBat</td>
+        <td valign="top" width="19%" bgcolor="#FFFFFF"><font
+        size="1">Battery Voltage</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF"><p align="right">3</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFFFF">53</td>
+        <td valign="top" width="6%" bgcolor="#FFFFFF"><p
+        align="right">free</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFFFF"><p
+        align="right">free</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFFFF"><font
+        size="1">free (e.g. voltage, % of charge, or table)</td>
+        <td valign="top" bgcolor="#FFFFFF">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><font
+        size="1">WD</td>
+        <td valign="top" width="19%" bgcolor="#FFFF00"><font
+        size="1">Wind Direction</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00"><p align="right">7</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00">56</td>
+        <td valign="top" width="6%" bgcolor="#FFFF00"><p
+        align="right">0.0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><p
+        align="right">360.0</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFF00"><font
+        size="1">WD(deg) = 3 n <br>
+        n=127 indicates no Wind Direction sensor present</td>
+        <td valign="top" bgcolor="#FFFF00">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><font
+        size="1">WS</td>
+        <td valign="top" width="19%" bgcolor="#FFFF00"><font
+        size="1">Wind Speed</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00"><p align="right">6</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00">63</td>
+        <td valign="top" width="6%" bgcolor="#FFFF00"><p
+        align="right">0.0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><p
+        align="right">63</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFF00"><font
+        size="1">WS(m/s) = n</td>
+        <td valign="top" bgcolor="#FFFF00">Y</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><font
+        size="1">AT</td>
+        <td valign="top" width="19%" bgcolor="#FFFF00"><font
+        size="1">Air Temperature</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00"><p align="right">8</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00">69</td>
+        <td valign="top" width="6%" bgcolor="#FFFF00"><p
+        align="right">-20.0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><p
+        align="right">43.75</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFF00"><font
+        size="1">AT(°C) = 0.25 N - 20</td>
+        <td valign="top" bgcolor="#FFFF00">N</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><font
+        size="1">Sal/Cond</td>
+        <td valign="top" width="19%" bgcolor="#FFFF00"><font
+        size="1">Conductivity or Salinity</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00"><p align="right">11</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#FFFF00">77</td>
+        <td valign="top" width="6%" bgcolor="#FFFF00"><p
+        align="right">25.0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#FFFF00"><p
+        align="right">55.705</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#FFFF00"><font
+        size="1">Cond(mmho/cm) = 0.015 n + 25<br>
+        Salinity (psu)=0.015 n + 25</td>
+        <td valign="top" bgcolor="#FFFF00">N</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#00FF00"><font
+        size="1">Tz</td>
+        <td valign="top" width="19%" bgcolor="#00FF00"><font
+        size="1">Subsurface Temp.</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00"><p align="right">10</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00">88</td>
+        <td valign="top" width="6%" bgcolor="#00FF00"><p
+        align="right">-5</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#00FF00"><p
+        align="right">35.92</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#00FF00"><font
+        size="1">Tz(°C) = 0.04 n - 5</td>
+        <td valign="top" bgcolor="#00FF00">N</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#00FF00"><font
+        size="1">Depth</td>
+        <td valign="top" width="19%" bgcolor="#00FF00"><font
+        size="1">Depth (pressure)</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00"><p align="right">8</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00">98</td>
+        <td valign="top" width="6%" bgcolor="#00FF00"><p
+        align="right">0</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#00FF00"><p
+        align="right">255</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#00FF00"><font
+        size="1">Depth(m) = N </td>
+        <td valign="top" bgcolor="#00FF00">N</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#00FF00"><font
+        size="1">Extra</td>
+        <td valign="top" width="19%" bgcolor="#00FF00"><font
+        size="1">Extra sensor #1</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00"><p align="right">?</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00">106</td>
+        <td valign="top" width="6%" bgcolor="#00FF00"><p
+        align="right">?</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#00FF00"><p
+        align="right">?</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#00FF00"><font
+        size="1">?</td>
+        <td valign="top" bgcolor="#00FF00">N</td>
+    </tr>
+    <tr>
+        <td valign="top" width="7%" bgcolor="#00FF00"><font
+        size="1">&#133;</td>
+        <td valign="top" width="19%" bgcolor="#00FF00"><font
+        size="1">&#133;</td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00"><p align="right">&#133;</p>
+        </td>
+        <td align="center" valign="top" width="4%"
+        bgcolor="#00FF00">...</td>
+        <td valign="top" width="6%" bgcolor="#00FF00"><p
+        align="right">&#133;</p>
+        </td>
+        <td valign="top" width="7%" bgcolor="#00FF00"><p
+        align="right">&#133;</p>
+        </td>
+        <td valign="top" width="39%" bgcolor="#00FF00"><font
+        size="1">&#133;</td>
+        <td bgcolor="#00FF00">N</td>
+    </tr>
+</table>
+</center></div>
+
+
+    <p align="left">(o) Where &quot;Fixed bits in blocks&quot;
+    is marked as &quot;Y&quot;, it means that when a block is
+    actually coded, the exact number of bits are reserved for the
+    considered sensor or information if available. If there is no
+    such sensor in the buoy, then those bits shall be considered
+    as free and can be used for one or more other variables
+    provided that this does not affect the bits used by the
+    surrounding sensors. These bits can also be coded with all
+    bits set to 1 in case they are completely useless. This
+    permits some flexibility in the format.</p>
+    <p align="left">Offsets and resolutions are given here as
+    examples and can be modified. The number of bits for each
+    sensor must be changed only if it is not possible to do
+    otherwise (see remark under (o) above).</p>
+    <p align="left">We chose to report the barometric tendency
+    in one single word instead of two (one for the absolute value
+    of pressure tendency, the other for the characteristic).
+    Automatic stations are permitted to do so. On the GTS, the
+    characteristic is coded as 2, 4 or 7, according to the sign
+    of the tendency (positive, zero or negative, respectively).
+    This solution is debatable.</p>
+
+
+<p align="left"><a name="Examples"><b><u>Examples:</u></b></a></p>
+
+
+    <p align="left"><b>a) </b><a
+    name="Basic"><b>Basic format</b></a><b> (e.g. SVPB, FGGE)</b></p>
+
+
+
+    <div align="center"><center><table border="1" cellspacing="1"
+    width="544">
+        <tr>
+            <td valign="top" width="3%" bgcolor="#FFFFFF"><p
+            align="center">0</p>
+            </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF"><p
+            align="center">8</p>
+            </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">12</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">18</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="8" width="24%"><p
+            align="center">Checksum<br>
+            8 bits</p>
+            </td>
+            <td valign="top" colspan="4" width="12%"><p
+            align="center">Rank<br>
+            4 bits</p>
+            </td>
+            <td valign="top" colspan="6" width="18%"><p
+            align="center">AgeB<br>
+            6 bits</p>
+            </td>
+            <td valign="top" colspan="6" width="18%"><p
+            align="center">Barometric
+            Pressure<br>
+            11 bits</p>
+            </td>
+            <td valign="top" colspan="8" width="24%">&nbsp;</td>
+        </tr>
+    </table>
+    </center><center><table border="1"
+    cellspacing="1" width="544">
+        <tr>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">24</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" bgcolor="#FFFFFF">29</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">38</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">47</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF"><p
+            align="center">53</p>
+            </td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="5" width="15%"><p
+            align="center">Barometric
+            pressure (cont.)<br>
+            </p>
+            </td>
+            <td colspan="9" width="27%"><p align="center">Sea Surface Temperature<br>
+            9 bits</p>
+            </td>
+            <td valign="top" colspan="9" width="27%"><p
+            align="center">Barometric
+            Tendency<br>
+            9 bits</p>
+            </td>
+            <td valign="top" colspan="6" width="18%"><p
+            align="center">Submergence
+            count<br>
+            6 bits</p>
+            </td>
+            <td valign="top" colspan="3" width="9%"><p
+            align="center">Battery
+            Voltage<br>
+            3 bits</p>
+            </td>
+        </tr>
+    </table>
+    </center>
+</div><p align="left">The message
+    length is 56 bits.</p>
+
+
+<p align="left"><b>b)</b><a name="Wind"><b> Wind and/or salinity buoys</b></a><b> (e.g. SVPBW, Wind FGGE)</b></p>
+
+
+    <p align="left">This format concerns SVP-BW
+    drifters and Wind FGGE buoys, possibly equipped for Air
+    Temperature and/or Sea Surface Salinity measurements. The
+    message length is 88 bits. The parameters are :</p>
+    <div align="center"><center><table border="1" cellspacing="1"
+    width="544">
+        <tr>
+            <td valign="top" width="3%" bgcolor="#FFFFFF"><p
+            align="center">0</p>
+            </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF"><p
+            align="center">8</p>
+            </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">12</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">18</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="8" width="24%"><p
+            align="center">Checksum<br>
+            8 bits</p>
+            </td>
+            <td valign="top" colspan="4" width="12%"><p
+            align="center">Rank<br>
+            4 bits</p>
+            </td>
+            <td valign="top" colspan="6" width="18%"><p
+            align="center">AgeB<br>
+            6 bits</p>
+            </td>
+            <td valign="top" colspan="6" width="18%"><p
+            align="center">Barometric
+            Pressure<br>
+            11 bits</p>
+            </td>
+            <td valign="top" colspan="8" width="24%">&nbsp;</td>
+        </tr>
+    </table>
+    </center><center><table border="1"
+    cellspacing="1" width="544">
+        <tr>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">24</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" bgcolor="#FFFFFF">29</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">38</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">47</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF"><p
+            align="center">53</p>
+            </td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="5" width="15%"><p
+            align="center">Barometric
+            pressure (cont.)<br>
+            </p>
+            </td>
+            <td colspan="9" width="27%"><p align="center">Sea Surface Temperature<br>
+            9 bits</p>
+            </td>
+            <td valign="top" colspan="9" width="27%"><p
+            align="center">Barometric
+            Tendency<br>
+            9 bits</p>
+            </td>
+            <td valign="top" colspan="6" width="18%"><p
+            align="center">Submergence
+            count<br>
+            6 bits</p>
+            </td>
+            <td valign="top" colspan="3" width="9%"><p
+            align="center">Battery
+            Voltage<br>
+            3 bits</p>
+            </td>
+        </tr>
+    </table>
+    </center><center><table border="1"
+    cellspacing="1" width="544">
+        <tr>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">56</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">63</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">69</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp; </td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">77</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td valign="top" width="3%" bgcolor="#FFFFFF">&nbsp;</td>
+            <td bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="7" width="21%"><p
+            align="center">Wind
+            Direction<br>
+            7 bits</p>
+            </td>
+            <td valign="top" colspan="6" width="18%"><p
+            align="center">Wind Speed<br>
+            6 bits</p>
+            </td>
+            <td valign="top" colspan="8" width="24%"><p
+            align="center">Air
+            Temperature<br>
+            8 bits</p>
+            </td>
+            <td valign="top" colspan="11" width="33%"><p
+            align="center">Conductivity<br>
+            11 bits</p>
+            </td>
+        </tr>
+    </table>
+</center></div><p align="left">Air temperature
+    and Conductivity rooms can be used by technological data such
+    as Weather Classification and/or Wind speed from specific
+    frequency bands in the case of SVP-BW drifters.</p>
+
+<!-- **********************************-->
+<!-- *** Code for Google Analytics ***-->
+<!-- **********************************-->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3558742-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- ********************************-->
+<!-- End of Code for Google Analytics-->
+<!-- ********************************--></body>
+</html>
