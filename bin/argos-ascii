@@ -60,7 +60,7 @@ optparser = OptionParser.new(ARGV) do |opts|
         param[:level]
     end
   end
-  
+
    opts.on("--debug") do
 
     param[:level] = Logger::DEBUG
@@ -90,11 +90,11 @@ argosfiles = 0
 
 Dir[glob].reject {|f| File.directory? f}.select {|f|
   argosfiles = argosfiles + 1
-  if not Argos::Ascii.argos? f  
+  if not Argos::Ascii.argos? f
     log.warn "Not Argos: #{f}"
   end
-  
-  Argos::Ascii.argos? f  
+
+  Argos::Ascii.argos? f
 }.map {|filename|
   log.debug "*"*80
   argos = Argos::Ascii.factory(Argos::Ascii.type(filename))
@@ -106,11 +106,11 @@ Dir[glob].reject {|f| File.directory? f}.select {|f|
   case param[:action]
     when "source","metadata"
       result << Argos::Ascii.source(argos).merge(glob: glob, bundle: bundle)
-      
+
     when "parse"
-      
+
       arr = argos.parse(filename)
-      
+
       unless param[:dest].nil?
         jsonfile = "#{param[:dest].gsub(/\$/, "")}/#{argos.source}.json"
         File.open(jsonfile, "w") { |file| file.write(arr.to_json) }
@@ -129,8 +129,8 @@ diag_count = result.select {|argos| argos[:type] == "diag"}.size
 
 if ["parse", "messages"].include? param[:action]
   log.info "Documents: #{result.size}, ds: #{ds_count}, diag: #{diag_count}, bundle: #{bundle}, glob: #{glob}"
-  
-  
+
+
 elsif /source|metadata/ =~ param[:action]
   # Count the total number of files in the bundle
   result = result.select {|s| s[:size] > 0 }
@@ -144,7 +144,7 @@ elsif /source|metadata/ =~ param[:action]
     FileUtils.mkpath(File.dirname(jsonfile))
     log.debug "Argos bundle metadata: #{jsonfile}"
     File.open(jsonfile, "w") { |file| file.write(result.to_json) }
-    
+
   end
   if argosfiles != result.size
     log.warn "Argos file count: #{argosfiles} differs from parsed files: #{result.size}"
@@ -156,13 +156,18 @@ if param[:dest].nil?
   case param[:format]
     when "json"
       puts JSON.pretty_generate(result)
-    when /y(a)?ml/ 
+    when /y(a)?ml/
       puts result.to_yaml
     when /(ruby|rb)/
       puts result
     when "csv"
-      
-      data = result.map {|r| r.values }
+
+      data = result.map {|r|
+        if r.values.size != r.keys.size
+          raise "Header/value size mismatch: #{r.values.size}/#{r.keys.size}"
+        end
+        r.values
+      }
       csv = CSV.generate() do |csv|
         csv << result[0].keys
         data.each { |row| csv << row }
@@ -176,4 +181,4 @@ exit(0)
 rescue => e
   Logger.new(STDERR).fatal e
   exit(1)
-end 
+end
