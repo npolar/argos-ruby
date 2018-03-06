@@ -47,7 +47,7 @@ The download tool creates one XML data file per platform per day, stored in a fi
 
 * /path/to/tracking/archive/argos/xml/$year/program-$program/platform-$platform/argos-$year-$mm-$dd-platform-$platform.xml
 * /path/to/tracking/archive/argos/xml/2015/program-9660/platform-2180/argos-2015-03-06-platform-2180.xml
-  
+
 ```sh
 $ argos-soap --download /path/to/tracking/archive/argos/xml --username=USERNAME --password=PASSWORD --debug
 
@@ -57,7 +57,7 @@ $ argos-soap --download /path/to/tracking/archive/argos/xml --username=USERNAME 
 
 ```sh
 $ ./bin/argos-json-xslt /path/to/argos-data.xml
-$ xsltproc lib/argos/_xslt/argos-json.xslt spec/argos/_soap/getXml.xml 
+$ xsltproc lib/argos/_xslt/argos-json.xslt spec/argos/_soap/getXml.xml
 ```
 
 ## Sensor data decoding
@@ -77,6 +77,7 @@ Note: The extra step is a [bug](https://github.com/npolar/argos-ruby/issues/1)
 * https://github.com/npolar/api.npolar.no/wiki/Tracking-API
 * [Argos User's Manual](http://www.argos-system.org/manual/)
 * [Argos Web Service Interface Specification v1.6](http://www.argos-system.org/files/pmedia/public/r1479_9_argos_webservices-1_6.pdf) [2015-02-27]
+* [Argos Web Service Interface Specification v1.7](http://www.argos-system.org/files/pmedia/public/r1626_9_argos_webservices-1_7.pdf) [issued 2015-09-25]
 * http://alaska.usgs.gov/science/biology/spatial/
 * http://gis-lab.info/programs/argos/argos-manual-eng.html
 * [CLS](http://www.cls.fr/welcome_en.html) - operates the Argos system
