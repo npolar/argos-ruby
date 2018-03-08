@@ -56,6 +56,8 @@ module Argos
         message_type_0
       when 1
         message_type_1
+      when 2,3,4,5,6,7
+        {}
       else
         raise ArgumentError, "Unknown message type: #{message_type.to_json}"
       end
